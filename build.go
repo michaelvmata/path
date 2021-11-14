@@ -14,13 +14,13 @@ type RawRoom struct {
 	Size        int
 }
 
-func build() []*Room {
+func build() map[string]*Room {
 	roomFilePath := "data/room.ndjson"
 	data, err := ioutil.ReadFile(roomFilePath)
 	if err != nil {
 		log.Fatalf("Error opening room %s", roomFilePath)
 	}
-	rooms := make([]*Room, 0)
+	rooms := make(map[string]*Room)
 	d := json.NewDecoder(strings.NewReader(string(data)))
 	for d.More() {
 		rr := RawRoom{}
@@ -29,7 +29,7 @@ func build() []*Room {
 			log.Fatalf("Error parsing %s", data)
 		}
 		room := NewRoom(rr.UUID, rr.Name, rr.Description, rr.Size)
-		rooms = append(rooms, room)
+		rooms[room.uuid] = room
 	}
 	return rooms
 }
