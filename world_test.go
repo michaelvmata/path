@@ -13,10 +13,14 @@ func TestCharacter(t *testing.T) {
 }
 
 func TestRoom(t *testing.T) {
+	uuid := "b8712a40130e41dabb7e17adb2d1aef7"
 	name := "The Void"
 	description := "An unending abyss."
 	size := 1
-	r := NewRoom(name, description, size)
+	r := NewRoom(uuid, name, description, size)
+	if r.uuid != uuid {
+		t.Fatalf("Rooom uuid(%s) expected(%s)", r.uuid, uuid)
+	}
 	if r.name != name {
 		t.Fatalf("Room name(%s) expected(%s)", r.name, name)
 	}

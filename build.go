@@ -8,9 +8,10 @@ import (
 )
 
 type RawRoom struct {
-	Name string
+	UUID        string
+	Name        string
 	Description string
-	Size int
+	Size        int
 }
 
 func build() []*Room {
@@ -27,7 +28,7 @@ func build() []*Room {
 		if err != nil {
 			log.Fatalf("Error parsing %s", data)
 		}
-		room := NewRoom(rr.Name, rr.Description, rr.Size)
+		room := NewRoom(rr.UUID, rr.Name, rr.Description, rr.Size)
 		rooms = append(rooms, room)
 	}
 	return rooms

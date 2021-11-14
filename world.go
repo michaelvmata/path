@@ -15,14 +15,16 @@ func NewCharacter(handle string) *Character {
 }
 
 type Room struct {
+	uuid        string
 	name        string
 	description string
 	characters  []*Character
 	size        int
 }
 
-func NewRoom(name string, description string, size int) *Room {
+func NewRoom(uuid string, name string, description string, size int) *Room {
 	room := Room{
+		uuid:        uuid,
 		name:        name,
 		description: description,
 		size:        size,
