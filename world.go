@@ -5,13 +5,18 @@ import (
 )
 
 type Character struct {
-	handle string
+	Handle string
+	Room   *Room
 }
 
 func NewCharacter(handle string) *Character {
 	return &Character{
-		handle: handle,
+		Handle: handle,
 	}
+}
+
+func (c *Character) Move(r *Room) {
+	c.Room = r
 }
 
 type Room struct {

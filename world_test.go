@@ -7,8 +7,18 @@ import (
 func TestCharacter(t *testing.T) {
 	handle := "Tester"
 	c := NewCharacter(handle)
-	if c.handle != handle {
-		t.Fatalf("Character handle(%s) expect (%s)", c.handle, handle)
+	if c.Handle != handle {
+		t.Fatalf("Character handle(%s) expect (%s)", c.Handle, handle)
+	}
+
+	uuid := "b8712a40130e41dabb7e17adb2d1aef7"
+	name := "The Void"
+	description := "An unending abyss."
+	size := 1
+	r := NewRoom(uuid, name, description, size)
+	c.Move(r)
+	if c.Room != r {
+		t.Fatalf("Character room(%v) expected(%v)", c.Room, r)
 	}
 }
 
