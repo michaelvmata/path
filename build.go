@@ -14,13 +14,12 @@ type RawRoom struct {
 	Size        int
 }
 
-func build() map[string]*Room {
+func buildRooms(world *World) {
 	roomFilePath := "data/room.ndjson"
 	data, err := ioutil.ReadFile(roomFilePath)
 	if err != nil {
 		log.Fatalf("Error opening room %s", roomFilePath)
 	}
-	rooms := make(map[string]*Room)
 	d := json.NewDecoder(strings.NewReader(string(data)))
 	for d.More() {
 		rr := RawRoom{}
@@ -29,7 +28,30 @@ func build() map[string]*Room {
 			log.Fatalf("Error parsing %s", data)
 		}
 		room := NewRoom(rr.UUID, rr.Name, rr.Description, rr.Size)
-		rooms[room.uuid] = room
+		world.Rooms[room.uuid] = room
 	}
-	return rooms
+}
+
+func buildCharacters(world *World) {
+	characterFilePath := "data/character.ndjson"
+	data, err := ioutil.ReadFile(characterFilePath)
+	if err != nil {
+		log.Fatalf("Error opening character %s", characterFilePath)
+	}
+	d := json.NewDecoder(strings.NewReader(string(data)))
+	for d.More() {
+		c := Character{}
+		err := d.Decode(&c)
+		if err != nil {
+			log.Fatalf("Error parsing %s", data)
+		}
+		world.Characters[c.Handle] = &c
+	}
+}
+
+func build() *World {
+	world := NewWorld()
+	buildRooms(world)
+	buildCharacters(world)
+	return world
 }

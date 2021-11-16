@@ -5,12 +5,12 @@ import (
 )
 
 func TestBuild(t *testing.T) {
-	rooms := build()
+	world := build()
 	expectedRooms := 2
-	if len(rooms) != expectedRooms {
-		t.Fatalf("Rooms count(%d) expected (%d)", len(rooms), expectedRooms)
+	if len(world.Rooms) != expectedRooms {
+		t.Fatalf("Rooms count(%d) expected (%d)", len(world.Rooms), expectedRooms)
 	}
-	for _, room := range rooms {
+	for _, room := range world.Rooms {
 		if room.uuid == "" {
 			t.Fatalf("Room uuid is empty")
 		}

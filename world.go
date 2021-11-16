@@ -73,3 +73,16 @@ func (r *Room) IndexOfCharacter(target *Character) int {
 	}
 	return -1
 }
+
+type World struct {
+	Characters map[string]*Character
+	Rooms      map[string]*Room
+}
+
+func NewWorld() *World {
+	w := World{
+		Characters: make(map[string]*Character),
+		Rooms:      make(map[string]*Room),
+	}
+	return &w
+}
