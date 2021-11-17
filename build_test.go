@@ -18,4 +18,13 @@ func TestBuild(t *testing.T) {
 			t.Fatalf("Room size is zero")
 		}
 	}
+
+	for _, character := range world.Characters {
+		if character.Room == nil {
+			t.Fatalf("Character room not loaded")
+		}
+		if character.Name == "" {
+			t.Fatalf("Character name empty")
+		}
+	}
 }

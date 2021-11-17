@@ -7,8 +7,8 @@ import (
 func TestCharacter(t *testing.T) {
 	handle := "Tester"
 	c := NewCharacter(handle)
-	if c.Handle != handle {
-		t.Fatalf("Character handle(%s) expect (%s)", c.Handle, handle)
+	if c.Name != handle {
+		t.Fatalf("Character handle(%s) expect (%s)", c.Name, handle)
 	}
 
 	uuid := "b8712a40130e41dabb7e17adb2d1aef7"

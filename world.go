@@ -5,13 +5,13 @@ import (
 )
 
 type Character struct {
-	Handle string
-	Room   *Room
+	Name string
+	Room *Room
 }
 
 func NewCharacter(handle string) *Character {
 	return &Character{
-		Handle: handle,
+		Name: handle,
 	}
 }
 

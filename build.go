@@ -32,6 +32,11 @@ func buildRooms(world *World) {
 	}
 }
 
+type RawCharacter struct {
+	RoomUUID string
+	Name     string
+}
+
 func buildCharacters(world *World) {
 	characterFilePath := "data/character.ndjson"
 	data, err := ioutil.ReadFile(characterFilePath)
@@ -40,12 +45,18 @@ func buildCharacters(world *World) {
 	}
 	d := json.NewDecoder(strings.NewReader(string(data)))
 	for d.More() {
-		c := Character{}
-		err := d.Decode(&c)
+		rc := RawCharacter{}
+		err := d.Decode(&rc)
 		if err != nil {
 			log.Fatalf("Error parsing %s", data)
 		}
-		world.Characters[c.Handle] = &c
+		c := NewCharacter(rc.Name)
+		world.Characters[c.Name] = c
+		if room, ok := world.Rooms[rc.RoomUUID]; ok {
+			if err := room.EnterCharacter(c); err == nil {
+				c.Room = room
+			}
+		}
 	}
 }
 
