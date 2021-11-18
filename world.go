@@ -4,18 +4,18 @@ import (
 	"errors"
 )
 
-type Character struct {
+type Player struct {
 	Name string
 	Room *Room
 }
 
-func NewCharacter(handle string) *Character {
-	return &Character{
+func NewPlayer(handle string) *Player {
+	return &Player{
 		Name: handle,
 	}
 }
 
-func (c *Character) Move(r *Room) {
+func (c *Player) Move(r *Room) {
 	c.Room = r
 }
 
@@ -23,7 +23,7 @@ type Room struct {
 	uuid        string
 	name        string
 	description string
-	characters  []*Character
+	players     []*Player
 	size        int
 }
 
@@ -33,41 +33,41 @@ func NewRoom(uuid string, name string, description string, size int) *Room {
 		name:        name,
 		description: description,
 		size:        size,
-		characters:  make([]*Character, 0, size),
+		players:     make([]*Player, 0, size),
 	}
 	return &room
 }
 
 func (r *Room) IsFull() bool {
-	return r.size == len(r.characters)
+	return r.size == len(r.players)
 }
 
-func (r *Room) EnterCharacter(c *Character) error {
+func (r *Room) Enter(c *Player) error {
 	if r.IsFull() {
 		return errors.New("room is full")
 	}
-	if r.IndexOfCharacter(c) != -1 {
-		return errors.New("character already in room")
+	if r.IndexOfPlayer(c) != -1 {
+		return errors.New("player already in room")
 	}
-	r.characters = append(r.characters, c)
+	r.players = append(r.players, c)
 	return nil
 }
 
-func (r *Room) ExitCharacter(c *Character) error {
-	i := r.IndexOfCharacter(c)
+func (r *Room) Exit(c *Player) error {
+	i := r.IndexOfPlayer(c)
 	if i == -1 {
-		return errors.New("character not in room")
+		return errors.New("player not in room")
 	}
-	copy(r.characters[i:], r.characters[:i+1])
-	length := len(r.characters) - 1
-	r.characters[length] = nil
-	r.characters = r.characters[:length]
+	copy(r.players[i:], r.players[:i+1])
+	length := len(r.players) - 1
+	r.players[length] = nil
+	r.players = r.players[:length]
 	return nil
 }
 
-func (r *Room) IndexOfCharacter(target *Character) int {
-	for i, c := range r.characters {
-		if c == target {
+func (r *Room) IndexOfPlayer(target *Player) int {
+	for i, p := range r.players {
+		if p == target {
 			return i
 		}
 	}
@@ -75,14 +75,14 @@ func (r *Room) IndexOfCharacter(target *Character) int {
 }
 
 type World struct {
-	Characters map[string]*Character
-	Rooms      map[string]*Room
+	Players map[string]*Player
+	Rooms   map[string]*Room
 }
 
 func NewWorld() *World {
 	w := World{
-		Characters: make(map[string]*Character),
-		Rooms:      make(map[string]*Room),
+		Players: make(map[string]*Player),
+		Rooms:   make(map[string]*Room),
 	}
 	return &w
 }

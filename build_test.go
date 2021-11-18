@@ -19,12 +19,12 @@ func TestBuild(t *testing.T) {
 		}
 	}
 
-	for _, character := range world.Characters {
-		if character.Room == nil {
-			t.Fatalf("Character room not loaded")
+	for _, player := range world.Players {
+		if player.Room == nil {
+			t.Fatalf("Player room not loaded")
 		}
-		if character.Name == "" {
-			t.Fatalf("Character name empty")
+		if player.Name == "" {
+			t.Fatalf("Player name empty")
 		}
 	}
 }

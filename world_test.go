@@ -4,11 +4,11 @@ import (
 	"testing"
 )
 
-func TestCharacter(t *testing.T) {
+func TestPlayer(t *testing.T) {
 	handle := "Tester"
-	c := NewCharacter(handle)
+	c := NewPlayer(handle)
 	if c.Name != handle {
-		t.Fatalf("Character handle(%s) expect (%s)", c.Name, handle)
+		t.Fatalf("Player handle(%s) expect (%s)", c.Name, handle)
 	}
 
 	uuid := "b8712a40130e41dabb7e17adb2d1aef7"
@@ -18,7 +18,7 @@ func TestCharacter(t *testing.T) {
 	r := NewRoom(uuid, name, description, size)
 	c.Move(r)
 	if c.Room != r {
-		t.Fatalf("Character room(%v) expected(%v)", c.Room, r)
+		t.Fatalf("Player room(%v) expected(%v)", c.Room, r)
 	}
 }
 
@@ -41,38 +41,38 @@ func TestRoom(t *testing.T) {
 		t.Fatalf("Room size(%d) expected(%d)", r.size, size)
 	}
 
-	c := NewCharacter("Tester")
+	c := NewPlayer("Tester")
 	if r.IsFull() {
 		t.Fatalf("Room is unexpectedly full")
 	}
-	if err := r.EnterCharacter(c); err != nil {
-		t.Fatalf("Character unable to enter empty room")
+	if err := r.Enter(c); err != nil {
+		t.Fatalf("Player unable to enter empty room")
 	}
-	if r.IndexOfCharacter(c) == -1 {
-		t.Fatalf("Character not found in room")
+	if r.IndexOfPlayer(c) == -1 {
+		t.Fatalf("Player not found in room")
 	}
 	if !r.IsFull() {
 		t.Fatalf("Room is unexpectedly not full")
 	}
-	if err := r.EnterCharacter(c); err == nil {
-		t.Fatalf("Character entered full room")
+	if err := r.Enter(c); err == nil {
+		t.Fatalf("Player entered full room")
 	}
 
 	r.size += 1
 	if r.IsFull() {
 		t.Fatalf("Room is unexpectedly full after resize")
 	}
-	if err := r.EnterCharacter(c); err == nil {
-		t.Fatalf("Character able to enter room twice")
+	if err := r.Enter(c); err == nil {
+		t.Fatalf("Player able to enter room twice")
 	}
 
-	if err := r.ExitCharacter(c); err != nil {
-		t.Fatalf("Character unable to exit room")
+	if err := r.Exit(c); err != nil {
+		t.Fatalf("Player unable to exit room")
 	}
-	if r.IndexOfCharacter(c) != -1 {
-		t.Fatalf("Character present after exiting")
+	if r.IndexOfPlayer(c) != -1 {
+		t.Fatalf("Player present after exiting")
 	}
-	if err := r.ExitCharacter(c); err == nil {
-		t.Fatalf("Character able to exit room twice")
+	if err := r.Exit(c); err == nil {
+		t.Fatalf("Player able to exit room twice")
 	}
 }
