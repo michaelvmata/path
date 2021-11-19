@@ -1,16 +1,15 @@
 package main
 
 func main() {
-	incoming := make(chan string)
-	outgoing := make(chan string)
+	session := NewSession()
 	prompt := make(chan bool)
 	done := make(chan bool)
-	go handleInput(incoming)
-	go handleOutput(outgoing, prompt, done)
+	go handleInput(session.incoming)
+	go handleOutput(session.outgoing, prompt, done)
 	prompt <- true
 	for {
-		text := <-incoming
-		outgoing <- text
+		text := <-session.incoming
+		session.outgoing <- text
 		if text == "quit" {
 			done <- true
 			break
