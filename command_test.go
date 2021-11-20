@@ -3,7 +3,7 @@ package main
 import "testing"
 
 func TestDetermineCommand(t *testing.T) {
-	input := "look"
+	input := Look{}.Label()
 	world := NewWorld()
 	session := NewSession()
 	c := determineCommand(input)

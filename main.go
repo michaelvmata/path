@@ -2,6 +2,7 @@ package main
 
 func main() {
 	session := NewSession()
+	world := build()
 	prompt := make(chan bool)
 	done := make(chan bool)
 	go handleInput(session.incoming)
@@ -9,7 +10,8 @@ func main() {
 	prompt <- true
 	for {
 		text := <-session.incoming
-		session.outgoing <- text
+		command := determineCommand(text)
+		command.Execute(world, session, text)
 		if text == "quit" {
 			done <- true
 			break
