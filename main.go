@@ -3,6 +3,7 @@ package main
 func main() {
 	session := NewSession()
 	world := build()
+	session.player = world.Players["gaigen"]
 	prompt := make(chan bool)
 	done := make(chan bool)
 	go handleInput(session.incoming)

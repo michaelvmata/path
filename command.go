@@ -1,18 +1,13 @@
 package main
 
-import (
-	"log"
-)
-
 type Look struct{}
 
 func (l Look) Execute(w *World, s *Session, raw string) {
-	s.outgoing <- "look"
+	s.outgoing <- s.player.Room.Describe()
 }
 
 func (l Look) Label() string {
 	return "look"
-
 }
 
 type Typo struct{}
@@ -36,7 +31,6 @@ var commands = map[string]Executor{
 
 func determineCommand(raw string) Executor {
 	command, ok := commands[raw]
-	log.Println("checking command")
 	if !ok {
 		return commands[Typo{}.Label()]
 	}

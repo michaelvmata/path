@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"strings"
 )
 
 type Player struct {
@@ -36,6 +37,14 @@ func NewRoom(uuid string, name string, description string, size int) *Room {
 		players:     make([]*Player, 0, size),
 	}
 	return &room
+}
+
+func (r *Room) Describe() string {
+	parts := make([]string, 0)
+	parts = append(parts, r.name)
+	parts = append(parts, "")
+	parts = append(parts, r.description)
+	return strings.Join(parts, "\n")
 }
 
 func (r *Room) IsFull() bool {
