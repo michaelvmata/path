@@ -4,13 +4,14 @@ import "testing"
 
 func TestDetermineCommand(t *testing.T) {
 	input := Look{}.Label()
-	world := NewWorld()
+	world := build()
 	session := NewSession()
+	session.player = world.Players["gaigen"]
 	c := determineCommand(input)
 	go func(outgoing chan string) {
 		output := <-outgoing
-		if output != input {
-			t.Fatalf("Got output(%s) expected(%s)", output, input)
+		if output == "" {
+			t.Fatalf("Got empty output")
 		}
 	}(session.outgoing)
 	c.Execute(world, session, input)
