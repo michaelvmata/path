@@ -3,7 +3,9 @@ package main
 type Look struct{}
 
 func (l Look) Execute(w *World, s *Session, raw string) {
+	s.outgoing <- ""
 	s.outgoing <- s.player.Room.Describe()
+	s.outgoing <- ""
 }
 
 func (l Look) Label() string {
