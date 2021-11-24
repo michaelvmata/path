@@ -22,12 +22,23 @@ func (t Typo) Label() string {
 	return "typo"
 }
 
+type Noop struct{}
+
+func (n Noop) Execute(w *World, s *Session, raw string) {
+	s.outgoing <- ""
+}
+
+func (n Noop) Label() string {
+	return ""
+}
+
 type Executor interface {
 	Execute(w *World, s *Session, raw string)
 }
 
 var commands = map[string]Executor{
 	Look{}.Label(): Look{},
+	Noop{}.Label(): Noop{},
 	Typo{}.Label(): Typo{},
 }
 
