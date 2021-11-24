@@ -22,9 +22,9 @@ func handleOutput(outgoing chan string, prompt chan bool, done chan bool) {
 	for {
 		select {
 		case text := <-outgoing:
-			fmt.Println(text)
+			fmt.Println(Colorize(text))
 		case <-prompt:
-			fmt.Print(">> ")
+			fmt.Print(Colorize(" <red>98❤ <green>117★ <yellow>85✹ <blue>72⦿ <grey_62>>> "))
 		case <-done:
 			break
 		}
