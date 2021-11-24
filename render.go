@@ -6,8 +6,9 @@ import (
 )
 
 const (
-	ESC = "\x1b[38;5;" // ESC character in hex, followed by color code for 256 colors
-	END = "m"          // Finishing symbol
+	ESC   = "\x1b[38;5;" // ESC character in hex, followed by color code for 256 colors
+	END   = "m"          // Finishing symbol
+	RESET = "\x1b[0m"
 )
 
 var Colors = []string{
@@ -275,6 +276,8 @@ func Colorize(content string) string {
 		args = append(args, fmt.Sprintf("<%s>", color))
 		args = append(args, fmt.Sprintf("%s%d%s", ESC, i, END))
 	}
+	args = append(args, "<reset>")
+	args = append(args, RESET)
 	r := strings.NewReplacer(args...)
-	return r.Replace(content)
+	return r.Replace(content) + RESET
 }
