@@ -24,7 +24,8 @@ func handleOutput(outgoing chan string, prompt chan bool, done chan bool) {
 		case text := <-outgoing:
 			fmt.Println(Colorize(text))
 		case <-prompt:
-			fmt.Print(Colorize(" <red>98❤ <green>117★ <yellow>85✹ <blue>72⦿ <grey_62>>> "))
+			fmt.Printf(Colorize(" <red>98%s <green>117%s <yellow>85%s <blue>72%s <grey_62>>> "),
+				HEART, FIVE_STAR, TWELVE_STAR, CIRCLED_BULLET)
 		case <-done:
 			break
 		}
