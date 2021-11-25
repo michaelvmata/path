@@ -16,6 +16,10 @@ func NewSession() *Session {
 	return &s
 }
 
+func (s *Session) HasPlayer() bool {
+	return s.player != nil
+}
+
 func (s *Session) Receive() string {
 	select {
 	case input := <-s.incoming:
