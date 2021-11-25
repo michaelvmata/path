@@ -5,14 +5,27 @@ import (
 	"strings"
 )
 
+type Line struct {
+	Natural int // Base limit
+	Maximum int // Adjusted limit
+	Current int
+	Recover int
+}
+
 type Player struct {
-	Name string
-	Room *Room
+	Name   string
+	Room   *Room
+	Health Line
+	Spirit Line
+	Energy Line
 }
 
 func NewPlayer(handle string) *Player {
 	return &Player{
-		Name: handle,
+		Name:   handle,
+		Health: Line{},
+		Spirit: Line{},
+		Energy: Line{},
 	}
 }
 
