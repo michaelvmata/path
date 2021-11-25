@@ -18,14 +18,14 @@ func handleInput(incoming chan string) {
 	}
 }
 
-func handleOutput(outgoing chan string, prompt chan bool, done chan bool) {
+func handleOutput(session *Session, showPrompt chan bool, done chan bool) {
+	prompt := NewPrompt(session)
 	for {
 		select {
-		case text := <-outgoing:
+		case text := <-session.outgoing:
 			fmt.Println(Colorize(text))
-		case <-prompt:
-			fmt.Printf(Colorize(" <red>98%s <green>117%s <yellow>85%s <blue>72%s <grey_62>>> "),
-				HEART, FIVE_STAR, TWELVE_STAR, CIRCLED_BULLET)
+		case <-showPrompt:
+			fmt.Printf(Colorize(prompt.Render()))
 		case <-done:
 			break
 		}

@@ -7,7 +7,7 @@ func main() {
 	prompt := make(chan bool)
 	done := make(chan bool)
 	go handleInput(session.incoming)
-	go handleOutput(session.outgoing, prompt, done)
+	go handleOutput(session, prompt, done)
 	prompt <- true
 	for {
 		text := <-session.incoming
