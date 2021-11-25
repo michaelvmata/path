@@ -4,6 +4,13 @@ import (
 	"testing"
 )
 
+func TestStat(t *testing.T) {
+	s := NewStat(10, 10)
+	if s.Value() != 20 {
+		t.Fatalf("Stat value expected(%d) actual(%d)", 20, s.Value())
+	}
+}
+
 func TestPlayer(t *testing.T) {
 	handle := "Tester"
 	c := NewPlayer(handle)
