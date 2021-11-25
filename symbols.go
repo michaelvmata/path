@@ -1,6 +1,8 @@
 package main
 
 const (
+	COLLISSON         = "💥"
+	DAGGER_KNIFE      = "🗡"
 	HEART             = "❤"
 	FIVE_STAR         = "★"
 	TWELVE_STAR       = "✹"
