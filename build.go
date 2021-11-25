@@ -33,8 +33,23 @@ func buildRooms(world *World) {
 }
 
 type RawPlayer struct {
-	RoomUUID string
-	Name     string
+	RoomUUID string `json:"RoomUUID"`
+	Name     string `json:"Name"`
+	Health   struct {
+		Maximum int `json:"Maximum"`
+		Current int `json:"Current"`
+		Recover int `json:"Recover"`
+	} `json:"Health"`
+	Spirit struct {
+		Maximum int `json:"Maximum"`
+		Current int `json:"Current"`
+		Recover int `json:"Recover"`
+	} `json:"Spirit"`
+	Energy struct {
+		Maximum int `json:"Maximum"`
+		Current int `json:"Current"`
+		Recover int `json:"Recover"`
+	} `json:"Energy"`
 }
 
 func buildPlayers(world *World) {
@@ -51,6 +66,18 @@ func buildPlayers(world *World) {
 			log.Fatalf("Error parsing %s", data)
 		}
 		c := NewPlayer(rp.Name)
+		c.Health.Current = rp.Health.Current
+		c.Health.Maximum = rp.Health.Maximum
+		c.Health.Recover = rp.Health.Recover
+
+		c.Energy.Current = rp.Energy.Current
+		c.Energy.Maximum = rp.Energy.Maximum
+		c.Energy.Recover = rp.Energy.Recover
+
+		c.Spirit.Current = rp.Spirit.Current
+		c.Spirit.Maximum = rp.Spirit.Maximum
+		c.Spirit.Recover = rp.Spirit.Recover
+
 		world.Players[c.Name] = c
 		if room, ok := world.Rooms[rp.RoomUUID]; ok {
 			if err := room.Enter(c); err == nil {

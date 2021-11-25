@@ -1,1 +1,1 @@
-{"name":  "gaigen", "roomUuid":  "b8712a40130e41dabb7e17adb2d1aef7"}
+{"name":  "gaigen", "roomUuid":  "b8712a40130e41dabb7e17adb2d1aef7", "Health": {"Maximum": 33, "Current": 42, "Recover": 7}, "Spirit": {"Maximum": 92, "Current": 17, "Recover": 55},  "Energy": {"Maximum": 84, "Current": 72, "Recover": 2}}
