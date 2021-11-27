@@ -11,4 +11,5 @@ const (
 	CLUB_SUIT         = "♣"
 	SUN_WITH_RAYS     = "☀"
 	STAFF_OF_HERMES   = "⚚"
+	TRIANGULAR_BULLET = "‣"
 )

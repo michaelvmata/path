@@ -38,6 +38,8 @@ type Player struct {
 	Health Line
 	Spirit Line
 	Energy Line
+
+	Skills Skills
 }
 
 func NewPlayer(handle string) *Player {
@@ -46,6 +48,7 @@ func NewPlayer(handle string) *Player {
 		Health: Line{},
 		Spirit: Line{},
 		Energy: Line{},
+		Skills: NewSkills(),
 	}
 }
 
