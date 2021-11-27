@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"strings"
+)
+
 type Look struct{}
 
 func (l Look) Execute(w *World, s *Session, raw string) {
@@ -10,6 +15,23 @@ func (l Look) Execute(w *World, s *Session, raw string) {
 
 func (l Look) Label() string {
 	return "look"
+}
+
+type Score struct{}
+
+func (sc Score) Execute(w *World, s *Session, raw string) {
+	p := s.player
+	parts := make([]string, 0)
+	parts = append(parts, fmt.Sprintf("<red>%s<reset> Health %d(%d)+%d", HEART, p.Health.Current, p.Health.Maximum, p.Health.Recover))
+	parts = append(parts, fmt.Sprintf("<green>%s<reset> Spirit %d(%d)+%d", TWELVE_STAR, p.Spirit.Current, p.Spirit.Maximum, p.Spirit.Recover))
+	parts = append(parts, fmt.Sprintf("<blue>%s<reset> Energy %d(%d)+%d", CIRCLED_BULLET, p.Energy.Current, p.Energy.Maximum, p.Energy.Recover))
+	s.outgoing <- ""
+	s.outgoing <- strings.Join(parts, "   ")
+	s.outgoing <- ""
+}
+
+func (sc Score) Label() string {
+	return "score"
 }
 
 type Typo struct{}
@@ -37,9 +59,10 @@ type Executor interface {
 }
 
 var commands = map[string]Executor{
-	Look{}.Label(): Look{},
-	Noop{}.Label(): Noop{},
-	Typo{}.Label(): Typo{},
+	Look{}.Label():  Look{},
+	Noop{}.Label():  Noop{},
+	Score{}.Label(): Score{},
+	Typo{}.Label():  Typo{},
 }
 
 func determineCommand(raw string) Executor {
