@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/michaelvmata/path/symbols"
 	"strings"
 )
 
@@ -14,7 +15,7 @@ const (
 )
 
 func (st SkillType) String() string {
-	return TRIANGULAR_BULLET + " " + []string{"Dagger", "Sword", "Spear"}[st]
+	return symbols.TRIANGULAR_BULLET + " " + []string{"Dagger", "Sword", "Spear"}[st]
 }
 
 type Skills map[SkillType]*Stat
