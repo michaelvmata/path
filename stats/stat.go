@@ -13,11 +13,25 @@ func NewStat(base int, modifier int) *Stat {
 }
 
 func (s *Stat) Value() int {
+	// The value is a sum of the base and modifier.  It can be negative.
 	total := s.Base + s.Modifier
-	if total <= 0 {
-		total = 1
-	}
 	return total
+}
+
+func (s *Stat) Increment() {
+	// The base value should only ever increase.  It should be a relatively
+	// rare event.
+	s.Base += 1
+}
+
+func (s *Stat) Modify(value int) {
+	// The modifier can be positive or negative.  It will be a common event.
+	s.Modifier += value
+}
+
+func (s *Stat) Reset() {
+	// Reset the Modifier to a zero state.  Used when recalculating the total.
+	s.Modifier = 0
 }
 
 type ConsumableType int
@@ -41,16 +55,16 @@ func NewConsumables() Consumables {
 	return c
 }
 
-func (c Consumables) Health() Stat {
-	return c[Health]
+func (c Consumables) Health() *Stat {
+	return &c[Health]
 }
 
-func (c Consumables) Energy() Stat {
-	return c[Energy]
+func (c Consumables) Energy() *Stat {
+	return &c[Energy]
 }
 
-func (c Consumables) Spirit() Stat {
-	return c[Spirit]
+func (c Consumables) Spirit() *Stat {
+	return &c[Spirit]
 }
 
 type Line struct {

@@ -15,4 +15,20 @@ func TestConsumable(t *testing.T) {
 	c.Health()
 	c.Energy()
 	c.Spirit()
+
+	oldBase := c.Health().Base
+	c.Health().Increment()
+	if c.Health().Base <= oldBase {
+		t.Fatalf("Health increment didn't increase base")
+	}
+
+	oldModifier := c.Health().Modifier
+	c.Health().Modify(1)
+	if c.Health().Modifier <= oldModifier {
+		t.Fatalf("Health modify didn't change the value")
+	}
+	c.Health().Reset()
+	if c.Health().Modifier != oldModifier {
+		t.Fatalf("Reset didn't set to initial state")
+	}
 }
