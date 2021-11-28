@@ -2,42 +2,16 @@ package main
 
 import (
 	"errors"
+	"github.com/michaelvmata/path/stats"
 	"strings"
 )
-
-type Stat struct {
-	Base     int
-	Modifier int
-}
-
-func NewStat(base int, modifier int) *Stat {
-	return &Stat{
-		Base:     base,
-		Modifier: modifier,
-	}
-}
-
-func (s *Stat) Value() int {
-	total := s.Base + s.Modifier
-	if total <= 0 {
-		total = 1
-	}
-	return total
-}
-
-type Line struct {
-	Natural int // Base limit
-	Maximum int // Adjusted limit
-	Current int
-	Recover int
-}
 
 type Player struct {
 	Name   string
 	Room   *Room
-	Health Line
-	Spirit Line
-	Energy Line
+	Health stats.Line
+	Spirit stats.Line
+	Energy stats.Line
 
 	Skills Skills
 }
@@ -45,9 +19,10 @@ type Player struct {
 func NewPlayer(handle string) *Player {
 	return &Player{
 		Name:   handle,
-		Health: Line{},
-		Spirit: Line{},
-		Energy: Line{},
+		Health: stats.Line{},
+		Spirit: stats.Line{},
+		Energy: stats.Line{},
+
 		Skills: NewSkills(),
 	}
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/michaelvmata/path/stats"
 	"github.com/michaelvmata/path/symbols"
 	"strings"
 )
@@ -18,7 +19,7 @@ func (st SkillType) String() string {
 	return symbols.TRIANGULAR_BULLET + " " + []string{"Dagger", "Sword", "Spear"}[st]
 }
 
-type Skills map[SkillType]*Stat
+type Skills map[SkillType]*stats.Stat
 
 func (s Skills) Describe() string {
 	parts := make([]string, 0)
@@ -32,7 +33,7 @@ func (s Skills) Describe() string {
 func NewSkills() Skills {
 	s := make(Skills)
 	for i := DAGGER; i <= SPEAR; i++ {
-		s[i] = NewStat(0, 0)
+		s[i] = stats.NewStat(0, 0)
 	}
 	return s
 }

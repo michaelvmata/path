@@ -1,11 +1,12 @@
 package main
 
 import (
+	"github.com/michaelvmata/path/stats"
 	"testing"
 )
 
 func TestStat(t *testing.T) {
-	s := NewStat(10, 10)
+	s := stats.NewStat(10, 10)
 	if s.Value() != 20 {
 		t.Fatalf("Stat value expected(%d) actual(%d)", 20, s.Value())
 	}
