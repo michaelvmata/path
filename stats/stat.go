@@ -20,6 +20,39 @@ func (s *Stat) Value() int {
 	return total
 }
 
+type ConsumableType int
+
+const (
+	Health ConsumableType = iota
+	Energy
+	Spirit
+)
+
+var ConsumableLabels = []string{"Health", "Energy", "Spirit"}
+
+func (ct ConsumableType) String() string {
+	return ConsumableLabels[ct]
+}
+
+type Consumables []Stat
+
+func NewConsumables() Consumables {
+	c := make([]Stat, len(ConsumableLabels))
+	return c
+}
+
+func (c Consumables) Health() Stat {
+	return c[Health]
+}
+
+func (c Consumables) Energy() Stat {
+	return c[Energy]
+}
+
+func (c Consumables) Spirit() Stat {
+	return c[Spirit]
+}
+
 type Line struct {
 	Natural int // Base limit
 	Maximum int // Adjusted limit
