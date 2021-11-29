@@ -2,33 +2,29 @@ package stats
 
 import "testing"
 
-func TestCore(t *testing.T) {
-	c := NewCores()
-	if c.Power().Current != 0 {
+func TestConsumable(t *testing.T) {
+	c := NewConsumable()
+	if c.Health.Current != 0 {
 		t.Fatalf("Core power zero value is not 0")
 	}
-	c.Will()
 }
 
-func TestConsumable(t *testing.T) {
-	c := NewConsumables()
-	c.Health()
-	c.Energy()
-	c.Spirit()
+func TestCore(t *testing.T) {
+	c := NewCore()
 
-	oldBase := c.Health().Base
-	c.Health().Increment()
-	if c.Health().Base <= oldBase {
-		t.Fatalf("Health increment didn't increase base")
+	oldBase := c.Power.Base
+	c.Power.Increment()
+	if c.Power.Base <= oldBase {
+		t.Fatalf("Power increment didn't increase base")
 	}
 
-	oldModifier := c.Health().Modifier
-	c.Health().Modify(1)
-	if c.Health().Modifier <= oldModifier {
-		t.Fatalf("Health modify didn't change the value")
+	oldModifier := c.Power.Modifier
+	c.Power.Modify(1)
+	if c.Power.Modifier <= oldModifier {
+		t.Fatalf("Power modify didn't change the value")
 	}
-	c.Health().Reset()
-	if c.Health().Modifier != oldModifier {
+	c.Power.Reset()
+	if c.Power.Modifier != oldModifier {
 		t.Fatalf("Reset didn't set to initial state")
 	}
 }

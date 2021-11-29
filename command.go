@@ -23,9 +23,9 @@ type Score struct{}
 func (sc Score) Execute(w *World, s *Session, raw string) {
 	p := s.player
 	parts := make([]string, 0)
-	parts = append(parts, fmt.Sprintf("<red>%s<reset> Health %d(%d)+%d", symbols.HEART, p.Health.Current, p.Health.Maximum, p.Health.Recover))
-	parts = append(parts, fmt.Sprintf("<green>%s<reset> Spirit %d(%d)+%d", symbols.TWELVE_STAR, p.Spirit.Current, p.Spirit.Maximum, p.Spirit.Recover))
-	parts = append(parts, fmt.Sprintf("<blue>%s<reset> Energy %d(%d)+%d", symbols.CIRCLED_BULLET, p.Energy.Current, p.Energy.Maximum, p.Energy.Recover))
+	parts = append(parts, fmt.Sprintf("<red>%s<reset> Health %d(%d)+%d", symbols.HEART, p.Health.Current, p.Health.Maximum, p.Health.RecoverRate))
+	parts = append(parts, fmt.Sprintf("<green>%s<reset> Spirit %d(%d)+%d", symbols.TWELVE_STAR, p.Spirit.Current, p.Spirit.Maximum, p.Spirit.RecoverRate))
+	parts = append(parts, fmt.Sprintf("<blue>%s<reset> Energy %d(%d)+%d", symbols.CIRCLED_BULLET, p.Energy.Current, p.Energy.Maximum, p.Energy.RecoverRate))
 	s.outgoing <- ""
 	s.outgoing <- strings.Join(parts, "   ")
 	s.outgoing <- ""

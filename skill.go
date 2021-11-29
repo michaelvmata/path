@@ -33,7 +33,8 @@ func (s Skills) Describe() string {
 func NewSkills() Skills {
 	s := make(Skills)
 	for i := DAGGER; i <= SPEAR; i++ {
-		s[i] = stats.NewStat(0, 0)
+		stat := stats.NewStat(0, 0)
+		s[i] = &stat
 	}
 	return s
 }

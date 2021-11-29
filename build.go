@@ -68,15 +68,15 @@ func buildPlayers(world *World) {
 		c := NewPlayer(rp.Name)
 		c.Health.Current = rp.Health.Current
 		c.Health.Maximum = rp.Health.Maximum
-		c.Health.Recover = rp.Health.Recover
+		c.Health.RecoverRate = rp.Health.Recover
 
 		c.Energy.Current = rp.Energy.Current
 		c.Energy.Maximum = rp.Energy.Maximum
-		c.Energy.Recover = rp.Energy.Recover
+		c.Energy.RecoverRate = rp.Energy.Recover
 
 		c.Spirit.Current = rp.Spirit.Current
 		c.Spirit.Maximum = rp.Spirit.Maximum
-		c.Spirit.Recover = rp.Spirit.Recover
+		c.Spirit.RecoverRate = rp.Spirit.Recover
 
 		world.Players[c.Name] = c
 		if room, ok := world.Rooms[rp.RoomUUID]; ok {
