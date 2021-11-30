@@ -55,22 +55,23 @@ func NewCore() Core {
 }
 
 type Line struct {
-	Natural     int // Base limit
-	Maximum     int // Adjusted limit
+	Maximum     int
 	Current     int
 	RecoverRate int
+}
+
+func (l *Line) EnforceMaximum() {
+	if l.Current > l.Maximum {
+		l.Current = l.Maximum
+	}
 }
 
 func (l *Line) Recover() {
 	if l.Current >= l.Maximum {
 		return
 	}
-	diff := l.Maximum - l.Current
-	if l.RecoverRate > diff {
-		l.Current = l.Maximum
-	} else {
-		l.Current += l.RecoverRate
-	}
+	l.Current += l.RecoverRate
+	l.EnforceMaximum()
 }
 
 type Consumable struct {
