@@ -1,6 +1,6 @@
 package item
 
-import "github.com/michaelvmata/path/skills"
+import "github.com/michaelvmata/path/modifiers"
 
 type Type int
 
@@ -13,12 +13,12 @@ type Item struct {
 	Name      string
 	Type      Type
 	Slot      Slot
-	Modifiers []skills.Modifier
+	Modifiers []modifiers.Modifier
 }
 
-func (i *Item) AddModifier(skill skills.SkillType, value int) {
-	modifier := skills.Modifier{
-		Skill: skill,
+func (i *Item) AddModifier(modifierType modifiers.Type, value int) {
+	modifier := modifiers.Modifier{
+		Type:  modifierType,
 		Value: value,
 	}
 	i.Modifiers = append(i.Modifiers, modifier)
@@ -29,7 +29,7 @@ func NewItem(name string, itemType Type, slot Slot) Item {
 		Name:      name,
 		Type:      itemType,
 		Slot:      slot,
-		Modifiers: make([]skills.Modifier, 0),
+		Modifiers: make([]modifiers.Modifier, 0),
 	}
 }
 

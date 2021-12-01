@@ -1,7 +1,7 @@
 package item
 
 import (
-	"github.com/michaelvmata/path/skills"
+	"github.com/michaelvmata/path/modifiers"
 	"testing"
 )
 
@@ -10,7 +10,7 @@ func TestItem(t *testing.T) {
 	if len(item.Modifiers) != 0 {
 		t.Fatalf("Default item has non empty modifiers")
 	}
-	item.AddModifier(skills.DAGGER, 1)
+	item.AddModifier(modifiers.Dagger, 1)
 	if len(item.Modifiers) != 1 {
 		t.Fatalf("Item does not have modifier")
 	}

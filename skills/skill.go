@@ -7,24 +7,6 @@ import (
 	"strings"
 )
 
-type SkillType int
-
-const (
-	DAGGER SkillType = iota
-	SWORD
-	SPEAR
-)
-
-var Labels = []string{
-	"Dagger",
-	"Sword",
-	"Spear",
-}
-
-func (st SkillType) String() string {
-	return Labels[st]
-}
-
 type Skills struct {
 	Dagger stats.Stat
 	Sword  stats.Stat
@@ -46,9 +28,4 @@ func NewSkills() Skills {
 		Sword:  stats.NewStat(0, 0),
 		Spear:  stats.NewStat(0, 0),
 	}
-}
-
-type Modifier struct {
-	Skill SkillType
-	Value int
 }
