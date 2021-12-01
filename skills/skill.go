@@ -16,14 +16,25 @@ const (
 	TALENT
 	INSIGHT
 	WILL
-
 	DAGGER
 	SWORD
 	SPEAR
 )
 
+var Labels = []string{
+	"Power",
+	"Agility",
+	"Endurance",
+	"Talent",
+	"Insight",
+	"Will",
+	"Dagger",
+	"Sword",
+	"Spear",
+}
+
 func (st SkillType) String() string {
-	return symbols.TRIANGULAR_BULLET + " " + []string{"Dagger", "Sword", "Spear"}[st]
+	return symbols.TRIANGULAR_BULLET + " " + Labels[st]
 }
 
 type Skills map[SkillType]*stats.Stat
@@ -39,7 +50,7 @@ func (s Skills) Describe() string {
 
 func NewSkills() Skills {
 	s := make(Skills)
-	for i := DAGGER; i <= SPEAR; i++ {
+	for i := POWER; i <= SPEAR; i++ {
 		stat := stats.NewStat(0, 0)
 		s[i] = &stat
 	}
