@@ -9,7 +9,6 @@ import (
 func TestRender(t *testing.T) {
 	for _, color := range Colors {
 		c := Colorize(fmt.Sprintf("<%s>%s", color, color))
-		fmt.Println(c)
 		if !strings.HasPrefix(c, ESC) {
 			t.Fatalf("Color %s, %s missing prefix", color, c)
 		}
