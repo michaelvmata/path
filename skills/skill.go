@@ -1,4 +1,4 @@
-package main
+package skills
 
 import (
 	"fmt"
@@ -10,7 +10,14 @@ import (
 type SkillType int
 
 const (
-	DAGGER SkillType = iota
+	POWER SkillType = iota
+	AGILITY
+	ENDURANCE
+	TALENT
+	INSIGHT
+	WILL
+
+	DAGGER
 	SWORD
 	SPEAR
 )
@@ -37,4 +44,9 @@ func NewSkills() Skills {
 		s[i] = &stat
 	}
 	return s
+}
+
+type Modifier struct {
+	skill Skills
+	value int
 }

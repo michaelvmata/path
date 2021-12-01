@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"github.com/michaelvmata/path/skills"
 	"github.com/michaelvmata/path/stats"
 	"strings"
 )
@@ -13,7 +14,7 @@ type Player struct {
 	Spirit stats.Line
 	Energy stats.Line
 
-	Skills Skills
+	Skills skills.Skills
 }
 
 func NewPlayer(handle string) *Player {
@@ -23,7 +24,7 @@ func NewPlayer(handle string) *Player {
 		Spirit: stats.Line{},
 		Energy: stats.Line{},
 
-		Skills: NewSkills(),
+		Skills: skills.NewSkills(),
 	}
 }
 

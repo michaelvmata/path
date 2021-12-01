@@ -1,6 +1,8 @@
-package main
+package skills
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestSkill(t *testing.T) {
 	skills := NewSkills()
