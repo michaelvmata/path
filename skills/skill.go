@@ -30,7 +30,7 @@ type Skills map[SkillType]*stats.Stat
 
 func (s Skills) Describe() string {
 	parts := make([]string, 0)
-	for i := DAGGER; i <= SPEAR; i++ {
+	for i := POWER; i <= SPEAR; i++ {
 		description := fmt.Sprintf("%s: %d", i.String(), s[i].Value())
 		parts = append(parts, description)
 	}
@@ -47,6 +47,6 @@ func NewSkills() Skills {
 }
 
 type Modifier struct {
-	skill Skills
-	value int
+	Skill SkillType
+	Value int
 }
