@@ -10,7 +10,7 @@ func TestItem(t *testing.T) {
 	if len(item.Modifiers) != 0 {
 		t.Fatalf("Default item has non empty modifiers")
 	}
-	item.AddModifier(skills.POWER, 1)
+	item.AddModifier(skills.DAGGER, 1)
 	if len(item.Modifiers) != 1 {
 		t.Fatalf("Item does not have modifier")
 	}

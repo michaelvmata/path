@@ -10,51 +10,42 @@ import (
 type SkillType int
 
 const (
-	POWER SkillType = iota
-	AGILITY
-	ENDURANCE
-	TALENT
-	INSIGHT
-	WILL
-	DAGGER
+	DAGGER SkillType = iota
 	SWORD
 	SPEAR
 )
 
 var Labels = []string{
-	"Power",
-	"Agility",
-	"Endurance",
-	"Talent",
-	"Insight",
-	"Will",
 	"Dagger",
 	"Sword",
 	"Spear",
 }
 
 func (st SkillType) String() string {
-	return symbols.TRIANGULAR_BULLET + " " + Labels[st]
+	return Labels[st]
 }
 
-type Skills map[SkillType]*stats.Stat
+type Skills struct {
+	Dagger stats.Stat
+	Sword  stats.Stat
+	Spear  stats.Stat
+}
 
 func (s Skills) Describe() string {
-	parts := make([]string, 0)
-	for i := POWER; i <= SPEAR; i++ {
-		description := fmt.Sprintf("%s: %d", i.String(), s[i].Value())
-		parts = append(parts, description)
+	parts := []string{
+		fmt.Sprintf("%s Dagger: %d", symbols.TRIANGULAR_BULLET, s.Dagger.Value()),
+		fmt.Sprintf("%s Sword: %d", symbols.TRIANGULAR_BULLET, s.Sword.Value()),
+		fmt.Sprintf("%s Spear: %d", symbols.TRIANGULAR_BULLET, s.Spear.Value()),
 	}
 	return strings.Join(parts, "\n")
 }
 
 func NewSkills() Skills {
-	s := make(Skills)
-	for i := POWER; i <= SPEAR; i++ {
-		stat := stats.NewStat(0, 0)
-		s[i] = &stat
+	return Skills{
+		Dagger: stats.NewStat(0, 0),
+		Sword:  stats.NewStat(0, 0),
+		Spear:  stats.NewStat(0, 0),
 	}
-	return s
 }
 
 type Modifier struct {
