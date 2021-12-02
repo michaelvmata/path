@@ -34,6 +34,22 @@ func (c *Player) Move(r *Room) {
 	c.Room = r
 }
 
+func (c *Player) Update(tock bool) {
+	// Adjust lines from core stats
+	c.Health.Maximum = c.Core.Endurance.Value() * 100
+	c.Health.EnforceMaximum()
+	c.Spirit.Maximum = c.Core.Insight.Value() * 100
+	c.Spirit.EnforceMaximum()
+	c.Energy.Maximum = (c.Core.Power.Value() + c.Core.Will.Value()) * 100
+	c.Energy.EnforceMaximum()
+
+	if tock {
+		c.Health.Recover()
+		c.Spirit.Recover()
+		c.Energy.Recover()
+	}
+}
+
 type Room struct {
 	uuid        string
 	name        string
