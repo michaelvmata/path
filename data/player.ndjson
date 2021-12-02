@@ -1,1 +1,1 @@
-{"name":  "gaigen", "roomUuid":  "b8712a40130e41dabb7e17adb2d1aef7", "Health": {"Maximum": 33, "Current": 42, "Recover": 7}, "Spirit": {"Maximum": 92, "Current": 17, "Recover": 55},  "Energy": {"Maximum": 84, "Current": 72, "Recover": 2}}
+{"name":  "gaigen", "roomUuid":  "b8712a40130e41dabb7e17adb2d1aef7", "Power": 1, "Agility":2, "Endurance":3, "Talent":4, "Insight":5, "Will":6, "Health": {"Maximum": 33, "Current": 42, "Recover": 7}, "Spirit": {"Maximum": 92, "Current": 17, "Recover": 55},  "Energy": {"Maximum": 84, "Current": 72, "Recover": 2}}

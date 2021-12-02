@@ -29,6 +29,8 @@ func (sc Score) Execute(w *World, s *Session, raw string) {
 	s.outgoing <- ""
 	s.outgoing <- strings.Join(parts, "   ")
 	s.outgoing <- ""
+	s.outgoing <- p.Core.Describe()
+	s.outgoing <- ""
 	s.outgoing <- p.Skills.Describe()
 	s.outgoing <- ""
 }

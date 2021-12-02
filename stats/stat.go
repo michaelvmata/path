@@ -1,5 +1,10 @@
 package stats
 
+import (
+	"fmt"
+	"github.com/michaelvmata/path/symbols"
+)
+
 type Stat struct {
 	Base     int
 	Modifier int
@@ -41,6 +46,16 @@ type Core struct {
 	Talent    Stat
 	Insight   Stat
 	Will      Stat
+}
+
+func (c Core) Describe() string {
+	return fmt.Sprintf("%s Power %d  %s Agility %d  %s Endurance %d  %s Talent %d  %s Insight %d  %s Will %d",
+		symbols.HEAVY_GREEK_CROSS, c.Power.Value(),
+		symbols.HEAVY_GREEK_CROSS, c.Agility.Value(),
+		symbols.HEAVY_GREEK_CROSS, c.Endurance.Value(),
+		symbols.HEAVY_GREEK_CROSS, c.Talent.Value(),
+		symbols.HEAVY_GREEK_CROSS, c.Insight.Value(),
+		symbols.HEAVY_GREEK_CROSS, c.Will.Value())
 }
 
 func NewCore() Core {

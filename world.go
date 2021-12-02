@@ -14,6 +14,7 @@ type Player struct {
 	Spirit stats.Line
 	Energy stats.Line
 
+	Core   stats.Core
 	Skills skills.Skills
 }
 
@@ -24,6 +25,7 @@ func NewPlayer(handle string) *Player {
 		Spirit: stats.Line{},
 		Energy: stats.Line{},
 
+		Core:   stats.NewCore(),
 		Skills: skills.NewSkills(),
 	}
 }
