@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	item "github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/skills"
 	"github.com/michaelvmata/path/stats"
 	"strings"
@@ -16,6 +17,8 @@ type Player struct {
 
 	Core   stats.Core
 	Skills skills.Skills
+
+	Gear item.Gear
 }
 
 func NewPlayer(handle string) *Player {
@@ -27,6 +30,8 @@ func NewPlayer(handle string) *Player {
 
 		Core:   stats.NewCore(),
 		Skills: skills.NewSkills(),
+
+		Gear: item.NewGear(),
 	}
 }
 
