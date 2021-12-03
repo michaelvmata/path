@@ -18,7 +18,7 @@ type Player struct {
 	Core   stats.Core
 	Skills skills.Skills
 
-	Gear item.Gear
+	Gear *item.Gear
 }
 
 func NewPlayer(handle string) *Player {

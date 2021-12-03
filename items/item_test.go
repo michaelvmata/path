@@ -18,9 +18,6 @@ func TestItem(t *testing.T) {
 
 func TestGear(t *testing.T) {
 	gear := NewGear()
-	if len(gear) == 0 {
-		t.Fatalf("Gear is empty")
-	}
 	helmet := NewItem("test helmet", Armor, Head)
 	if _, err := gear.Equip(helmet); err != nil {
 		t.Fatalf("Error equiping %v", helmet)

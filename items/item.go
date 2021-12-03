@@ -5,18 +5,16 @@ import (
 	"github.com/michaelvmata/path/modifiers"
 )
 
-type Type int
-
 const (
-	Armor Type = iota
-	Weapon
-	Tablet
+	Armor  = "Armor"
+	Weapon = "Weapon"
+	Tablet = "Tablet"
 )
 
 type Item struct {
 	Name      string
-	Type      Type
-	Slot      Slot
+	Type      string
+	Slot      string
 	Modifiers []modifiers.Modifier
 }
 
@@ -28,7 +26,7 @@ func (i *Item) AddModifier(modifierType modifiers.Type, value int) {
 	i.Modifiers = append(i.Modifiers, modifier)
 }
 
-func NewItem(name string, itemType Type, slot Slot) *Item {
+func NewItem(name string, itemType string, slot string) *Item {
 	return &Item{
 		Name:      name,
 		Type:      itemType,
@@ -37,45 +35,78 @@ func NewItem(name string, itemType Type, slot Slot) *Item {
 	}
 }
 
-type Slot int
-
 const (
-	Empty Slot = iota
-	Head
-	Neck
-	Body
-	Arms
-	Hands
-	Waist
-	Legs
-	Feet
-	Wrist
-	Fingers
-	OffHand
-	MainHand
+	Empty    = ""
+	Head     = "Head"
+	Neck     = "Neck"
+	Body     = "Body"
+	Arms     = "Arms"
+	Hands    = "Hands"
+	Waist    = "Waist"
+	Legs     = "Legs"
+	Feet     = "Feet"
+	Wrist    = "Wrist"
+	Fingers  = "Fingers"
+	MainHand = "MainHand"
 )
 
-type Gear []*Item
-
-func NewGear() Gear {
-	e := make([]*Item, MainHand-1)
-	return e
+type Gear struct {
+	Head     *Item
+	Neck     *Item
+	Body     *Item
+	Arms     *Item
+	Hands    *Item
+	Waist    *Item
+	Legs     *Item
+	Feet     *Item
+	Wrist    *Item
+	Fingers  *Item
+	OffHand  *Item
+	MainHand *Item
 }
 
-func (g Gear) Equip(item *Item) (*Item, error) {
-	var previous *Item
-	if item.Type == Armor {
-		if g[item.Slot] != nil {
-			previous = g[item.Slot]
-		}
-		g[item.Slot] = item
-	} else if item.Type == Weapon {
-		if g[MainHand] != nil {
-			previous = g[MainHand]
-		}
-		g[MainHand] = item
-	} else {
+func NewGear() *Gear {
+	return &Gear{}
+}
+
+func (g *Gear) Equip(item *Item) (*Item, error) {
+	if item.Type != Weapon && item.Type != Armor {
 		return nil, errors.New("can't equip item")
+	}
+	var previous *Item
+	switch item.Slot {
+	case Head:
+		previous = g.Head
+		g.Head = item
+	case Neck:
+		previous = g.Neck
+		g.Neck = item
+	case Body:
+		previous = g.Body
+		g.Body = item
+	case Arms:
+		previous = g.Arms
+		g.Arms = item
+	case Waist:
+		previous = g.Waist
+		g.Waist = item
+	case Legs:
+		previous = g.Legs
+		g.Legs = item
+	case Feet:
+		previous = g.Feet
+		g.Feet = item
+	case Wrist:
+		previous = g.Wrist
+		g.Wrist = item
+	case Fingers:
+		previous = g.Fingers
+		g.Fingers = item
+	case MainHand:
+		previous = g.MainHand
+		g.MainHand = item
+	default:
+		return nil, errors.New("bad item slot")
 	}
 	return previous, nil
 }
