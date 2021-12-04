@@ -87,7 +87,18 @@ type RawPlayer struct {
 		Recover int `json:"Recover"`
 	} `json:"Energy"`
 	Gear struct {
-		Head string `json:"Head"`
+		Head     string `json:"Head"`
+		Neck     string `json:"Neck"`
+		Body     string `json:"Body"`
+		Arms     string `json:"Arms"`
+		Hands    string `json:"Hands"`
+		Waist    string `json:"Waist"`
+		Legs     string `json:"Legs"`
+		Feet     string `json:"Feet"`
+		Wrist    string `json:"Wrist"`
+		Fingers  string `json:"Fingers"`
+		OffHand  string `json:"Offhand"`
+		MainHand string `json:"MainHand"`
 	} `json:"Gear"`
 }
 
@@ -127,6 +138,61 @@ func buildPlayers(world *World) {
 		if rp.Gear.Head != "" {
 			if i, ok := world.Items[rp.Gear.Head]; ok {
 				c.Gear.Head = i
+			}
+		}
+		if rp.Gear.Neck != "" {
+			if i, ok := world.Items[rp.Gear.Neck]; ok {
+				c.Gear.Neck = i
+			}
+		}
+		if rp.Gear.Body != "" {
+			if i, ok := world.Items[rp.Gear.Body]; ok {
+				c.Gear.Body = i
+			}
+		}
+		if rp.Gear.Arms != "" {
+			if i, ok := world.Items[rp.Gear.Arms]; ok {
+				c.Gear.Arms = i
+			}
+		}
+		if rp.Gear.Hands != "" {
+			if i, ok := world.Items[rp.Gear.Hands]; ok {
+				c.Gear.Hands = i
+			}
+		}
+		if rp.Gear.Waist != "" {
+			if i, ok := world.Items[rp.Gear.Waist]; ok {
+				c.Gear.Waist = i
+			}
+		}
+		if rp.Gear.Legs != "" {
+			if i, ok := world.Items[rp.Gear.Legs]; ok {
+				c.Gear.Legs = i
+			}
+		}
+		if rp.Gear.Feet != "" {
+			if i, ok := world.Items[rp.Gear.Feet]; ok {
+				c.Gear.Feet = i
+			}
+		}
+		if rp.Gear.Wrist != "" {
+			if i, ok := world.Items[rp.Gear.Wrist]; ok {
+				c.Gear.Wrist = i
+			}
+		}
+		if rp.Gear.Fingers != "" {
+			if i, ok := world.Items[rp.Gear.Fingers]; ok {
+				c.Gear.Fingers = i
+			}
+		}
+		if rp.Gear.OffHand != "" {
+			if i, ok := world.Items[rp.Gear.OffHand]; ok {
+				c.Gear.OffHand = i
+			}
+		}
+		if rp.Gear.MainHand != "" {
+			if i, ok := world.Items[rp.Gear.MainHand]; ok {
+				c.Gear.MainHand = i
 			}
 		}
 		world.Players[c.Name] = c
