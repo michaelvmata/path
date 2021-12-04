@@ -12,6 +12,7 @@ const (
 )
 
 type Item struct {
+	UUID      string
 	Name      string
 	Type      string
 	Slot      string
@@ -26,8 +27,9 @@ func (i *Item) AddModifier(modifierType string, value int) {
 	i.Modifiers = append(i.Modifiers, modifier)
 }
 
-func NewItem(name string, itemType string, slot string) *Item {
+func NewItem(UUID string, name string, itemType string, slot string) *Item {
 	return &Item{
+		UUID:      UUID,
 		Name:      name,
 		Type:      itemType,
 		Slot:      slot,

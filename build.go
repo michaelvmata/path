@@ -2,10 +2,40 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/michaelvmata/path/items"
 	"io/ioutil"
 	"log"
 	"strings"
 )
+
+type RawItem struct {
+	UUID      string `json:"UUID"`
+	Name      string `json:"Name"`
+	Type      string `json:"Type"`
+	Slot      string `json:"Slot"`
+	Modifiers []struct {
+		Type  string `json:"Type"`
+		Value int    `json:",Value"`
+	} `json:"Modifiers"`
+}
+
+func buildItems(world *World) {
+	itemFilePath := "data/item.ndjson"
+	data, err := ioutil.ReadFile(itemFilePath)
+	if err != nil {
+		log.Fatalf("Error opening room %s", itemFilePath)
+	}
+	d := json.NewDecoder(strings.NewReader(string(data)))
+	for d.More() {
+		r := RawItem{}
+		err := d.Decode(&r)
+		if err != nil {
+			log.Fatalf("Error parsing %s", data)
+		}
+		i := item.NewItem(r.UUID, r.Name, r.Type, r.Slot)
+		world.Items[i.UUID] = i
+	}
+}
 
 type RawRoom struct {
 	UUID        string
@@ -103,5 +133,6 @@ func build() *World {
 	world := NewWorld()
 	buildRooms(world)
 	buildPlayers(world)
+	buildItems(world)
 	return world
 }

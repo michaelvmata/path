@@ -6,7 +6,7 @@ import (
 )
 
 func TestItem(t *testing.T) {
-	item := NewItem("test helmet", Armor, Head)
+	item := NewItem("f7b83201941a422f95100ac174be587f", "test helmet", Armor, Head)
 	if len(item.Modifiers) != 0 {
 		t.Fatalf("Default item has non empty modifiers")
 	}
@@ -18,14 +18,14 @@ func TestItem(t *testing.T) {
 
 func TestGear(t *testing.T) {
 	gear := NewGear()
-	helmet := NewItem("test helmet", Armor, Head)
+	helmet := NewItem("f7b83201941a422f95100ac174be587f", "test helmet", Armor, Head)
 	if _, err := gear.Equip(helmet); err != nil {
 		t.Fatalf("Error equiping %v", helmet)
 	}
 	if previous, err := gear.Equip(helmet); previous != helmet || err != nil {
 		t.Fatalf("Error getting previous %v %v", helmet, err)
 	}
-	tablet := NewItem("test tablet", Tablet, Empty)
+	tablet := NewItem("329f203e98c64a2fa511385f55a7abcb", "test tablet", Tablet, Empty)
 	if _, err := gear.Equip(tablet); err == nil {
 		t.Fatalf("No Error equiping %v", tablet)
 	}

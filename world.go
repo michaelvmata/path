@@ -121,12 +121,14 @@ func (r *Room) IndexOfPlayer(target *Player) int {
 type World struct {
 	Players map[string]*Player
 	Rooms   map[string]*Room
+	Items   map[string]*item.Item
 }
 
 func NewWorld() *World {
 	w := World{
 		Players: make(map[string]*Player),
 		Rooms:   make(map[string]*Room),
+		Items:   make(map[string]*item.Item),
 	}
 	return &w
 }
