@@ -2,7 +2,7 @@ package main
 
 import (
 	"errors"
-	item "github.com/michaelvmata/path/items"
+	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/skills"
 	"github.com/michaelvmata/path/stats"
 	"strings"
