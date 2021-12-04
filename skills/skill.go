@@ -8,12 +8,12 @@ import (
 )
 
 type Skills struct {
-	Dagger stats.Stat
-	Sword  stats.Stat
-	Spear  stats.Stat
+	Dagger *stats.Stat
+	Sword  *stats.Stat
+	Spear  *stats.Stat
 }
 
-func (s Skills) Describe() string {
+func (s *Skills) Describe() string {
 	parts := []string{
 		fmt.Sprintf("%s Dagger: %d", symbols.TRIANGULAR_BULLET, s.Dagger.Value()),
 		fmt.Sprintf("%s Sword: %d", symbols.TRIANGULAR_BULLET, s.Sword.Value()),
@@ -22,8 +22,8 @@ func (s Skills) Describe() string {
 	return strings.Join(parts, "\n")
 }
 
-func NewSkills() Skills {
-	return Skills{
+func NewSkills() *Skills {
+	return &Skills{
 		Dagger: stats.NewStat(0, 0),
 		Sword:  stats.NewStat(0, 0),
 		Spear:  stats.NewStat(0, 0),

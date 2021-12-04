@@ -15,8 +15,8 @@ type Player struct {
 	Spirit stats.Line
 	Energy stats.Line
 
-	Core   stats.Core
-	Skills skills.Skills
+	Core   *stats.Core
+	Skills *skills.Skills
 
 	Gear *item.Gear
 }
