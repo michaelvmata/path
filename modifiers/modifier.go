@@ -1,21 +1,19 @@
 package modifiers
 
-type Type int
-
 const (
-	Power Type = iota
-	Agility
-	Endurance
-	Talent
-	Insight
-	Will
+	Power     = "Power"
+	Agility   = "Agility"
+	Endurance = "Endurance"
+	Talent    = "Talent"
+	Insight   = "Insight"
+	Will      = "Will"
 
-	Dagger
-	Sword
-	Spear
+	Dagger = "Dagger"
+	Sword  = "Sword"
+	Spear  = "Spear"
 )
 
 type Modifier struct {
-	Type  Type
+	Type  string
 	Value int
 }

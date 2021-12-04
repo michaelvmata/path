@@ -18,7 +18,7 @@ type Item struct {
 	Modifiers []modifiers.Modifier
 }
 
-func (i *Item) AddModifier(modifierType modifiers.Type, value int) {
+func (i *Item) AddModifier(modifierType string, value int) {
 	modifier := modifiers.Modifier{
 		Type:  modifierType,
 		Value: value,
