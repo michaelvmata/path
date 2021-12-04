@@ -64,12 +64,29 @@ func (c *Player) ApplyModifiers(mods []modifiers.Modifier) {
 		}
 	}
 }
-func (c *Player) CalculateModifiers() {
-	c.Core.ResetModifier()
-	if c.Gear.Head != nil {
-		c.ApplyModifiers(c.Gear.Head.Modifiers)
+
+func (c *Player) ApplyItemModifiers(i *item.Item) {
+	if i != nil {
+		c.ApplyModifiers(i.Modifiers)
 	}
 }
+
+func (c *Player) CalculateModifiers() {
+	c.Core.ResetModifier()
+	c.ApplyItemModifiers(c.Gear.Head)
+	c.ApplyItemModifiers(c.Gear.Neck)
+	c.ApplyItemModifiers(c.Gear.Body)
+	c.ApplyItemModifiers(c.Gear.Arms)
+	c.ApplyItemModifiers(c.Gear.Hands)
+	c.ApplyItemModifiers(c.Gear.Waist)
+	c.ApplyItemModifiers(c.Gear.Legs)
+	c.ApplyItemModifiers(c.Gear.Feet)
+	c.ApplyItemModifiers(c.Gear.Wrist)
+	c.ApplyItemModifiers(c.Gear.Fingers)
+	c.ApplyItemModifiers(c.Gear.OffHand)
+	c.ApplyItemModifiers(c.Gear.MainHand)
+}
+
 func (c *Player) Update(tock bool) {
 	c.CalculateModifiers()
 	// Adjust lines from core stats
