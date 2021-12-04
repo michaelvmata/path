@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"github.com/michaelvmata/path/items"
+	"github.com/michaelvmata/path/modifiers"
 	"github.com/michaelvmata/path/skills"
 	"github.com/michaelvmata/path/stats"
 	"strings"
@@ -39,7 +40,38 @@ func (c *Player) Move(r *Room) {
 	c.Room = r
 }
 
+func (c *Player) ApplyModifiers(mods []modifiers.Modifier) {
+	for _, mod := range mods {
+		switch mod.Type {
+		case modifiers.Power:
+			c.Core.Power.Modify(mod.Value)
+		case modifiers.Agility:
+			c.Core.Agility.Modify(mod.Value)
+		case modifiers.Endurance:
+			c.Core.Endurance.Modify(mod.Value)
+		case modifiers.Talent:
+			c.Core.Talent.Modify(mod.Value)
+		case modifiers.Insight:
+			c.Core.Insight.Modify(mod.Value)
+		case modifiers.Will:
+			c.Core.Will.Modify(mod.Value)
+		case modifiers.Dagger:
+			c.Skills.Dagger.Modify(mod.Value)
+		case modifiers.Sword:
+			c.Skills.Sword.Modify(mod.Value)
+		case modifiers.Spear:
+			c.Skills.Spear.Modify(mod.Value)
+		}
+	}
+}
+func (c *Player) CalculateModifiers() {
+	c.Core.ResetModifier()
+	if c.Gear.Head != nil {
+		c.ApplyModifiers(c.Gear.Head.Modifiers)
+	}
+}
 func (c *Player) Update(tock bool) {
+	c.CalculateModifiers()
 	// Adjust lines from core stats
 	c.Health.Maximum = c.Core.Endurance.Value() * 100
 	c.Health.EnforceMaximum()

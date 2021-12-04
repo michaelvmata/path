@@ -12,6 +12,7 @@ func main() {
 	for {
 		text := <-session.incoming
 		command := determineCommand(text)
+		session.player.Update(true)
 		command.Execute(world, session, text)
 		if text == "quit" {
 			done <- true

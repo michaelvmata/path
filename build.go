@@ -33,6 +33,9 @@ func buildItems(world *World) {
 			log.Fatalf("Error parsing %s", data)
 		}
 		i := item.NewItem(r.UUID, r.Name, r.Type, r.Slot)
+		for _, rm := range r.Modifiers {
+			i.AddModifier(rm.Type, rm.Value)
+		}
 		world.Items[i.UUID] = i
 	}
 }
