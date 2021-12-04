@@ -86,6 +86,9 @@ type RawPlayer struct {
 		Current int `json:"Current"`
 		Recover int `json:"Recover"`
 	} `json:"Energy"`
+	Gear struct {
+		Head string `json:"Head"`
+	} `json:"Gear"`
 }
 
 func buildPlayers(world *World) {
@@ -120,6 +123,12 @@ func buildPlayers(world *World) {
 		c.Core.Talent.Base = rp.Talent
 		c.Core.Insight.Base = rp.Insight
 		c.Core.Will.Base = rp.Will
+
+		if rp.Gear.Head != "" {
+			if i, ok := world.Items[rp.Gear.Head]; ok {
+				c.Gear.Head = i
+			}
+		}
 		world.Players[c.Name] = c
 		if room, ok := world.Rooms[rp.RoomUUID]; ok {
 			if err := room.Enter(c); err == nil {
@@ -131,8 +140,8 @@ func buildPlayers(world *World) {
 
 func build() *World {
 	world := NewWorld()
+	buildItems(world)
 	buildRooms(world)
 	buildPlayers(world)
-	buildItems(world)
 	return world
 }
