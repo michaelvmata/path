@@ -87,6 +87,9 @@ func (g *Gear) Equip(item *Item) (*Item, error) {
 	case Arms:
 		previous = g.Arms
 		g.Arms = item
+	case Hands:
+		previous = g.Hands
+		g.Hands = item
 	case Waist:
 		previous = g.Waist
 		g.Waist = item
