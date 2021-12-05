@@ -48,6 +48,41 @@ func NewItem(UUID string, name string, itemType string, slot string, keywords []
 	}
 }
 
+type Container struct {
+	Capacity int
+	Items    []*Item
+}
+
+func NewContainer(capacity int) Container {
+	return Container{
+		Capacity: capacity,
+		Items:    make([]*Item, 0),
+	}
+}
+
+func (c *Container) AddItem(item *Item) error {
+	if len(c.Items) == c.Capacity {
+		return errors.New("container full")
+	}
+	c.Items = append(c.Items, item)
+	return nil
+}
+
+func (c Container) IndexOfItem(keyword string) int {
+	for i, item := range c.Items {
+		if item.HasKeyword(keyword) {
+			return i
+		}
+	}
+	return -1
+}
+
+func (c *Container) RemItemAtIndex(index int) *Item {
+	item := c.Items[index]
+	c.Items = append(c.Items[:index], c.Items[index+1:]...)
+	return item
+}
+
 const (
 	Empty    = ""
 	Head     = "Head"
