@@ -101,9 +101,10 @@ type RawPlayer struct {
 		Feet     string `json:"Feet"`
 		Wrist    string `json:"Wrist"`
 		Fingers  string `json:"Fingers"`
-		OffHand  string `json:"Offhand"`
+		OffHand  string `json:"OffHand"`
 		MainHand string `json:"MainHand"`
 	} `json:"Gear"`
+	Inventory []string `json:"Inventory"`
 }
 
 func buildPlayers(world *World) {
@@ -197,6 +198,11 @@ func buildPlayers(world *World) {
 		if rp.Gear.MainHand != "" {
 			if i, ok := world.Items[rp.Gear.MainHand]; ok {
 				c.Gear.MainHand = i
+			}
+		}
+		for _, itemUUID := range rp.Inventory {
+			if i, ok := world.Items[itemUUID]; ok {
+				c.Inventory.AddItem(i)
 			}
 		}
 		world.Players[c.Name] = c

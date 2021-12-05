@@ -19,7 +19,8 @@ type Player struct {
 	Core   *stats.Core
 	Skills *skills.Skills
 
-	Gear *item.Gear
+	Gear      *item.Gear
+	Inventory item.Container
 }
 
 func NewPlayer(handle string) *Player {
@@ -32,7 +33,8 @@ func NewPlayer(handle string) *Player {
 		Core:   stats.NewCore(),
 		Skills: skills.NewSkills(),
 
-		Gear: item.NewGear(),
+		Gear:      item.NewGear(),
+		Inventory: item.NewContainer(10),
 	}
 }
 
