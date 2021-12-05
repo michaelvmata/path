@@ -38,6 +38,20 @@ func (g Gear) Label() string {
 	return "gear"
 }
 
+type Inventory struct{}
+
+func (i Inventory) Execute(w *World, s *Session, raw string) {
+	s.outgoing <- ""
+	for _, i := range s.player.Inventory.Items {
+		s.outgoing <- i.Name
+	}
+	s.outgoing <- ""
+}
+
+func (i Inventory) Label() string {
+	return "inventory"
+}
+
 type Look struct{}
 
 func (l Look) Execute(w *World, s *Session, raw string) {
@@ -96,11 +110,12 @@ type Executor interface {
 }
 
 var commands = map[string]Executor{
-	Gear{}.Label():  Gear{},
-	Look{}.Label():  Look{},
-	Noop{}.Label():  Noop{},
-	Score{}.Label(): Score{},
-	Typo{}.Label():  Typo{},
+	Gear{}.Label():      Gear{},
+	Inventory{}.Label(): Inventory{},
+	Look{}.Label():      Look{},
+	Noop{}.Label():      Noop{},
+	Score{}.Label():     Score{},
+	Typo{}.Label():      Typo{},
 }
 
 func determineCommand(raw string) Executor {
