@@ -2,9 +2,41 @@ package main
 
 import (
 	"fmt"
+	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/symbols"
 	"strings"
 )
+
+type Gear struct{}
+
+func (g Gear) SafeName(i *item.Item) string {
+	if i == nil {
+		return ""
+	}
+	return i.Name
+}
+
+func (g Gear) Execute(w *World, s *Session, raw string) {
+	gear := s.player.Gear
+	s.outgoing <- ""
+	s.outgoing <- fmt.Sprintf("     [Head]: %s", g.SafeName(gear.Head))
+	s.outgoing <- fmt.Sprintf("     [Neck]: %s", g.SafeName(gear.Neck))
+	s.outgoing <- fmt.Sprintf("     [Body]: %s", g.SafeName(gear.Body))
+	s.outgoing <- fmt.Sprintf("     [Arms]: %s", g.SafeName(gear.Arms))
+	s.outgoing <- fmt.Sprintf("    [Hands]: %s", g.SafeName(gear.Hands))
+	s.outgoing <- fmt.Sprintf("    [Waist]: %s", g.SafeName(gear.Waist))
+	s.outgoing <- fmt.Sprintf("     [Legs]: %s", g.SafeName(gear.Legs))
+	s.outgoing <- fmt.Sprintf("     [Feet]: %s", g.SafeName(gear.Feet))
+	s.outgoing <- fmt.Sprintf("     Wrist]: %s", g.SafeName(gear.Wrist))
+	s.outgoing <- fmt.Sprintf("  [Fingers]: %s", g.SafeName(gear.Fingers))
+	s.outgoing <- fmt.Sprintf(" [Off Hand]: %s", g.SafeName(gear.OffHand))
+	s.outgoing <- fmt.Sprintf("[Main Hand]: %s", g.SafeName(gear.MainHand))
+	s.outgoing <- ""
+}
+
+func (g Gear) Label() string {
+	return "gear"
+}
 
 type Look struct{}
 
@@ -64,6 +96,7 @@ type Executor interface {
 }
 
 var commands = map[string]Executor{
+	Gear{}.Label():  Gear{},
 	Look{}.Label():  Look{},
 	Noop{}.Label():  Noop{},
 	Score{}.Label(): Score{},
