@@ -15,8 +15,9 @@ type RawItem struct {
 	Slot      string `json:"Slot"`
 	Modifiers []struct {
 		Type  string `json:"Type"`
-		Value int    `json:",Value"`
+		Value int    `json:"Value"`
 	} `json:"Modifiers"`
+	Keywords []string `json:"Keywords"`
 }
 
 func buildItems(world *World) {
@@ -32,7 +33,7 @@ func buildItems(world *World) {
 		if err != nil {
 			log.Fatalf("Error parsing %s", data)
 		}
-		i := item.NewItem(r.UUID, r.Name, r.Type, r.Slot)
+		i := item.NewItem(r.UUID, r.Name, r.Type, r.Slot, r.Keywords)
 		for _, rm := range r.Modifiers {
 			i.AddModifier(rm.Type, rm.Value)
 		}

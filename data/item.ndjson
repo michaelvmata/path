@@ -1,1 +1,1 @@
-{"UUID": "f7b83201941a422f95100ac174be587f", "Name": "Crash helmet", "Type":  "Armor", "Slot":  "Head", "Modifiers":  [{"Type":  "Power", "Value":  1}]}
+{"UUID": "f7b83201941a422f95100ac174be587f", "Name": "Crash helmet", "Type":  "Armor", "Slot":  "Head", "Modifiers":  [{"Type":  "Power", "Value":  1}], "Keywords":["crash", "helmet"]}

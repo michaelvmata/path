@@ -14,6 +14,7 @@ const (
 type Item struct {
 	UUID      string
 	Name      string
+	Keywords  []string
 	Type      string
 	Slot      string
 	Modifiers []modifiers.Modifier
@@ -27,12 +28,22 @@ func (i *Item) AddModifier(modifierType string, value int) {
 	i.Modifiers = append(i.Modifiers, modifier)
 }
 
-func NewItem(UUID string, name string, itemType string, slot string) *Item {
+func (i Item) HasKeyword(keyword string) bool {
+	for _, candidate := range i.Keywords {
+		if candidate == keyword {
+			return true
+		}
+	}
+	return false
+}
+
+func NewItem(UUID string, name string, itemType string, slot string, keywords []string) *Item {
 	return &Item{
 		UUID:      UUID,
 		Name:      name,
 		Type:      itemType,
 		Slot:      slot,
+		Keywords:  keywords,
 		Modifiers: make([]modifiers.Modifier, 0),
 	}
 }
