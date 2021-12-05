@@ -105,6 +105,41 @@ func (n Noop) Label() string {
 	return ""
 }
 
+type Wear struct{}
+
+func (wr Wear) Execute(w *World, s *Session, raw string) {
+	parts := strings.SplitN(raw, " ", 2)
+	if len(parts) == 1 {
+		s.outgoing <- "Wear what?"
+		return
+	}
+	index := s.player.Inventory.IndexOfItem(parts[1])
+	if index == -1 {
+		s.outgoing <- fmt.Sprintf("You don't have a '%s'", parts[1])
+		return
+	}
+	i := s.player.Inventory.RemItemAtIndex(index)
+	if i.Type != item.Armor {
+		s.outgoing <- fmt.Sprintf("You can't wear '%s'.", i.Name)
+		s.player.Inventory.AddItem(i)
+		return
+	}
+	previous, err := s.player.Gear.Equip(i)
+	if err != nil {
+		s.outgoing <- fmt.Sprintf("You can't wear '%s'.", i.Name)
+		s.player.Inventory.AddItem(i)
+	} else {
+		s.outgoing <- fmt.Sprintf("You wear %s", i.Name)
+	}
+	if previous != nil {
+		s.player.Inventory.AddItem(previous)
+	}
+}
+
+func (wr Wear) Label() string {
+	return "wear"
+}
+
 type Executor interface {
 	Execute(w *World, s *Session, raw string)
 }
@@ -116,10 +151,12 @@ var commands = map[string]Executor{
 	Noop{}.Label():      Noop{},
 	Score{}.Label():     Score{},
 	Typo{}.Label():      Typo{},
+	Wear{}.Label():      Wear{},
 }
 
 func determineCommand(raw string) Executor {
-	command, ok := commands[raw]
+	rawCmd := strings.SplitN(raw, " ", 2)[0]
+	command, ok := commands[rawCmd]
 	if !ok {
 		return commands[Typo{}.Label()]
 	}

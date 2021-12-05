@@ -1,2 +1,2 @@
 {"UUID": "f7b83201941a422f95100ac174be587f", "Name": "Crash helmet", "Type":  "Armor", "Slot":  "Head", "Modifiers":  [{"Type":  "Power", "Value":  1}], "Keywords":["crash", "helmet"]}
-{"UUID": "e37c82bead784d83817ef781d1b3c6d8", "Name": "Bronze gauntlets", "Type":  "Armor", "Slot":  "Hands", "Modifiers":  [{"Type":  "Power", "Value":  2}, {"Type":  "Agility", "Value":  1}], ",Keywords":["crash", "helmet"]}
+{"UUID": "e37c82bead784d83817ef781d1b3c6d8", "Name": "Bronze gauntlets", "Type":  "Armor", "Slot":  "Hands", "Modifiers":  [{"Type":  "Power", "Value":  2}, {"Type":  "Agility", "Value":  1}], "Keywords":["bronze", "gauntlet"]}
