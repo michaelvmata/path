@@ -64,6 +64,28 @@ func (l Look) Label() string {
 	return "look"
 }
 
+type Remove struct{}
+
+func (r Remove) Execute(w *World, s *Session, raw string) {
+	parts := strings.SplitN(raw, " ", 2)
+	if len(parts) == 1 {
+		s.outgoing <- "Remove what?"
+		return
+	}
+	keyword := parts[1]
+	i := s.player.Gear.Remove(keyword)
+	if i == nil {
+		s.outgoing <- fmt.Sprintf("You don't have a '%s'", keyword)
+		return
+	}
+	s.player.Inventory.AddItem(i)
+	s.outgoing <- fmt.Sprintf("You remove a %s", i.Name)
+}
+
+func (r Remove) Label() string {
+	return "remove"
+}
+
 type Score struct{}
 
 func (sc Score) Execute(w *World, s *Session, raw string) {
@@ -120,13 +142,13 @@ func (wr Wear) Execute(w *World, s *Session, raw string) {
 	}
 	i := s.player.Inventory.RemItemAtIndex(index)
 	if i.Type != item.Armor {
-		s.outgoing <- fmt.Sprintf("You can't wear '%s'.", i.Name)
+		s.outgoing <- fmt.Sprintf("You can't wear %s.", i.Name)
 		s.player.Inventory.AddItem(i)
 		return
 	}
 	previous, err := s.player.Gear.Equip(i)
 	if err != nil {
-		s.outgoing <- fmt.Sprintf("You can't wear '%s'.", i.Name)
+		s.outgoing <- fmt.Sprintf("You can't wear %s.", i.Name)
 		s.player.Inventory.AddItem(i)
 	} else {
 		s.outgoing <- fmt.Sprintf("You wear %s", i.Name)
@@ -149,6 +171,7 @@ var commands = map[string]Executor{
 	Inventory{}.Label(): Inventory{},
 	Look{}.Label():      Look{},
 	Noop{}.Label():      Noop{},
+	Remove{}.Label():    Remove{},
 	Score{}.Label():     Score{},
 	Typo{}.Label():      Typo{},
 	Wear{}.Label():      Wear{},

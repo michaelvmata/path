@@ -117,6 +117,70 @@ func NewGear() *Gear {
 	return &Gear{}
 }
 
+func (g *Gear) Remove(keyword string) *Item {
+	if g.Head != nil && g.Head.HasKeyword(keyword) {
+		item := g.Head
+		g.Head = nil
+		return item
+	}
+	if g.Neck != nil && g.Neck.HasKeyword(keyword) {
+		item := g.Neck
+		g.Neck = nil
+		return item
+	}
+	if g.Body != nil && g.Body.HasKeyword(keyword) {
+		item := g.Body
+		g.Body = nil
+		return item
+	}
+	if g.Arms != nil && g.Arms.HasKeyword(keyword) {
+		item := g.Arms
+		g.Arms = nil
+		return item
+	}
+	if g.Hands != nil && g.Hands.HasKeyword(keyword) {
+		item := g.Hands
+		g.Hands = nil
+		return item
+	}
+	if g.Waist != nil && g.Waist.HasKeyword(keyword) {
+		item := g.Waist
+		g.Waist = nil
+		return item
+	}
+	if g.Legs != nil && g.Legs.HasKeyword(keyword) {
+		item := g.Legs
+		g.Legs = nil
+		return item
+	}
+	if g.Feet != nil && g.Feet.HasKeyword(keyword) {
+		item := g.Feet
+		g.Feet = nil
+		return item
+	}
+	if g.Wrist != nil && g.Wrist.HasKeyword(keyword) {
+		item := g.Wrist
+		g.Wrist = nil
+		return item
+	}
+	if g.Fingers != nil && g.Fingers.HasKeyword(keyword) {
+		item := g.Fingers
+		g.Fingers = nil
+		return item
+	}
+	if g.OffHand != nil && g.OffHand.HasKeyword(keyword) {
+		item := g.OffHand
+		g.OffHand = nil
+		return item
+	}
+	if g.MainHand != nil && g.MainHand.HasKeyword(keyword) {
+		item := g.MainHand
+		g.MainHand = nil
+		return item
+	}
+	return nil
+}
+
 func (g *Gear) Equip(item *Item) (*Item, error) {
 	if item.Type != Weapon && item.Type != Armor {
 		return nil, errors.New("can't equip item")
