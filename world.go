@@ -111,6 +111,7 @@ type Room struct {
 	name        string
 	description string
 	players     []*Player
+	Items       item.Container
 	size        int
 }
 
@@ -121,6 +122,7 @@ func NewRoom(uuid string, name string, description string, size int) *Room {
 		description: description,
 		size:        size,
 		players:     make([]*Player, 0, size),
+		Items:       item.NewContainer(100),
 	}
 	return &room
 }
@@ -131,6 +133,23 @@ func (r *Room) Describe() string {
 	parts = append(parts, "")
 	parts = append(parts, r.description)
 	return strings.Join(parts, "\n")
+}
+
+func (r *Room) DropItem(i *item.Item) error {
+	err := r.Items.AddItem(i)
+	if err != nil {
+		return errors.New("can't drop item")
+	}
+	return nil
+}
+
+func (r *Room) PickupItem(keyword string) (*item.Item, error) {
+	index := r.Items.IndexOfItem(keyword)
+	if index == -1 {
+		return nil, errors.New("no item with keyword")
+	}
+	i := r.Items.RemItemAtIndex(index)
+	return i, nil
 }
 
 func (r *Room) IsFull() bool {

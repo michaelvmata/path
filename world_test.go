@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/stats"
 	"testing"
 )
@@ -82,5 +83,17 @@ func TestRoom(t *testing.T) {
 	}
 	if err := r.Exit(c); err == nil {
 		t.Fatalf("Player able to exit room twice")
+	}
+
+	i := item.NewItem("test uuid", "test item", item.Armor, item.Head, []string{"test"})
+	err := r.DropItem(i)
+	if err != nil {
+		t.Fatalf("Unable to drop item in room")
+	}
+	if _, ok := r.PickupItem("test"); ok != nil {
+		t.Fatalf("Unable to pickup item in room")
+	}
+	if _, ok := r.PickupItem("test"); ok == nil {
+		t.Fatalf("Able to pickup item in room, twice")
 	}
 }
