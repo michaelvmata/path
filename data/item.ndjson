@@ -1,2 +1,3 @@
-{"UUID": "f7b83201941a422f95100ac174be587f", "Name": "Crash helmet", "Type":  "Armor", "Slot":  "Head", "Modifiers":  [{"Type":  "Power", "Value":  1}], "Keywords":["crash", "helmet"]}
+{"UUID": "f7b83201941a422f95100ac174be587f", "Name": "Adept circlet", "Type":  "Armor", "Slot":  "Head", "Modifiers":  [{"Type":  "Power", "Value":  1}], "Keywords":["adept", "circlet"]}
+{"UUID": "2a33d8056ea4450889118bc4ed0cb854", "Name": "Glowing pendant", "Type":  "Armor", "Slot":  "Neck", "Modifiers":  [{"Type":  "Talent", "Value": 2}, {"Type":  "Insight", "Value":  1}], "Keywords":["glowing", "pendant"]}
 {"UUID": "e37c82bead784d83817ef781d1b3c6d8", "Name": "Bronze gauntlets", "Type":  "Armor", "Slot":  "Hands", "Modifiers":  [{"Type":  "Power", "Value":  2}, {"Type":  "Agility", "Value":  1}], "Keywords":["bronze", "gauntlet"]}
