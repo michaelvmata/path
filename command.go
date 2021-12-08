@@ -7,6 +7,29 @@ import (
 	"strings"
 )
 
+type Drop struct{}
+
+func (d Drop) Execute(w *World, s *Session, raw string) {
+	parts := strings.SplitN(raw, " ", 2)
+	if len(parts) == 1 {
+		s.outgoing <- "Drop what?"
+		return
+	}
+	keyword := parts[1]
+	index := s.player.Inventory.IndexOfItem(keyword)
+	if index == -1 {
+		s.outgoing <- fmt.Sprintf("You don't have '%s'.", keyword)
+		return
+	}
+	i := s.player.Inventory.RemItemAtIndex(index)
+	s.player.Room.Items.AddItem(i)
+	s.outgoing <- fmt.Sprintf("You drop %s.", i.Name)
+}
+
+func (d Drop) Label() string {
+	return "drop"
+}
+
 type Gear struct{}
 
 func (g Gear) SafeName(i *item.Item) string {
@@ -167,6 +190,7 @@ type Executor interface {
 }
 
 var commands = map[string]Executor{
+	Drop{}.Label():      Drop{},
 	Gear{}.Label():      Gear{},
 	Inventory{}.Label(): Inventory{},
 	Look{}.Label():      Look{},
