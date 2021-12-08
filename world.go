@@ -38,6 +38,22 @@ func NewPlayer(handle string) *Player {
 	}
 }
 
+func (c *Player) Discard(keyword string) *item.Item {
+	index := c.Inventory.IndexOfItem(keyword)
+	if index == -1 {
+		return nil
+	}
+	i := c.Inventory.RemItemAtIndex(index)
+	return i
+}
+
+func (c *Player) Receive(i *item.Item) error {
+	if err := c.Inventory.AddItem(i); err != nil {
+		return errors.New("player can't carry item")
+	}
+	return nil
+}
+
 func (c *Player) Move(r *Room) {
 	c.Room = r
 }
@@ -135,7 +151,8 @@ func (r *Room) Describe() string {
 	return strings.Join(parts, "\n")
 }
 
-func (r *Room) DropItem(i *item.Item) error {
+func (r *Room) Accept(i *item.Item) error {
+	// Accept places an item in the room.  It throws an error if there is no space.
 	err := r.Items.AddItem(i)
 	if err != nil {
 		return errors.New("can't drop item")

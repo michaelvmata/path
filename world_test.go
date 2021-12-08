@@ -86,7 +86,7 @@ func TestRoom(t *testing.T) {
 	}
 
 	i := item.NewItem("test uuid", "test item", item.Armor, item.Head, []string{"test"})
-	err := r.DropItem(i)
+	err := r.Accept(i)
 	if err != nil {
 		t.Fatalf("Unable to drop item in room")
 	}

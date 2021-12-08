@@ -16,13 +16,16 @@ func (d Drop) Execute(w *World, s *Session, raw string) {
 		return
 	}
 	keyword := parts[1]
-	index := s.player.Inventory.IndexOfItem(keyword)
-	if index == -1 {
+	i := s.player.Discard(keyword)
+	if i == nil {
 		s.outgoing <- fmt.Sprintf("You don't have '%s'.", keyword)
 		return
 	}
-	i := s.player.Inventory.RemItemAtIndex(index)
-	s.player.Room.Items.AddItem(i)
+	if err := s.player.Room.Accept(i); err != nil {
+		s.outgoing <- fmt.Sprintf("You can't drop %s.", i.Name)
+		s.player.Receive(i)
+		return
+	}
 	s.outgoing <- fmt.Sprintf("You drop %s.", i.Name)
 }
 
