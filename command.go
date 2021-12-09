@@ -217,19 +217,32 @@ func (wr Wear) Label() string {
 
 type Executor interface {
 	Execute(w *World, s *Session, raw string)
+	Label() string
 }
 
-var commands = map[string]Executor{
-	Drop{}.Label():      Drop{},
-	Gear{}.Label():      Gear{},
-	Get{}.Label():       Get{},
-	Inventory{}.Label(): Inventory{},
-	Look{}.Label():      Look{},
-	Noop{}.Label():      Noop{},
-	Remove{}.Label():    Remove{},
-	Score{}.Label():     Score{},
-	Typo{}.Label():      Typo{},
-	Wear{}.Label():      Wear{},
+var commands = buildCommands()
+
+func buildCommands() map[string]Executor {
+	commands := []Executor{
+		Drop{},
+		Gear{},
+		Get{},
+		Inventory{},
+		Look{},
+		Noop{},
+		Remove{},
+		Score{},
+		Typo{},
+		Wear{},
+	}
+	aliases := make(map[string]Executor)
+	for _, command := range commands {
+		for i := range command.Label() {
+			alias := command.Label()[:i+1]
+			aliases[alias] = command
+		}
+	}
+	return aliases
 }
 
 func determineCommand(raw string) Executor {
