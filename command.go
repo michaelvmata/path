@@ -64,6 +64,33 @@ func (g Gear) Label() string {
 	return "gear"
 }
 
+type Get struct{}
+
+func (g Get) Execute(w *World, s *Session, raw string) {
+	parts := strings.SplitN(raw, " ", 2)
+	if len(parts) == 1 {
+		s.outgoing <- "Get what?"
+		return
+	}
+	keyword := parts[1]
+	i, err := s.player.Room.PickupItem(keyword)
+	if err != nil {
+		s.outgoing <- fmt.Sprintf("You don't see '%s'.", keyword)
+		return
+	}
+	if err := s.player.Receive(i); err != nil {
+		s.outgoing <- fmt.Sprintf("You can't get %s.", i.Name)
+		s.player.Room.Accept(i)
+		return
+	} else {
+		s.outgoing <- fmt.Sprintf("You get %s.", i.Name)
+	}
+}
+
+func (g Get) Label() string {
+	return "get"
+}
+
 type Inventory struct{}
 
 func (i Inventory) Execute(w *World, s *Session, raw string) {
@@ -195,6 +222,7 @@ type Executor interface {
 var commands = map[string]Executor{
 	Drop{}.Label():      Drop{},
 	Gear{}.Label():      Gear{},
+	Get{}.Label():       Get{},
 	Inventory{}.Label(): Inventory{},
 	Look{}.Label():      Look{},
 	Noop{}.Label():      Noop{},
