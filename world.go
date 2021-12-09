@@ -148,6 +148,10 @@ func (r *Room) Describe() string {
 	parts = append(parts, r.name)
 	parts = append(parts, "")
 	parts = append(parts, r.description)
+	parts = append(parts, "")
+	for _, i := range r.Items.Items {
+		parts = append(parts, i.Name)
+	}
 	return strings.Join(parts, "\n")
 }
 
