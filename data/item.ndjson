@@ -6,3 +6,7 @@
 {"UUID":"5039972fa2084f9daabbc5baf01407c4","Name":"Adept sash","Type":"Armor","Slot":"Waist","Modifiers":[{"Type":"Power","Value":1},{"Type":"Agility","Value":1}],"Keywords":["adept","sash"]}
 {"UUID":"f5924ab64bdd4c609618b58eac4689ca","Name":"Oaken greaves","Type":"Armor","Slot":"Legs","Modifiers":[{"Type":"Will","Value":1},{"Type":"Insight","Value":1}],"Keywords":["oaken","greaves"]}
 {"UUID":"2b6b35b167a14c4ab3a9c24a95926ba9","Name":"Dark sabatons","Type":"Armor","Slot":"Feets","Modifiers":[{"Type":"Agility","Value":1},{"Type":"Endurance","Value":1}],"Keywords":["dark","sabatons"]}
+{"UUID":"9b2a03d91bc6441c9c229733a45d574a","Name":"Stone bracelets","Type":"Armor","Slot":"Wrist","Modifiers":[{"Type":"Will","Value":2}],"Keywords":["stone","bracelets"]}
+{"UUID":"beb709cef0124bbc95923e1bdc017e16","Name":"Titanium bands","Type":"Armor","Slot":"Wrist","Modifiers":[{"Type":"Will","Value":1},{"Type":"Insight","Value":1}],"Keywords":["titanium","bands"]}
+{"UUID":"f10bb2345276469ebaabe057eb36e4ee","Name":"Tear drop buckler","Type":"Armor","Slot":"OffHand","Modifiers":[{"Type":"Endurance","Value":1},{"Type":"Will","Value":1}],"Keywords":["tear","drop","buckler"]}
+{"UUID":"682ed1f513c0459fb16673b2ac0922ba","Name":"Short spear","Type":"Armor","Slot":"MainHand","Modifiers":[{"Type":"Agility","Value":1},{"Type":"Talent","Value":2}],"Keywords":["short","spear"]}
