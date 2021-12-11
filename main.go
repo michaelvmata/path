@@ -15,16 +15,18 @@ func main() {
 	go handleInput(session.incoming)
 	go handleOutput(session, prompt, done)
 	prompt <- true
+
+MainLoop:
 	for {
 		select {
 		case text := <-session.incoming:
+			if text == "quit" {
+				done <- true
+				break MainLoop
+			}
 			command := determineCommand(text)
 			session.player.Update(false)
 			command.Execute(world, session, text)
-			if text == "quit" {
-				done <- true
-				break
-			}
 			prompt <- true
 		case <-ticker.C:
 			ticks += 1
