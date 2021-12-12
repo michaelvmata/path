@@ -6,7 +6,6 @@ import (
 
 func main() {
 	ticker := time.NewTicker(time.Second)
-	ticks := 0
 	session := NewSession()
 	world := build()
 	session.player = world.Players["gaigen"]
@@ -29,13 +28,7 @@ MainLoop:
 			command.Execute(world, session, text)
 			prompt <- true
 		case <-ticker.C:
-			ticks += 1
-			isTock := ticks%20 == 0
-			session.player.Update(isTock)
-			if isTock == true {
-				session.outgoing <- ""
-				prompt <- true
-			}
+			session.player.Update(true)
 		}
 
 	}

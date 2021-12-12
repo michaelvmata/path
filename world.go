@@ -105,7 +105,7 @@ func (c *Player) CalculateModifiers() {
 	c.ApplyItemModifiers(c.Gear.MainHand)
 }
 
-func (c *Player) Update(tock bool) {
+func (c *Player) Update(tick bool) {
 	c.CalculateModifiers()
 	// Adjust lines from core stats
 	c.Health.Maximum = c.Core.Endurance.Value() * 100
@@ -115,7 +115,7 @@ func (c *Player) Update(tock bool) {
 	c.Energy.Maximum = (c.Core.Power.Value() + c.Core.Will.Value()) * 100
 	c.Energy.EnforceMaximum()
 
-	if tock {
+	if tick {
 		c.Health.Recover()
 		c.Spirit.Recover()
 		c.Energy.Recover()
