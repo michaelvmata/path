@@ -76,17 +76,14 @@ type RawPlayer struct {
 	Insight   int    `json:"Insight"`
 	Will      int    `json:"Will"`
 	Health    struct {
-		Maximum int `json:"Maximum"`
 		Current int `json:"Current"`
 		Recover int `json:"Recover"`
 	} `json:"Health"`
 	Spirit struct {
-		Maximum int `json:"Maximum"`
 		Current int `json:"Current"`
 		Recover int `json:"Recover"`
 	} `json:"Spirit"`
 	Energy struct {
-		Maximum int `json:"Maximum"`
 		Current int `json:"Current"`
 		Recover int `json:"Recover"`
 	} `json:"Energy"`
@@ -121,17 +118,6 @@ func buildPlayers(world *World) {
 			log.Fatalf("Error parsing %s", data)
 		}
 		c := NewPlayer(rp.Name)
-		c.Health.Current = rp.Health.Current
-		c.Health.Maximum = rp.Health.Maximum
-		c.Health.RecoverRate = rp.Health.Recover
-
-		c.Energy.Current = rp.Energy.Current
-		c.Energy.Maximum = rp.Energy.Maximum
-		c.Energy.RecoverRate = rp.Energy.Recover
-
-		c.Spirit.Current = rp.Spirit.Current
-		c.Spirit.Maximum = rp.Spirit.Maximum
-		c.Spirit.RecoverRate = rp.Spirit.Recover
 
 		c.Core.Power.Base = rp.Power
 		c.Core.Agility.Base = rp.Agility
@@ -139,6 +125,15 @@ func buildPlayers(world *World) {
 		c.Core.Talent.Base = rp.Talent
 		c.Core.Insight.Base = rp.Insight
 		c.Core.Will.Base = rp.Will
+
+		c.Health.Current = rp.Health.Current
+		c.Health.RecoverRate = rp.Health.Recover
+
+		c.Energy.Current = rp.Energy.Current
+		c.Energy.RecoverRate = rp.Energy.Recover
+
+		c.Spirit.Current = rp.Spirit.Current
+		c.Spirit.RecoverRate = rp.Spirit.Recover
 
 		if rp.Gear.Head != "" {
 			if i, ok := world.Items[rp.Gear.Head]; ok {
@@ -205,6 +200,7 @@ func buildPlayers(world *World) {
 				c.Inventory.AddItem(i)
 			}
 		}
+		c.Update(false)
 		world.Players[c.Name] = c
 		if room, ok := world.Rooms[rp.RoomUUID]; ok {
 			if err := room.Enter(c); err == nil {
