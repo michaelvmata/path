@@ -72,7 +72,7 @@ func NewContainer(capacity int) Container {
 	}
 }
 
-func (c *Container) AddItem(item *Armor) error {
+func (c *Container) AddItem(item Item) error {
 	if len(c.Items) == c.Capacity {
 		return errors.New("container full")
 	}
