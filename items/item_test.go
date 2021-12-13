@@ -7,11 +7,11 @@ import (
 
 func TestItem(t *testing.T) {
 	item := NewArmor("f7b83201941a422f95100ac174be587f", "test helmet", Head, []string{"test", "helmet"})
-	if len(item.Modifiers) != 0 {
+	if len(item.Modifiers()) != 0 {
 		t.Fatalf("Default item has non empty modifiers")
 	}
 	item.AddModifier(modifiers.Dagger, 1)
-	if len(item.Modifiers) != 1 {
+	if len(item.Modifiers()) != 1 {
 		t.Fatalf("Armor does not have modifier")
 	}
 	if !item.HasKeyword("helmet") {

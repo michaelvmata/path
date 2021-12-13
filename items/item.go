@@ -6,9 +6,10 @@ import (
 )
 
 type item struct {
-	uuid     string
-	name     string
-	keywords []string
+	uuid      string
+	name      string
+	keywords  []string
+	modifiers []modifiers.Modifier
 }
 
 func (i item) UUID() string {
@@ -28,35 +29,39 @@ func (i item) HasKeyword(keyword string) bool {
 	return false
 }
 
-type Item interface {
-	UUID() string
-	Name() string
-	HasKeyword(string) bool
-}
-
-type Armor struct {
-	item
-	Slot      string
-	Modifiers []modifiers.Modifier
-}
-
-func (i *Armor) AddModifier(modifierType string, value int) {
+func (i *item) AddModifier(modifierType string, value int) {
 	modifier := modifiers.Modifier{
 		Type:  modifierType,
 		Value: value,
 	}
-	i.Modifiers = append(i.Modifiers, modifier)
+	i.modifiers = append(i.modifiers, modifier)
+}
+
+func (i item) Modifiers() []modifiers.Modifier {
+	return i.modifiers
+}
+
+type Item interface {
+	UUID() string
+	Name() string
+	HasKeyword(string) bool
+	Modifiers() []modifiers.Modifier
+}
+
+type Armor struct {
+	item
+	Slot string
 }
 
 func NewArmor(UUID string, name string, slot string, keywords []string) *Armor {
 	return &Armor{
 		item: item{
-			uuid:     UUID,
-			name:     name,
-			keywords: keywords,
+			uuid:      UUID,
+			name:      name,
+			keywords:  keywords,
+			modifiers: make([]modifiers.Modifier, 0),
 		},
-		Slot:      slot,
-		Modifiers: make([]modifiers.Modifier, 0),
+		Slot: slot,
 	}
 }
 

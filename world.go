@@ -85,7 +85,7 @@ func (c *Player) ApplyModifiers(mods []modifiers.Modifier) {
 
 func (c *Player) ApplyItemModifiers(i *item.Armor) {
 	if i != nil {
-		c.ApplyModifiers(i.Modifiers)
+		c.ApplyModifiers(i.Modifiers())
 	}
 }
 
