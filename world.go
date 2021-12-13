@@ -38,16 +38,16 @@ func NewPlayer(handle string) *Player {
 	}
 }
 
-func (c *Player) Discard(keyword string) *item.Item {
+func (c *Player) Discard(keyword string) *item.Armor {
 	index := c.Inventory.IndexOfItem(keyword)
 	if index == -1 {
 		return nil
 	}
 	i := c.Inventory.RemItemAtIndex(index)
-	return i
+	return i.(*item.Armor)
 }
 
-func (c *Player) Receive(i *item.Item) error {
+func (c *Player) Receive(i *item.Armor) error {
 	if err := c.Inventory.AddItem(i); err != nil {
 		return errors.New("player can't carry item")
 	}
@@ -83,7 +83,7 @@ func (c *Player) ApplyModifiers(mods []modifiers.Modifier) {
 	}
 }
 
-func (c *Player) ApplyItemModifiers(i *item.Item) {
+func (c *Player) ApplyItemModifiers(i *item.Armor) {
 	if i != nil {
 		c.ApplyModifiers(i.Modifiers)
 	}
@@ -150,12 +150,12 @@ func (r *Room) Describe() string {
 	parts = append(parts, r.description)
 	parts = append(parts, "")
 	for _, i := range r.Items.Items {
-		parts = append(parts, i.Name)
+		parts = append(parts, i.Name())
 	}
 	return strings.Join(parts, "\n")
 }
 
-func (r *Room) Accept(i *item.Item) error {
+func (r *Room) Accept(i *item.Armor) error {
 	// Accept places an item in the room.  It throws an error if there is no space.
 	err := r.Items.AddItem(i)
 	if err != nil {
@@ -164,13 +164,13 @@ func (r *Room) Accept(i *item.Item) error {
 	return nil
 }
 
-func (r *Room) PickupItem(keyword string) (*item.Item, error) {
+func (r *Room) PickupItem(keyword string) (*item.Armor, error) {
 	index := r.Items.IndexOfItem(keyword)
 	if index == -1 {
 		return nil, errors.New("no item with keyword")
 	}
 	i := r.Items.RemItemAtIndex(index)
-	return i, nil
+	return i.(*item.Armor), nil
 }
 
 func (r *Room) IsFull() bool {
@@ -212,14 +212,14 @@ func (r *Room) IndexOfPlayer(target *Player) int {
 type World struct {
 	Players map[string]*Player
 	Rooms   map[string]*Room
-	Items   map[string]*item.Item
+	Items   map[string]*item.Armor
 }
 
 func NewWorld() *World {
 	w := World{
 		Players: make(map[string]*Player),
 		Rooms:   make(map[string]*Room),
-		Items:   make(map[string]*item.Item),
+		Items:   make(map[string]*item.Armor),
 	}
 	return &w
 }

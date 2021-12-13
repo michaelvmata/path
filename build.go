@@ -9,8 +9,8 @@ import (
 )
 
 type RawItem struct {
-	UUID      string `json:"UUID"`
-	Name      string `json:"Name"`
+	UUID      string `json:"uuid"`
+	Name      string `json:"name"`
 	Type      string `json:"Type"`
 	Slot      string `json:"Slot"`
 	Modifiers []struct {
@@ -40,7 +40,7 @@ func buildItems(world *World) {
 		for _, rm := range r.Modifiers {
 			i.AddModifier(rm.Type, rm.Value)
 		}
-		world.Items[i.UUID] = i
+		world.Items[i.UUID()] = i
 	}
 }
 

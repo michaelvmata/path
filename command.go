@@ -22,11 +22,11 @@ func (d Drop) Execute(w *World, s *Session, raw string) {
 		return
 	}
 	if err := s.player.Room.Accept(i); err != nil {
-		s.outgoing <- fmt.Sprintf("You can't drop %s.", i.Name)
+		s.outgoing <- fmt.Sprintf("You can't drop %s.", i.Name())
 		s.player.Receive(i)
 		return
 	}
-	s.outgoing <- fmt.Sprintf("You drop %s.", i.Name)
+	s.outgoing <- fmt.Sprintf("You drop %s.", i.Name())
 }
 
 func (d Drop) Label() string {
@@ -35,11 +35,11 @@ func (d Drop) Label() string {
 
 type Gear struct{}
 
-func (g Gear) SafeName(i *item.Item) string {
+func (g Gear) SafeName(i *item.Armor) string {
 	if i == nil {
 		return ""
 	}
-	return i.Name
+	return i.Name()
 }
 
 func (g Gear) Execute(w *World, s *Session, raw string) {
@@ -79,11 +79,11 @@ func (g Get) Execute(w *World, s *Session, raw string) {
 		return
 	}
 	if err := s.player.Receive(i); err != nil {
-		s.outgoing <- fmt.Sprintf("You can't get %s.", i.Name)
+		s.outgoing <- fmt.Sprintf("You can't get %s.", i.Name())
 		s.player.Room.Accept(i)
 		return
 	} else {
-		s.outgoing <- fmt.Sprintf("You get %s.", i.Name)
+		s.outgoing <- fmt.Sprintf("You get %s.", i.Name())
 	}
 }
 
@@ -96,7 +96,7 @@ type Inventory struct{}
 func (i Inventory) Execute(w *World, s *Session, raw string) {
 	s.outgoing <- ""
 	for _, i := range s.player.Inventory.Items {
-		s.outgoing <- i.Name
+		s.outgoing <- i.Name()
 	}
 	s.outgoing <- ""
 }
@@ -132,7 +132,7 @@ func (r Remove) Execute(w *World, s *Session, raw string) {
 		return
 	}
 	s.player.Inventory.AddItem(i)
-	s.outgoing <- fmt.Sprintf("You remove a %s", i.Name)
+	s.outgoing <- fmt.Sprintf("You remove a %s", i.Name())
 }
 
 func (r Remove) Label() string {
@@ -194,12 +194,12 @@ func (wr Wear) Execute(w *World, s *Session, raw string) {
 		return
 	}
 	i := s.player.Inventory.RemItemAtIndex(index)
-	previous, err := s.player.Gear.Equip(i)
+	previous, err := s.player.Gear.Equip(i.(*item.Armor))
 	if err != nil {
-		s.outgoing <- fmt.Sprintf("You can't wear %s.", i.Name)
-		s.player.Inventory.AddItem(i)
+		s.outgoing <- fmt.Sprintf("You can't wear %s.", i.Name())
+		s.player.Inventory.AddItem(i.(*item.Armor))
 	} else {
-		s.outgoing <- fmt.Sprintf("You wear %s", i.Name)
+		s.outgoing <- fmt.Sprintf("You wear %s", i.Name())
 	}
 	if previous != nil {
 		s.player.Inventory.AddItem(previous)

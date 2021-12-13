@@ -12,10 +12,10 @@ func TestItem(t *testing.T) {
 	}
 	item.AddModifier(modifiers.Dagger, 1)
 	if len(item.Modifiers) != 1 {
-		t.Fatalf("Item does not have modifier")
+		t.Fatalf("Armor does not have modifier")
 	}
 	if !item.HasKeyword("helmet") {
-		t.Fatalf("Item doesn't have keyword")
+		t.Fatalf("Armor doesn't have keyword")
 	}
 }
 
@@ -23,18 +23,18 @@ func TestContainer(t *testing.T) {
 	item := NewArmor("f7b83201941a422f95100ac174be587f", "test helmet", Head, []string{"test", "helmet"})
 	container := NewContainer(1)
 	if index := container.IndexOfItem("test"); index != -1 {
-		t.Fatalf("Item found in empty container")
+		t.Fatalf("Armor found in empty container")
 	}
 	if err := container.AddItem(item); err != nil {
 		t.Fatalf("Unable to add item to container")
 	}
 	index := container.IndexOfItem("test")
 	if index != 0 {
-		t.Fatalf("Item not found in container")
+		t.Fatalf("Armor not found in container")
 	}
 	container.RemItemAtIndex(index)
 	if index := container.IndexOfItem("test"); index != -1 {
-		t.Fatalf("Item still found after rem")
+		t.Fatalf("Armor still found after rem")
 	}
 }
 

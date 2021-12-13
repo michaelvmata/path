@@ -5,24 +5,22 @@ import (
 	"github.com/michaelvmata/path/modifiers"
 )
 
-type Item struct {
-	UUID      string
-	Name      string
-	Keywords  []string
-	Slot      string
-	Modifiers []modifiers.Modifier
+type item struct {
+	uuid     string
+	name     string
+	keywords []string
 }
 
-func (i *Item) AddModifier(modifierType string, value int) {
-	modifier := modifiers.Modifier{
-		Type:  modifierType,
-		Value: value,
-	}
-	i.Modifiers = append(i.Modifiers, modifier)
+func (i item) UUID() string {
+	return i.uuid
 }
 
-func (i Item) HasKeyword(keyword string) bool {
-	for _, candidate := range i.Keywords {
+func (i item) Name() string {
+	return i.name
+}
+
+func (i item) HasKeyword(keyword string) bool {
+	for _, candidate := range i.keywords {
 		if candidate == keyword {
 			return true
 		}
@@ -30,29 +28,51 @@ func (i Item) HasKeyword(keyword string) bool {
 	return false
 }
 
-func NewArmor(UUID string, name string, slot string, keywords []string) *Item {
-	return &Item{
-		UUID:      UUID,
-		Name:      name,
+type Item interface {
+	UUID() string
+	Name() string
+	HasKeyword(string) bool
+}
+
+type Armor struct {
+	item
+	Slot      string
+	Modifiers []modifiers.Modifier
+}
+
+func (i *Armor) AddModifier(modifierType string, value int) {
+	modifier := modifiers.Modifier{
+		Type:  modifierType,
+		Value: value,
+	}
+	i.Modifiers = append(i.Modifiers, modifier)
+}
+
+func NewArmor(UUID string, name string, slot string, keywords []string) *Armor {
+	return &Armor{
+		item: item{
+			uuid:     UUID,
+			name:     name,
+			keywords: keywords,
+		},
 		Slot:      slot,
-		Keywords:  keywords,
 		Modifiers: make([]modifiers.Modifier, 0),
 	}
 }
 
 type Container struct {
 	Capacity int
-	Items    []*Item
+	Items    []Item
 }
 
 func NewContainer(capacity int) Container {
 	return Container{
 		Capacity: capacity,
-		Items:    make([]*Item, 0),
+		Items:    make([]Item, 0),
 	}
 }
 
-func (c *Container) AddItem(item *Item) error {
+func (c *Container) AddItem(item *Armor) error {
 	if len(c.Items) == c.Capacity {
 		return errors.New("container full")
 	}
@@ -69,7 +89,7 @@ func (c Container) IndexOfItem(keyword string) int {
 	return -1
 }
 
-func (c *Container) RemItemAtIndex(index int) *Item {
+func (c *Container) RemItemAtIndex(index int) Item {
 	item := c.Items[index]
 	c.Items = append(c.Items[:index], c.Items[index+1:]...)
 	return item
@@ -91,25 +111,25 @@ const (
 )
 
 type Gear struct {
-	Head     *Item
-	Neck     *Item
-	Body     *Item
-	Arms     *Item
-	Hands    *Item
-	Waist    *Item
-	Legs     *Item
-	Feet     *Item
-	Wrist    *Item
-	Fingers  *Item
-	OffHand  *Item
-	MainHand *Item
+	Head     *Armor
+	Neck     *Armor
+	Body     *Armor
+	Arms     *Armor
+	Hands    *Armor
+	Waist    *Armor
+	Legs     *Armor
+	Feet     *Armor
+	Wrist    *Armor
+	Fingers  *Armor
+	OffHand  *Armor
+	MainHand *Armor
 }
 
 func NewGear() *Gear {
 	return &Gear{}
 }
 
-func (g *Gear) Remove(keyword string) *Item {
+func (g *Gear) Remove(keyword string) *Armor {
 	if g.Head != nil && g.Head.HasKeyword(keyword) {
 		item := g.Head
 		g.Head = nil
@@ -173,8 +193,8 @@ func (g *Gear) Remove(keyword string) *Item {
 	return nil
 }
 
-func (g *Gear) Equip(item *Item) (*Item, error) {
-	var previous *Item
+func (g *Gear) Equip(item *Armor) (*Armor, error) {
+	var previous *Armor
 	switch item.Slot {
 	case Head:
 		previous = g.Head
