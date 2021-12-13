@@ -33,7 +33,10 @@ func buildItems(world *World) {
 		if err != nil {
 			log.Fatalf("Error parsing %s", data)
 		}
-		i := item.NewItem(r.UUID, r.Name, r.Type, r.Slot, r.Keywords)
+		if r.Type != "Armor" {
+			continue
+		}
+		i := item.NewArmor(r.UUID, r.Name, r.Slot, r.Keywords)
 		for _, rm := range r.Modifiers {
 			i.AddModifier(rm.Type, rm.Value)
 		}

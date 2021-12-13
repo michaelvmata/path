@@ -194,11 +194,6 @@ func (wr Wear) Execute(w *World, s *Session, raw string) {
 		return
 	}
 	i := s.player.Inventory.RemItemAtIndex(index)
-	if i.Type != item.Armor {
-		s.outgoing <- fmt.Sprintf("You can't wear %s.", i.Name)
-		s.player.Inventory.AddItem(i)
-		return
-	}
 	previous, err := s.player.Gear.Equip(i)
 	if err != nil {
 		s.outgoing <- fmt.Sprintf("You can't wear %s.", i.Name)

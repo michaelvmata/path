@@ -5,17 +5,10 @@ import (
 	"github.com/michaelvmata/path/modifiers"
 )
 
-const (
-	Armor  = "Armor"
-	Weapon = "Weapon"
-	Tablet = "Tablet"
-)
-
 type Item struct {
 	UUID      string
 	Name      string
 	Keywords  []string
-	Type      string
 	Slot      string
 	Modifiers []modifiers.Modifier
 }
@@ -37,11 +30,10 @@ func (i Item) HasKeyword(keyword string) bool {
 	return false
 }
 
-func NewItem(UUID string, name string, itemType string, slot string, keywords []string) *Item {
+func NewArmor(UUID string, name string, slot string, keywords []string) *Item {
 	return &Item{
 		UUID:      UUID,
 		Name:      name,
-		Type:      itemType,
 		Slot:      slot,
 		Keywords:  keywords,
 		Modifiers: make([]modifiers.Modifier, 0),
@@ -182,9 +174,6 @@ func (g *Gear) Remove(keyword string) *Item {
 }
 
 func (g *Gear) Equip(item *Item) (*Item, error) {
-	if item.Type != Weapon && item.Type != Armor {
-		return nil, errors.New("can't equip item")
-	}
 	var previous *Item
 	switch item.Slot {
 	case Head:

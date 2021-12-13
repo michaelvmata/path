@@ -85,7 +85,7 @@ func TestRoom(t *testing.T) {
 		t.Fatalf("Player able to exit room twice")
 	}
 
-	i := item.NewItem("test uuid", "test item", item.Armor, item.Head, []string{"test"})
+	i := item.NewArmor("test uuid", "test item", item.Head, []string{"test"})
 	err := r.Accept(i)
 	if err != nil {
 		t.Fatalf("Unable to drop item in room")
