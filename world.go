@@ -38,16 +38,16 @@ func NewPlayer(handle string) *Player {
 	}
 }
 
-func (c *Player) Discard(keyword string) *item.Armor {
+func (c *Player) Discard(keyword string) item.Item {
 	index := c.Inventory.IndexOfItem(keyword)
 	if index == -1 {
 		return nil
 	}
 	i := c.Inventory.RemItemAtIndex(index)
-	return i.(*item.Armor)
+	return i
 }
 
-func (c *Player) Receive(i *item.Armor) error {
+func (c *Player) Receive(i item.Item) error {
 	if err := c.Inventory.AddItem(i); err != nil {
 		return errors.New("player can't carry item")
 	}
@@ -155,7 +155,7 @@ func (r *Room) Describe() string {
 	return strings.Join(parts, "\n")
 }
 
-func (r *Room) Accept(i *item.Armor) error {
+func (r *Room) Accept(i item.Item) error {
 	// Accept places an item in the room.  It throws an error if there is no space.
 	err := r.Items.AddItem(i)
 	if err != nil {
@@ -164,13 +164,13 @@ func (r *Room) Accept(i *item.Armor) error {
 	return nil
 }
 
-func (r *Room) PickupItem(keyword string) (*item.Armor, error) {
+func (r *Room) PickupItem(keyword string) (item.Item, error) {
 	index := r.Items.IndexOfItem(keyword)
 	if index == -1 {
 		return nil, errors.New("no item with keyword")
 	}
 	i := r.Items.RemItemAtIndex(index)
-	return i.(*item.Armor), nil
+	return i, nil
 }
 
 func (r *Room) IsFull() bool {
