@@ -2,18 +2,19 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/michaelvmata/path/items"
+	item "github.com/michaelvmata/path/items"
 	"io/ioutil"
 	"log"
 	"strings"
 )
 
 type RawItem struct {
-	UUID      string `json:"uuid"`
-	Name      string `json:"name"`
-	Type      string `json:"Type"`
-	Slot      string `json:"Slot"`
-	Modifiers []struct {
+	UUID       string `json:"uuid"`
+	Name       string `json:"name"`
+	Type       string `json:"Type"`
+	WeaponType string `json:"WeaponType"`
+	Slot       string `json:"Slot"`
+	Modifiers  []struct {
 		Type  string `json:"Type"`
 		Value int    `json:"Value"`
 	} `json:"Modifiers"`
@@ -33,14 +34,20 @@ func buildItems(world *World) {
 		if err != nil {
 			log.Fatalf("Error parsing %s", data)
 		}
-		if r.Type != "Armor" {
-			continue
+		if r.Type == "Armor" {
+			a := item.NewArmor(r.UUID, r.Name, r.Slot, r.Keywords)
+			for _, rm := range r.Modifiers {
+				a.AddModifier(rm.Type, rm.Value)
+			}
+			world.Items[a.UUID()] = a
 		}
-		i := item.NewArmor(r.UUID, r.Name, r.Slot, r.Keywords)
-		for _, rm := range r.Modifiers {
-			i.AddModifier(rm.Type, rm.Value)
+		if r.Type == "Weapon" {
+			w := item.NewWeapon(r.UUID, r.Name, r.Keywords, r.WeaponType)
+			for _, rm := range r.Modifiers {
+				w.AddModifier(rm.Type, rm.Value)
+			}
+			world.Items[w.UUID()] = w
 		}
-		world.Items[i.UUID()] = i
 	}
 }
 
@@ -140,62 +147,62 @@ func buildPlayers(world *World) {
 
 		if rp.Gear.Head != "" {
 			if i, ok := world.Items[rp.Gear.Head]; ok {
-				c.Gear.Head = i
+				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Neck != "" {
 			if i, ok := world.Items[rp.Gear.Neck]; ok {
-				c.Gear.Neck = i
+				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Body != "" {
 			if i, ok := world.Items[rp.Gear.Body]; ok {
-				c.Gear.Body = i
+				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Arms != "" {
 			if i, ok := world.Items[rp.Gear.Arms]; ok {
-				c.Gear.Arms = i
+				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Hands != "" {
 			if i, ok := world.Items[rp.Gear.Hands]; ok {
-				c.Gear.Hands = i
+				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Waist != "" {
 			if i, ok := world.Items[rp.Gear.Waist]; ok {
-				c.Gear.Waist = i
+				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Legs != "" {
 			if i, ok := world.Items[rp.Gear.Legs]; ok {
-				c.Gear.Legs = i
+				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Feet != "" {
 			if i, ok := world.Items[rp.Gear.Feet]; ok {
-				c.Gear.Feet = i
+				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Wrist != "" {
 			if i, ok := world.Items[rp.Gear.Wrist]; ok {
-				c.Gear.Wrist = i
+				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Fingers != "" {
 			if i, ok := world.Items[rp.Gear.Fingers]; ok {
-				c.Gear.Fingers = i
+				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.OffHand != "" {
 			if i, ok := world.Items[rp.Gear.OffHand]; ok {
-				c.Gear.OffHand = i
+				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.MainHand != "" {
 			if i, ok := world.Items[rp.Gear.MainHand]; ok {
-				c.Gear.MainHand = i
+				c.Gear.Equip(i)
 			}
 		}
 		for _, itemUUID := range rp.Inventory {

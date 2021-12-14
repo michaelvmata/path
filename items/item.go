@@ -48,6 +48,29 @@ type Item interface {
 	Modifiers() []modifiers.Modifier
 }
 
+const (
+	Crush  = "crush"
+	Pierce = "pierce"
+	Slash  = "slash"
+)
+
+type Weapon struct {
+	item
+	WeaponType string
+}
+
+func NewWeapon(UUID string, name string, keywords []string, weaponType string) *Weapon {
+	return &Weapon{
+		item: item{
+			uuid:      UUID,
+			name:      name,
+			keywords:  keywords,
+			modifiers: make([]modifiers.Modifier, 0),
+		},
+		WeaponType: weaponType,
+	}
+}
+
 type Armor struct {
 	item
 	Slot string
@@ -112,6 +135,7 @@ const (
 	Feet     = "Feet"
 	Wrist    = "Wrist"
 	Fingers  = "Fingers"
+	OffHand  = "OffHand"
 	MainHand = "MainHand"
 )
 
@@ -127,14 +151,14 @@ type Gear struct {
 	Wrist    *Armor
 	Fingers  *Armor
 	OffHand  *Armor
-	MainHand *Armor
+	MainHand *Weapon
 }
 
 func NewGear() *Gear {
 	return &Gear{}
 }
 
-func (g *Gear) Remove(keyword string) *Armor {
+func (g *Gear) Remove(keyword string) Item {
 	if g.Head != nil && g.Head.HasKeyword(keyword) {
 		item := g.Head
 		g.Head = nil
@@ -198,44 +222,61 @@ func (g *Gear) Remove(keyword string) *Armor {
 	return nil
 }
 
-func (g *Gear) Equip(item *Armor) (*Armor, error) {
-	var previous *Armor
-	switch item.Slot {
+func (g *Gear) Equip(i Item) (Item, error) {
+	var previous Item
+	if weapon, ok := i.(*Weapon); ok {
+		previous = g.MainHand
+		g.MainHand = weapon
+		return previous, nil
+	}
+	armor, ok := i.(*Armor)
+	if !ok {
+		return nil, errors.New("not wearable")
+	}
+	switch armor.Slot {
 	case Head:
 		previous = g.Head
-		g.Head = item
+		g.Head = armor
 	case Neck:
 		previous = g.Neck
-		g.Neck = item
+		g.Neck = armor
 	case Body:
 		previous = g.Body
-		g.Body = item
+		g.Body = armor
 	case Arms:
 		previous = g.Arms
-		g.Arms = item
+		g.Arms = armor
 	case Hands:
 		previous = g.Hands
-		g.Hands = item
+		g.Hands = armor
 	case Waist:
 		previous = g.Waist
-		g.Waist = item
+		g.Waist = armor
 	case Legs:
 		previous = g.Legs
-		g.Legs = item
+		g.Legs = armor
 	case Feet:
 		previous = g.Feet
-		g.Feet = item
+		g.Feet = armor
 	case Wrist:
 		previous = g.Wrist
-		g.Wrist = item
+		g.Wrist = armor
 	case Fingers:
 		previous = g.Fingers
-		g.Fingers = item
-	case MainHand:
-		previous = g.MainHand
-		g.MainHand = item
-	default:
-		return nil, errors.New("bad item slot")
+		g.Fingers = armor
+	case OffHand:
+		previous = g.OffHand
+		g.OffHand = armor
 	}
 	return previous, nil
+}
+
+func IsNil(i Item) bool {
+	if a, ok := i.(*Armor); ok && a == nil {
+		return true
+	}
+	if w, ok := i.(*Weapon); ok && w == nil {
+		return true
+	}
+	return false
 }

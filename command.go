@@ -35,8 +35,8 @@ func (d Drop) Label() string {
 
 type Gear struct{}
 
-func (g Gear) SafeName(i *item.Armor) string {
-	if i == nil {
+func (g Gear) SafeName(i item.Item) string {
+	if item.IsNil(i) {
 		return ""
 	}
 	return i.Name()
@@ -194,14 +194,14 @@ func (wr Wear) Execute(w *World, s *Session, raw string) {
 		return
 	}
 	i := s.player.Inventory.RemItemAtIndex(index)
-	previous, err := s.player.Gear.Equip(i.(*item.Armor))
+	previous, err := s.player.Gear.Equip(i)
 	if err != nil {
 		s.outgoing <- fmt.Sprintf("You can't wear %s.", i.Name())
-		s.player.Inventory.AddItem(i.(*item.Armor))
+		s.player.Inventory.AddItem(i)
 	} else {
 		s.outgoing <- fmt.Sprintf("You wear %s", i.Name())
 	}
-	if previous != nil {
+	if !item.IsNil(previous) {
 		s.player.Inventory.AddItem(previous)
 	}
 }
