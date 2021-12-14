@@ -34,20 +34,16 @@ func buildItems(world *World) {
 		if err != nil {
 			log.Fatalf("Error parsing %s", data)
 		}
+		var i item.Item
 		if r.Type == "Armor" {
-			a := item.NewArmor(r.UUID, r.Name, r.Slot, r.Keywords)
-			for _, rm := range r.Modifiers {
-				a.AddModifier(rm.Type, rm.Value)
-			}
-			world.Items[a.UUID()] = a
+			i = item.NewArmor(r.UUID, r.Name, r.Slot, r.Keywords)
+		} else if r.Type == "Weapon" {
+			i = item.NewWeapon(r.UUID, r.Name, r.Keywords, r.WeaponType)
 		}
-		if r.Type == "Weapon" {
-			w := item.NewWeapon(r.UUID, r.Name, r.Keywords, r.WeaponType)
-			for _, rm := range r.Modifiers {
-				w.AddModifier(rm.Type, rm.Value)
-			}
-			world.Items[w.UUID()] = w
+		for _, rm := range r.Modifiers {
+			i.AddModifier(rm.Type, rm.Value)
 		}
+		world.Items[i.UUID()] = i
 	}
 }
 

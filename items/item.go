@@ -46,6 +46,7 @@ type Item interface {
 	Name() string
 	HasKeyword(string) bool
 	Modifiers() []modifiers.Modifier
+	AddModifier(string, int)
 }
 
 const (
