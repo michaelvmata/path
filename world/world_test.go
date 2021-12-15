@@ -29,6 +29,19 @@ func TestPlayer(t *testing.T) {
 	if c.Room != r {
 		t.Fatalf("Player room(%v) expected(%v)", c.Room, r)
 	}
+
+	target := "SomeUUID"
+	if c.IsAttacking(target) {
+		t.Fatalf("Player attacking %s by default", target)
+	}
+	c.StartAttacking(target)
+	if !c.IsAttacking(target) {
+		t.Fatalf("Player not attacking %s", target)
+	}
+	c.StopAttacking(target)
+	if c.IsAttacking(target) {
+		t.Fatalf("Player still attacking %s", target)
+	}
 }
 
 func TestRoom(t *testing.T) {

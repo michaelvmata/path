@@ -21,6 +21,8 @@ type Player struct {
 
 	Gear      *item.Gear
 	Inventory item.Container
+
+	Attacking map[string]bool
 }
 
 func NewPlayer(handle string) *Player {
@@ -35,7 +37,22 @@ func NewPlayer(handle string) *Player {
 
 		Gear:      item.NewGear(),
 		Inventory: item.NewContainer(10),
+
+		Attacking: make(map[string]bool),
 	}
+}
+
+func (c *Player) StartAttacking(defender string) {
+	c.Attacking[defender] = true
+}
+
+func (c *Player) StopAttacking(defender string) {
+	delete(c.Attacking, defender)
+}
+
+func (c Player) IsAttacking(defender string) bool {
+	_, ok := c.Attacking[defender]
+	return ok
 }
 
 func (c *Player) Discard(keyword string) item.Item {
