@@ -2,7 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	item "github.com/michaelvmata/path/items"
+	"github.com/michaelvmata/path/items"
+	"github.com/michaelvmata/path/world"
 	"io/ioutil"
 	"log"
 	"strings"
@@ -21,7 +22,7 @@ type RawItem struct {
 	Keywords []string `json:"Keywords"`
 }
 
-func buildItems(world *World) {
+func buildItems(w *world.World) {
 	itemFilePath := "data/item.ndjson"
 	data, err := ioutil.ReadFile(itemFilePath)
 	if err != nil {
@@ -43,7 +44,7 @@ func buildItems(world *World) {
 		for _, rm := range r.Modifiers {
 			i.AddModifier(rm.Type, rm.Value)
 		}
-		world.Items[i.UUID()] = i
+		w.Items[i.UUID()] = i
 	}
 }
 
@@ -54,7 +55,7 @@ type RawRoom struct {
 	Size        int
 }
 
-func buildRooms(world *World) {
+func buildRooms(w *world.World) {
 	roomFilePath := "data/room.ndjson"
 	data, err := ioutil.ReadFile(roomFilePath)
 	if err != nil {
@@ -67,8 +68,8 @@ func buildRooms(world *World) {
 		if err != nil {
 			log.Fatalf("Error parsing %s", data)
 		}
-		room := NewRoom(rr.UUID, rr.Name, rr.Description, rr.Size)
-		world.Rooms[room.uuid] = room
+		room := world.NewRoom(rr.UUID, rr.Name, rr.Description, rr.Size)
+		w.Rooms[room.UUID] = room
 	}
 }
 
@@ -110,7 +111,7 @@ type RawPlayer struct {
 	Inventory []string `json:"Inventory"`
 }
 
-func buildPlayers(world *World) {
+func buildPlayers(w *world.World) {
 	playerFilePath := "data/player.ndjson"
 	data, err := ioutil.ReadFile(playerFilePath)
 	if err != nil {
@@ -123,7 +124,7 @@ func buildPlayers(world *World) {
 		if err != nil {
 			log.Fatalf("Error parsing %s", data)
 		}
-		c := NewPlayer(rp.Name)
+		c := world.NewPlayer(rp.Name)
 
 		c.Core.Power.Base = rp.Power
 		c.Core.Agility.Base = rp.Agility
@@ -142,73 +143,73 @@ func buildPlayers(world *World) {
 		c.Spirit.RecoverRate = rp.Spirit.Recover
 
 		if rp.Gear.Head != "" {
-			if i, ok := world.Items[rp.Gear.Head]; ok {
+			if i, ok := w.Items[rp.Gear.Head]; ok {
 				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Neck != "" {
-			if i, ok := world.Items[rp.Gear.Neck]; ok {
+			if i, ok := w.Items[rp.Gear.Neck]; ok {
 				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Body != "" {
-			if i, ok := world.Items[rp.Gear.Body]; ok {
+			if i, ok := w.Items[rp.Gear.Body]; ok {
 				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Arms != "" {
-			if i, ok := world.Items[rp.Gear.Arms]; ok {
+			if i, ok := w.Items[rp.Gear.Arms]; ok {
 				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Hands != "" {
-			if i, ok := world.Items[rp.Gear.Hands]; ok {
+			if i, ok := w.Items[rp.Gear.Hands]; ok {
 				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Waist != "" {
-			if i, ok := world.Items[rp.Gear.Waist]; ok {
+			if i, ok := w.Items[rp.Gear.Waist]; ok {
 				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Legs != "" {
-			if i, ok := world.Items[rp.Gear.Legs]; ok {
+			if i, ok := w.Items[rp.Gear.Legs]; ok {
 				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Feet != "" {
-			if i, ok := world.Items[rp.Gear.Feet]; ok {
+			if i, ok := w.Items[rp.Gear.Feet]; ok {
 				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Wrist != "" {
-			if i, ok := world.Items[rp.Gear.Wrist]; ok {
+			if i, ok := w.Items[rp.Gear.Wrist]; ok {
 				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.Fingers != "" {
-			if i, ok := world.Items[rp.Gear.Fingers]; ok {
+			if i, ok := w.Items[rp.Gear.Fingers]; ok {
 				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.OffHand != "" {
-			if i, ok := world.Items[rp.Gear.OffHand]; ok {
+			if i, ok := w.Items[rp.Gear.OffHand]; ok {
 				c.Gear.Equip(i)
 			}
 		}
 		if rp.Gear.MainHand != "" {
-			if i, ok := world.Items[rp.Gear.MainHand]; ok {
+			if i, ok := w.Items[rp.Gear.MainHand]; ok {
 				c.Gear.Equip(i)
 			}
 		}
 		for _, itemUUID := range rp.Inventory {
-			if i, ok := world.Items[itemUUID]; ok {
+			if i, ok := w.Items[itemUUID]; ok {
 				c.Inventory.AddItem(i)
 			}
 		}
 		c.Update(false)
-		world.Players[c.Name] = c
-		if room, ok := world.Rooms[rp.RoomUUID]; ok {
+		w.Players[c.Name] = c
+		if room, ok := w.Rooms[rp.RoomUUID]; ok {
 			if err := room.Enter(c); err == nil {
 				c.Room = room
 			}
@@ -216,8 +217,8 @@ func buildPlayers(world *World) {
 	}
 }
 
-func build() *World {
-	world := NewWorld()
+func build() *world.World {
+	world := world.NewWorld()
 	buildItems(world)
 	buildRooms(world)
 	buildPlayers(world)

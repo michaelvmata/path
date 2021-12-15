@@ -1,4 +1,4 @@
-package main
+package world
 
 import (
 	"errors"
@@ -123,20 +123,20 @@ func (c *Player) Update(tick bool) {
 }
 
 type Room struct {
-	uuid        string
+	UUID        string
 	name        string
 	description string
 	players     []*Player
 	Items       item.Container
-	size        int
+	Size        int
 }
 
 func NewRoom(uuid string, name string, description string, size int) *Room {
 	room := Room{
-		uuid:        uuid,
+		UUID:        uuid,
 		name:        name,
 		description: description,
-		size:        size,
+		Size:        size,
 		players:     make([]*Player, 0, size),
 		Items:       item.NewContainer(100),
 	}
@@ -174,7 +174,7 @@ func (r *Room) PickupItem(keyword string) (item.Item, error) {
 }
 
 func (r *Room) IsFull() bool {
-	return r.size == len(r.players)
+	return r.Size == len(r.players)
 }
 
 func (r *Room) Enter(c *Player) error {

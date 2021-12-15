@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/symbols"
+	"github.com/michaelvmata/path/world"
 	"strings"
 )
 
 type Drop struct{}
 
-func (d Drop) Execute(w *World, s *Session, raw string) {
+func (d Drop) Execute(w *world.World, s *Session, raw string) {
 	parts := strings.SplitN(raw, " ", 2)
 	if len(parts) == 1 {
 		s.outgoing <- "Drop what?"
@@ -42,7 +43,7 @@ func (g Gear) SafeName(i item.Item) string {
 	return i.Name()
 }
 
-func (g Gear) Execute(w *World, s *Session, raw string) {
+func (g Gear) Execute(w *world.World, s *Session, raw string) {
 	gear := s.player.Gear
 	s.outgoing <- ""
 	s.outgoing <- fmt.Sprintf("     [Head]: %s", g.SafeName(gear.Head))
@@ -66,7 +67,7 @@ func (g Gear) Label() string {
 
 type Get struct{}
 
-func (g Get) Execute(w *World, s *Session, raw string) {
+func (g Get) Execute(w *world.World, s *Session, raw string) {
 	parts := strings.SplitN(raw, " ", 2)
 	if len(parts) == 1 {
 		s.outgoing <- "Get what?"
@@ -93,7 +94,7 @@ func (g Get) Label() string {
 
 type Inventory struct{}
 
-func (i Inventory) Execute(w *World, s *Session, raw string) {
+func (i Inventory) Execute(w *world.World, s *Session, raw string) {
 	s.outgoing <- ""
 	for _, i := range s.player.Inventory.Items {
 		s.outgoing <- i.Name()
@@ -107,7 +108,7 @@ func (i Inventory) Label() string {
 
 type Look struct{}
 
-func (l Look) Execute(w *World, s *Session, raw string) {
+func (l Look) Execute(w *world.World, s *Session, raw string) {
 	s.outgoing <- ""
 	s.outgoing <- s.player.Room.Describe()
 	s.outgoing <- ""
@@ -119,7 +120,7 @@ func (l Look) Label() string {
 
 type Remove struct{}
 
-func (r Remove) Execute(w *World, s *Session, raw string) {
+func (r Remove) Execute(w *world.World, s *Session, raw string) {
 	parts := strings.SplitN(raw, " ", 2)
 	if len(parts) == 1 {
 		s.outgoing <- "Remove what?"
@@ -141,7 +142,7 @@ func (r Remove) Label() string {
 
 type Score struct{}
 
-func (sc Score) Execute(w *World, s *Session, raw string) {
+func (sc Score) Execute(w *world.World, s *Session, raw string) {
 	p := s.player
 	parts := make([]string, 0)
 	parts = append(parts, fmt.Sprintf("<red>%s<reset> Health %d(%d)+%d", symbols.HEART, p.Health.Current, p.Health.Maximum, p.Health.RecoverRate))
@@ -162,7 +163,7 @@ func (sc Score) Label() string {
 
 type Typo struct{}
 
-func (t Typo) Execute(w *World, s *Session, raw string) {
+func (t Typo) Execute(w *world.World, s *Session, raw string) {
 	s.outgoing <- "The typo monster strikes again"
 }
 
@@ -172,7 +173,7 @@ func (t Typo) Label() string {
 
 type Noop struct{}
 
-func (n Noop) Execute(w *World, s *Session, raw string) {
+func (n Noop) Execute(w *world.World, s *Session, raw string) {
 	s.outgoing <- ""
 }
 
@@ -182,7 +183,7 @@ func (n Noop) Label() string {
 
 type Wear struct{}
 
-func (wr Wear) Execute(w *World, s *Session, raw string) {
+func (wr Wear) Execute(w *world.World, s *Session, raw string) {
 	parts := strings.SplitN(raw, " ", 2)
 	if len(parts) == 1 {
 		s.outgoing <- "Wear what?"
@@ -211,7 +212,7 @@ func (wr Wear) Label() string {
 }
 
 type Executor interface {
-	Execute(w *World, s *Session, raw string)
+	Execute(w *world.World, s *Session, raw string)
 	Label() string
 }
 

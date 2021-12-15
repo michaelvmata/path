@@ -1,9 +1,12 @@
 package main
 
-import "errors"
+import (
+	"errors"
+	"github.com/michaelvmata/path/world"
+)
 
 type Session struct {
-	player   *Player
+	player   *world.Player
 	incoming chan string
 	outgoing chan string
 }

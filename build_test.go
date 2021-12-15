@@ -11,10 +11,10 @@ func TestBuild(t *testing.T) {
 		t.Fatalf("Rooms count(%d) expected (%d)", len(world.Rooms), expectedRooms)
 	}
 	for _, room := range world.Rooms {
-		if room.uuid == "" {
+		if room.UUID == "" {
 			t.Fatalf("Room uuid is empty")
 		}
-		if room.size == 0 {
+		if room.Size == 0 {
 			t.Fatalf("Room size is zero")
 		}
 	}
