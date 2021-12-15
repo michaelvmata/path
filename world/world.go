@@ -143,7 +143,7 @@ type Room struct {
 	UUID        string
 	name        string
 	description string
-	players     []*Player
+	Players     []*Player
 	Items       item.Container
 	Size        int
 }
@@ -154,7 +154,7 @@ func NewRoom(uuid string, name string, description string, size int) *Room {
 		name:        name,
 		description: description,
 		Size:        size,
-		players:     make([]*Player, 0, size),
+		Players:     make([]*Player, 0, size),
 		Items:       item.NewContainer(100),
 	}
 	return &room
@@ -191,7 +191,7 @@ func (r *Room) PickupItem(keyword string) (item.Item, error) {
 }
 
 func (r *Room) IsFull() bool {
-	return r.Size == len(r.players)
+	return r.Size == len(r.Players)
 }
 
 func (r *Room) Enter(c *Player) error {
@@ -201,7 +201,7 @@ func (r *Room) Enter(c *Player) error {
 	if r.IndexOfPlayer(c) != -1 {
 		return errors.New("player already in room")
 	}
-	r.players = append(r.players, c)
+	r.Players = append(r.Players, c)
 	return nil
 }
 
@@ -210,15 +210,15 @@ func (r *Room) Exit(c *Player) error {
 	if i == -1 {
 		return errors.New("player not in room")
 	}
-	copy(r.players[i:], r.players[:i+1])
-	length := len(r.players) - 1
-	r.players[length] = nil
-	r.players = r.players[:length]
+	copy(r.Players[i:], r.Players[:i+1])
+	length := len(r.Players) - 1
+	r.Players[length] = nil
+	r.Players = r.Players[:length]
 	return nil
 }
 
 func (r *Room) IndexOfPlayer(target *Player) int {
-	for i, p := range r.players {
+	for i, p := range r.Players {
 		if p == target {
 			return i
 		}
