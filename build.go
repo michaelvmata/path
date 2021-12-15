@@ -44,6 +44,9 @@ func buildItems(w *world.World) {
 			i = item.NewArmor(r.UUID, r.Name, r.Slot, r.Keywords)
 		} else if r.Type == "Weapon" {
 			w := item.NewWeapon(r.UUID, r.Name, r.Keywords, r.WeaponType)
+			if r.MaximumDamage <= r.MinimumDamage || r.MinimumDamage <= 0 {
+				log.Fatalln("Invalid Maximum and Minimum Damage", r)
+			}
 			w.MinimumDamage = r.MinimumDamage
 			w.MaximumDamage = r.MaximumDamage
 			w.CriticalBonus = r.CriticalBonus
