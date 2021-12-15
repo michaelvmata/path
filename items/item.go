@@ -57,7 +57,11 @@ const (
 
 type Weapon struct {
 	item
-	WeaponType string
+	WeaponType    string
+	MaximumDamage int
+	MinimumDamage int
+	CriticalBonus float64
+	CriticalRate  float64
 }
 
 func NewWeapon(UUID string, name string, keywords []string, weaponType string) *Weapon {

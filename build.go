@@ -10,12 +10,16 @@ import (
 )
 
 type RawItem struct {
-	UUID       string `json:"uuid"`
-	Name       string `json:"name"`
-	Type       string `json:"Type"`
-	WeaponType string `json:"WeaponType"`
-	Slot       string `json:"Slot"`
-	Modifiers  []struct {
+	UUID          string  `json:"uuid"`
+	Name          string  `json:"name"`
+	Type          string  `json:"Type"`
+	WeaponType    string  `json:"WeaponType"`
+	MinimumDamage int     `json:"MinimumDamage"`
+	MaximumDamage int     `json:"MaximumDamage"`
+	CriticalRate  float64 `json:"CriticalRate"`
+	CriticalBonus float64 `json:"CriticalBonus"`
+	Slot          string  `json:"Slot"`
+	Modifiers     []struct {
 		Type  string `json:"Type"`
 		Value int    `json:"Value"`
 	} `json:"Modifiers"`
@@ -39,7 +43,12 @@ func buildItems(w *world.World) {
 		if r.Type == "Armor" {
 			i = item.NewArmor(r.UUID, r.Name, r.Slot, r.Keywords)
 		} else if r.Type == "Weapon" {
-			i = item.NewWeapon(r.UUID, r.Name, r.Keywords, r.WeaponType)
+			w := item.NewWeapon(r.UUID, r.Name, r.Keywords, r.WeaponType)
+			w.MinimumDamage = r.MinimumDamage
+			w.MaximumDamage = r.MaximumDamage
+			w.CriticalBonus = r.CriticalBonus
+			w.CriticalRate = r.CriticalRate
+			i = w
 		}
 		for _, rm := range r.Modifiers {
 			i.AddModifier(rm.Type, rm.Value)
