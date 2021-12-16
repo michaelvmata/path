@@ -22,3 +22,24 @@ func CalculateHitDamage(attacker *world.Player, defender *world.Player) int {
 	}
 	return damage
 }
+
+func ApplyDamage(p *world.Player, damage int) {
+	p.Health.Current -= damage
+	if p.IsDead() {
+		p.Health.Current = 1
+	}
+}
+
+func Simulate(w *world.World) {
+	for _, attacker := range w.Players {
+		if !attacker.IsFighting() {
+			continue
+		}
+		for UUID, _ := range attacker.Attacking {
+			defender := w.Players[UUID]
+			damage := CalculateHitDamage(attacker, defender)
+			ApplyDamage(defender, damage)
+			break
+		}
+	}
+}

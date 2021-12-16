@@ -55,6 +55,10 @@ func (c Player) IsAttacking(defender string) bool {
 	return ok
 }
 
+func (c Player) IsFighting() bool {
+	return len(c.Attacking) > 0
+}
+
 func (c *Player) Discard(keyword string) item.Item {
 	index := c.Inventory.IndexOfItem(keyword)
 	if index == -1 {
@@ -120,6 +124,10 @@ func (c *Player) CalculateModifiers() {
 	c.ApplyItemModifiers(c.Gear.Fingers)
 	c.ApplyItemModifiers(c.Gear.OffHand)
 	c.ApplyItemModifiers(c.Gear.MainHand)
+}
+
+func (c Player) IsDead() bool {
+	return c.Health.Current > 0
 }
 
 func (c *Player) Update(tick bool) {
