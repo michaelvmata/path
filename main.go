@@ -30,7 +30,7 @@ MainLoop:
 			command.Execute(world, session, text)
 			prompt <- true
 		case <-ticker.C:
-			player.Update(true)
+			world.Update(true)
 		}
 
 	}

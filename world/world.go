@@ -246,3 +246,9 @@ func NewWorld() *World {
 	}
 	return &w
 }
+
+func (w *World) Update(tick bool) {
+	for _, player := range w.Players {
+		player.Update(tick)
+	}
+}
