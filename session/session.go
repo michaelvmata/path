@@ -1,9 +1,5 @@
 package session
 
-import (
-	"errors"
-)
-
 type Session struct {
 	PlayerName string
 	Incoming   chan string
@@ -29,20 +25,6 @@ func (s *Session) Receive() string {
 	default:
 		return ""
 	}
-}
-
-func (s *Session) Process() error {
-	m := s.Receive()
-	if m == "" {
-		return nil
-	}
-	if m == "quit" {
-		return errors.New("time to quit")
-	}
-	messages := make([]string, 0)
-	messages = append(messages, m)
-	s.Send(messages)
-	return nil
 }
 
 func (s *Session) Send(messages []string) {
