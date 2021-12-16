@@ -102,10 +102,6 @@ type RawPlayer struct {
 		Current int `json:"Current"`
 		Recover int `json:"Recover"`
 	} `json:"Spirit"`
-	Energy struct {
-		Current int `json:"Current"`
-		Recover int `json:"Recover"`
-	} `json:"Energy"`
 	Gear struct {
 		Head     string `json:"Head"`
 		Neck     string `json:"Neck"`
@@ -147,9 +143,6 @@ func buildPlayers(w *world.World) {
 
 		c.Health.Current = rp.Health.Current
 		c.Health.RecoverRate = rp.Health.Recover
-
-		c.Energy.Current = rp.Energy.Current
-		c.Energy.RecoverRate = rp.Energy.Recover
 
 		c.Spirit.Current = rp.Spirit.Current
 		c.Spirit.RecoverRate = rp.Spirit.Recover

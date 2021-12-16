@@ -2,13 +2,6 @@ package stats
 
 import "testing"
 
-func TestConsumable(t *testing.T) {
-	c := NewConsumable()
-	if c.Health.Current != 0 {
-		t.Fatalf("Core power zero value is not 0")
-	}
-}
-
 func TestCore(t *testing.T) {
 	c := NewCore()
 

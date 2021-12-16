@@ -97,17 +97,3 @@ func (l *Line) Recover() {
 	l.Current += l.RecoverRate
 	l.EnforceMaximum()
 }
-
-type Consumable struct {
-	Health Line
-	Energy Line
-	Spirit Line
-}
-
-func NewConsumable() Consumable {
-	return Consumable{
-		Health: Line{},
-		Energy: Line{},
-		Spirit: Line{},
-	}
-}

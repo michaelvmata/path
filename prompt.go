@@ -15,12 +15,11 @@ func (p *Prompt) Render() string {
 		return border
 	}
 	player := p.Session.player
-	return fmt.Sprintf("%s%s <red>%d%s <green>%d%s <blue>%d%s <grey_62>%s",
+	return fmt.Sprintf("%s%s <red>%d%s <green>%d%s %s",
 		border,
 		player.Name,
 		player.Health.Current, symbols.HEART,
 		player.Spirit.Current, symbols.TWELVE_STAR,
-		player.Energy.Current, symbols.CIRCLED_BULLET,
 		border)
 }
 

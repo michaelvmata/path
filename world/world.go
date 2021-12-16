@@ -10,11 +10,11 @@ import (
 )
 
 type Player struct {
-	Name   string
-	Room   *Room
+	Name string
+	Room *Room
+
 	Health stats.Line
 	Spirit stats.Line
-	Energy stats.Line
 
 	Core   *stats.Core
 	Skills *skills.Skills
@@ -27,10 +27,10 @@ type Player struct {
 
 func NewPlayer(handle string) *Player {
 	return &Player{
-		Name:   handle,
+		Name: handle,
+
 		Health: stats.Line{},
 		Spirit: stats.Line{},
-		Energy: stats.Line{},
 
 		Core:   stats.NewCore(),
 		Skills: skills.NewSkills(),
@@ -125,17 +125,15 @@ func (c *Player) CalculateModifiers() {
 func (c *Player) Update(tick bool) {
 	c.CalculateModifiers()
 	// Adjust lines from core stats
+
 	c.Health.Maximum = c.Core.Endurance.Value() * 100
 	c.Health.EnforceMaximum()
 	c.Spirit.Maximum = c.Core.Insight.Value() * 100
 	c.Spirit.EnforceMaximum()
-	c.Energy.Maximum = (c.Core.Power.Value() + c.Core.Will.Value()) * 100
-	c.Energy.EnforceMaximum()
 
 	if tick {
 		c.Health.Recover()
 		c.Spirit.Recover()
-		c.Energy.Recover()
 	}
 }
 
