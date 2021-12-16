@@ -1,31 +1,30 @@
-package main
+package session
 
 import (
 	"errors"
-	"github.com/michaelvmata/path/world"
 )
 
 type Session struct {
-	player   *world.Player
-	incoming chan string
-	outgoing chan string
+	PlayerName string
+	Incoming   chan string
+	Outgoing   chan string
 }
 
 func NewSession() *Session {
 	s := Session{
-		incoming: make(chan string),
-		outgoing: make(chan string),
+		Incoming: make(chan string),
+		Outgoing: make(chan string),
 	}
 	return &s
 }
 
 func (s *Session) HasPlayer() bool {
-	return s.player != nil
+	return s.PlayerName != ""
 }
 
 func (s *Session) Receive() string {
 	select {
-	case input := <-s.incoming:
+	case input := <-s.Incoming:
 		return input
 	default:
 		return ""
@@ -48,6 +47,6 @@ func (s *Session) Process() error {
 
 func (s *Session) Send(messages []string) {
 	for _, message := range messages {
-		s.outgoing <- message
+		s.Outgoing <- message
 	}
 }

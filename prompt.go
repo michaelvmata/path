@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
+	"github.com/michaelvmata/path/session"
 	"github.com/michaelvmata/path/symbols"
+	"github.com/michaelvmata/path/world"
 )
 
 type Prompt struct {
-	Session *Session
+	Session *session.Session
+	Player  *world.Player
 }
 
 func (p *Prompt) Render() string {
@@ -14,15 +17,14 @@ func (p *Prompt) Render() string {
 	if !p.Session.HasPlayer() {
 		return border
 	}
-	player := p.Session.player
 	return fmt.Sprintf("%s%s <red>%d%s <green>%d%s %s",
 		border,
-		player.Name,
-		player.Health.Current, symbols.HEART,
-		player.Spirit.Current, symbols.TWELVE_STAR,
+		p.Player.Name,
+		p.Player.Health.Current, symbols.HEART,
+		p.Player.Spirit.Current, symbols.TWELVE_STAR,
 		border)
 }
 
-func NewPrompt(session *Session) *Prompt {
-	return &Prompt{Session: session}
+func NewPrompt(session *session.Session, p *world.Player) *Prompt {
+	return &Prompt{Session: session, Player: p}
 }

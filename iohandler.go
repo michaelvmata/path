@@ -3,6 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/michaelvmata/path/session"
+	"github.com/michaelvmata/path/world"
 	"os"
 	"strings"
 )
@@ -18,11 +20,11 @@ func handleInput(incoming chan string) {
 	}
 }
 
-func handleOutput(session *Session, showPrompt chan bool, done chan bool) {
-	prompt := NewPrompt(session)
+func handleOutput(session *session.Session, showPrompt chan bool, done chan bool, player *world.Player) {
+	prompt := NewPrompt(session, player)
 	for {
 		select {
-		case text := <-session.outgoing:
+		case text := <-session.Outgoing:
 			fmt.Println(Colorize(text))
 		case <-showPrompt:
 			fmt.Printf(Colorize(prompt.Render()))

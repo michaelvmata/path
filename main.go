@@ -1,34 +1,36 @@
 package main
 
 import (
+	session2 "github.com/michaelvmata/path/session"
 	"time"
 )
 
 func main() {
 	ticker := time.NewTicker(time.Second)
-	session := NewSession()
+	session := session2.NewSession()
 	world := build()
-	session.player = world.Players["gaigen"]
+	session.PlayerName = "gaigen"
+	player := world.Players[session.PlayerName]
 	prompt := make(chan bool)
 	done := make(chan bool)
-	go handleInput(session.incoming)
-	go handleOutput(session, prompt, done)
+	go handleInput(session.Incoming)
+	go handleOutput(session, prompt, done, player)
 	prompt <- true
 
 MainLoop:
 	for {
 		select {
-		case text := <-session.incoming:
+		case text := <-session.Incoming:
 			if text == "quit" {
 				done <- true
 				break MainLoop
 			}
 			command := determineCommand(text)
-			session.player.Update(false)
+			player.Update(false)
 			command.Execute(world, session, text)
 			prompt <- true
 		case <-ticker.C:
-			session.player.Update(true)
+			player.Update(true)
 		}
 
 	}
