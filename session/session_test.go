@@ -6,7 +6,7 @@ import (
 )
 
 func TestSession(t *testing.T) {
-	s := NewSession()
+	s := New()
 	if r := s.Receive(); r != "" {
 		log.Fatalf("Unexpected result %s", r)
 	}

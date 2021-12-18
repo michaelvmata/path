@@ -4,14 +4,16 @@ import (
 	"errors"
 	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/modifiers"
+	"github.com/michaelvmata/path/session"
 	"github.com/michaelvmata/path/skills"
 	"github.com/michaelvmata/path/stats"
 	"strings"
 )
 
 type Player struct {
-	Name string
-	Room *Room
+	Name    string
+	Room    *Room
+	Session *session.Session
 
 	Health stats.Line
 	Spirit stats.Line
@@ -142,6 +144,12 @@ func (c *Player) Update(tick bool) {
 	if tick {
 		c.Health.Recover()
 		c.Spirit.Recover()
+	}
+}
+
+func (c Player) Show(message string) {
+	if c.Session != nil {
+		c.Session.Outgoing <- message
 	}
 }
 

@@ -6,7 +6,7 @@ type Session struct {
 	Outgoing   chan string
 }
 
-func NewSession() *Session {
+func New() *Session {
 	s := Session{
 		Incoming: make(chan string),
 		Outgoing: make(chan string),
