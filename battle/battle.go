@@ -43,6 +43,10 @@ func Simulate(w *world.World) {
 				damage,
 				attacker.Gear.MainHand.WeaponType,
 				defender.Name)
+			defender.Show("%s did %d %s damage to you",
+				attacker.Name,
+				damage,
+				attacker.Gear.MainHand.WeaponType)
 			attacker.Update(false)
 			defender.Update(false)
 			break
