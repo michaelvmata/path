@@ -1,8 +1,6 @@
 package battle
 
 import (
-	"fmt"
-	"github.com/michaelvmata/path/session"
 	"github.com/michaelvmata/path/world"
 	"math/rand"
 )
@@ -32,7 +30,7 @@ func ApplyDamage(p *world.Player, damage int) {
 	}
 }
 
-func Simulate(w *world.World, s *session.Session) {
+func Simulate(w *world.World) {
 	for _, attacker := range w.Players {
 		if !attacker.IsFighting() {
 			continue
@@ -41,7 +39,7 @@ func Simulate(w *world.World, s *session.Session) {
 			defender := w.Players[UUID]
 			damage := CalculateHitDamage(attacker, defender)
 			ApplyDamage(defender, damage)
-			s.Outgoing <- fmt.Sprintf("You do %d %s damage to %s",
+			attacker.Show("You do %d %s damage to %s",
 				damage,
 				attacker.Gear.MainHand.WeaponType,
 				defender.Name)

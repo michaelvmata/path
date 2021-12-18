@@ -2,6 +2,7 @@ package world
 
 import (
 	"errors"
+	"fmt"
 	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/modifiers"
 	"github.com/michaelvmata/path/session"
@@ -147,9 +148,9 @@ func (c *Player) Update(tick bool) {
 	}
 }
 
-func (c Player) Show(message string) {
+func (c Player) Show(message string, args ...interface{}) {
 	if c.Session != nil {
-		c.Session.Outgoing <- message
+		c.Session.Outgoing <- fmt.Sprintf(message, args...)
 	}
 }
 

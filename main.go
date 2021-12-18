@@ -17,7 +17,10 @@ func main() {
 	go handleInput(s.Incoming)
 	go handleOutput(s, prompt, done, player)
 	prompt <- true
-
+	ctx := Context{
+		World:  world,
+		Player: player,
+	}
 MainLoop:
 	for {
 		select {
@@ -28,7 +31,8 @@ MainLoop:
 			}
 			command := determineCommand(text)
 			player.Update(false)
-			command.Execute(world, s, text)
+			ctx.Raw = text
+			command.Execute(ctx)
 			prompt <- true
 		case <-ticker.C:
 			world.Update(true)

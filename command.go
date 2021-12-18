@@ -3,33 +3,37 @@ package main
 import (
 	"fmt"
 	"github.com/michaelvmata/path/items"
-	"github.com/michaelvmata/path/session"
 	"github.com/michaelvmata/path/symbols"
 	"github.com/michaelvmata/path/world"
 	"strings"
 )
 
+type Context struct {
+	World  *world.World
+	Player *world.Player
+	Raw    string
+}
 type Drop struct{}
 
-func (d Drop) Execute(w *world.World, s *session.Session, raw string) {
-	parts := strings.SplitN(raw, " ", 2)
+func (d Drop) Execute(ctx Context) {
+	player := ctx.Player
+	parts := strings.SplitN(ctx.Raw, " ", 2)
 	if len(parts) == 1 {
-		s.Outgoing <- "Drop what?"
+		player.Show("Drop what?")
 		return
 	}
 	keyword := parts[1]
-	player := w.Players[s.PlayerName]
 	i := player.Discard(keyword)
 	if i == nil {
-		s.Outgoing <- fmt.Sprintf("You don't have '%s'.", keyword)
+		player.Show("You don't have '%s'.", keyword)
 		return
 	}
 	if err := player.Room.Accept(i); err != nil {
-		s.Outgoing <- fmt.Sprintf("You can't drop %s.", i.Name())
+		player.Show("You can't drop %s.", i.Name())
 		player.Receive(i)
 		return
 	}
-	s.Outgoing <- fmt.Sprintf("You drop %s.", i.Name())
+	player.Show("You drop %s.", i.Name())
 }
 
 func (d Drop) Label() string {
@@ -45,22 +49,24 @@ func (g Gear) SafeName(i item.Item) string {
 	return i.Name()
 }
 
-func (g Gear) Execute(w *world.World, s *session.Session, raw string) {
-	gear := w.Players[s.PlayerName].Gear
-	s.Outgoing <- ""
-	s.Outgoing <- fmt.Sprintf("     [Head]: %s", g.SafeName(gear.Head))
-	s.Outgoing <- fmt.Sprintf("     [Neck]: %s", g.SafeName(gear.Neck))
-	s.Outgoing <- fmt.Sprintf("     [Body]: %s", g.SafeName(gear.Body))
-	s.Outgoing <- fmt.Sprintf("     [Arms]: %s", g.SafeName(gear.Arms))
-	s.Outgoing <- fmt.Sprintf("    [Hands]: %s", g.SafeName(gear.Hands))
-	s.Outgoing <- fmt.Sprintf("    [Waist]: %s", g.SafeName(gear.Waist))
-	s.Outgoing <- fmt.Sprintf("     [Legs]: %s", g.SafeName(gear.Legs))
-	s.Outgoing <- fmt.Sprintf("     [Feet]: %s", g.SafeName(gear.Feet))
-	s.Outgoing <- fmt.Sprintf("     Wrist]: %s", g.SafeName(gear.Wrist))
-	s.Outgoing <- fmt.Sprintf("  [Fingers]: %s", g.SafeName(gear.Fingers))
-	s.Outgoing <- fmt.Sprintf(" [Off Hand]: %s", g.SafeName(gear.OffHand))
-	s.Outgoing <- fmt.Sprintf("[Main Hand]: %s", g.SafeName(gear.MainHand))
-	s.Outgoing <- ""
+func (g Gear) Execute(ctx Context) {
+	player := ctx.Player
+	gear := player.Gear
+
+	player.Show("")
+	player.Show("     [Head]: %s", g.SafeName(gear.Head))
+	player.Show("     [Neck]: %s", g.SafeName(gear.Neck))
+	player.Show("     [Body]: %s", g.SafeName(gear.Body))
+	player.Show("     [Arms]: %s", g.SafeName(gear.Arms))
+	player.Show("    [Hands]: %s", g.SafeName(gear.Hands))
+	player.Show("    [Waist]: %s", g.SafeName(gear.Waist))
+	player.Show("     [Legs]: %s", g.SafeName(gear.Legs))
+	player.Show("     [Feet]: %s", g.SafeName(gear.Feet))
+	player.Show("     Wrist]: %s", g.SafeName(gear.Wrist))
+	player.Show("  [Fingers]: %s", g.SafeName(gear.Fingers))
+	player.Show(" [Off Hand]: %s", g.SafeName(gear.OffHand))
+	player.Show("[Main Hand]: %s", g.SafeName(gear.MainHand))
+	player.Show("")
 }
 
 func (g Gear) Label() string {
@@ -69,25 +75,25 @@ func (g Gear) Label() string {
 
 type Get struct{}
 
-func (g Get) Execute(w *world.World, s *session.Session, raw string) {
-	parts := strings.SplitN(raw, " ", 2)
+func (g Get) Execute(ctx Context) {
+	player := ctx.Player
+	parts := strings.SplitN(ctx.Raw, " ", 2)
 	if len(parts) == 1 {
-		s.Outgoing <- "Get what?"
+		player.Show("Get what?")
 		return
 	}
 	keyword := parts[1]
-	player := w.Players[s.PlayerName]
 	i, err := player.Room.PickupItem(keyword)
 	if err != nil {
-		s.Outgoing <- fmt.Sprintf("You don't see '%s'.", keyword)
+		player.Show("You don't see '%s'.", keyword)
 		return
 	}
 	if err := player.Receive(i); err != nil {
-		s.Outgoing <- fmt.Sprintf("You can't get %s.", i.Name())
+		player.Show("You can't get %s.", i.Name())
 		player.Room.Accept(i)
 		return
 	} else {
-		s.Outgoing <- fmt.Sprintf("You get %s.", i.Name())
+		player.Show("You get %s.", i.Name())
 	}
 }
 
@@ -97,13 +103,13 @@ func (g Get) Label() string {
 
 type Inventory struct{}
 
-func (i Inventory) Execute(w *world.World, s *session.Session, raw string) {
-	s.Outgoing <- ""
-	player := w.Players[s.PlayerName]
+func (i Inventory) Execute(ctx Context) {
+	player := ctx.Player
+	player.Show("")
 	for _, i := range player.Inventory.Items {
-		s.Outgoing <- i.Name()
+		player.Show(i.Name())
 	}
-	s.Outgoing <- ""
+	player.Show("")
 }
 
 func (i Inventory) Label() string {
@@ -112,10 +118,10 @@ func (i Inventory) Label() string {
 
 type Look struct{}
 
-func (l Look) Execute(w *world.World, s *session.Session, raw string) {
-	s.Outgoing <- ""
-	s.Outgoing <- w.Players[s.PlayerName].Room.Describe()
-	s.Outgoing <- ""
+func (l Look) Execute(ctx Context) {
+	ctx.Player.Show("")
+	ctx.Player.Show(ctx.Player.Room.Describe())
+	ctx.Player.Show("")
 }
 
 func (l Look) Label() string {
@@ -124,21 +130,21 @@ func (l Look) Label() string {
 
 type Remove struct{}
 
-func (r Remove) Execute(w *world.World, s *session.Session, raw string) {
-	parts := strings.SplitN(raw, " ", 2)
+func (r Remove) Execute(ctx Context) {
+	player := ctx.Player
+	parts := strings.SplitN(ctx.Raw, " ", 2)
 	if len(parts) == 1 {
-		s.Outgoing <- "Remove what?"
+		player.Show("Remove what?")
 		return
 	}
 	keyword := parts[1]
-	player := w.Players[s.PlayerName]
 	i := player.Gear.Remove(keyword)
 	if i == nil {
-		s.Outgoing <- fmt.Sprintf("You don't have a '%s'", keyword)
+		player.Show("You don't have a '%s'", keyword)
 		return
 	}
 	player.Inventory.AddItem(i)
-	s.Outgoing <- fmt.Sprintf("You remove a %s", i.Name())
+	player.Show("You remove a %s", i.Name())
 }
 
 func (r Remove) Label() string {
@@ -147,18 +153,18 @@ func (r Remove) Label() string {
 
 type Score struct{}
 
-func (sc Score) Execute(w *world.World, s *session.Session, raw string) {
-	p := w.Players[s.PlayerName]
+func (sc Score) Execute(ctx Context) {
+	p := ctx.Player
 	parts := make([]string, 0)
 	parts = append(parts, fmt.Sprintf("<red>%s<reset> Health %d(%d)+%d", symbols.HEART, p.Health.Current, p.Health.Maximum, p.Health.RecoverRate))
 	parts = append(parts, fmt.Sprintf("<green>%s<reset> Spirit %d(%d)+%d", symbols.TWELVE_STAR, p.Spirit.Current, p.Spirit.Maximum, p.Spirit.RecoverRate))
-	s.Outgoing <- ""
-	s.Outgoing <- strings.Join(parts, "   ")
-	s.Outgoing <- ""
-	s.Outgoing <- p.Core.Describe()
-	s.Outgoing <- ""
-	s.Outgoing <- p.Skills.Describe()
-	s.Outgoing <- ""
+	p.Show("")
+	p.Show(strings.Join(parts, "   "))
+	p.Show("")
+	p.Show(p.Core.Describe())
+	p.Show("")
+	p.Show(p.Skills.Describe())
+	p.Show("")
 }
 
 func (sc Score) Label() string {
@@ -167,8 +173,8 @@ func (sc Score) Label() string {
 
 type Typo struct{}
 
-func (t Typo) Execute(w *world.World, s *session.Session, raw string) {
-	s.Outgoing <- "The typo monster strikes again"
+func (t Typo) Execute(ctx Context) {
+	ctx.Player.Show("The typo monster strikes again")
 }
 
 func (t Typo) Label() string {
@@ -177,8 +183,8 @@ func (t Typo) Label() string {
 
 type Noop struct{}
 
-func (n Noop) Execute(w *world.World, s *session.Session, raw string) {
-	s.Outgoing <- ""
+func (n Noop) Execute(ctx Context) {
+	ctx.Player.Show("")
 }
 
 func (n Noop) Label() string {
@@ -187,25 +193,25 @@ func (n Noop) Label() string {
 
 type Wear struct{}
 
-func (wr Wear) Execute(w *world.World, s *session.Session, raw string) {
-	parts := strings.SplitN(raw, " ", 2)
+func (wr Wear) Execute(ctx Context) {
+	player := ctx.Player
+	parts := strings.SplitN(ctx.Raw, " ", 2)
 	if len(parts) == 1 {
-		s.Outgoing <- "Wear what?"
+		player.Show("Wear what?")
 		return
 	}
-	player := w.Players[s.PlayerName]
 	index := player.Inventory.IndexOfItem(parts[1])
 	if index == -1 {
-		s.Outgoing <- fmt.Sprintf("You don't have a '%s'", parts[1])
+		player.Show("You don't have a '%s'", parts[1])
 		return
 	}
 	i := player.Inventory.RemItemAtIndex(index)
 	previous, err := player.Gear.Equip(i)
 	if err != nil {
-		s.Outgoing <- fmt.Sprintf("You can't wear %s.", i.Name())
+		player.Show("You can't wear %s.", i.Name())
 		player.Inventory.AddItem(i)
 	} else {
-		s.Outgoing <- fmt.Sprintf("You wear %s", i.Name())
+		player.Show("You wear %s", i.Name())
 	}
 	if !item.IsNil(previous) {
 		player.Inventory.AddItem(previous)
@@ -217,7 +223,7 @@ func (wr Wear) Label() string {
 }
 
 type Executor interface {
-	Execute(w *world.World, s *session.Session, raw string)
+	Execute(ctx Context)
 	Label() string
 }
 
