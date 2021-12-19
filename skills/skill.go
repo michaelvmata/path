@@ -8,9 +8,9 @@ import (
 )
 
 type Skills struct {
-	Dagger *stats.Stat
-	Sword  *stats.Stat
-	Spear  *stats.Stat
+	Dagger stats.Stat
+	Sword  stats.Stat
+	Spear  stats.Stat
 }
 
 func (s *Skills) Describe() string {

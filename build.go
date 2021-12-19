@@ -86,15 +86,13 @@ func buildRooms(w *world.World) {
 }
 
 type RawPlayer struct {
-	Name      string `json:"name"`
-	RoomUUID  string `json:"roomUuid"`
-	Power     int    `json:"Power"`
-	Agility   int    `json:"Agility"`
-	Endurance int    `json:"Endurance"`
-	Talent    int    `json:"Talent"`
-	Insight   int    `json:"Insight"`
-	Will      int    `json:"Will"`
-	Health    struct {
+	Name     string `json:"name"`
+	RoomUUID string `json:"roomUuid"`
+	Power    int    `json:"Power"`
+	Agility  int    `json:"Agility"`
+	Insight  int    `json:"Insight"`
+	Will     int    `json:"Will"`
+	Health   struct {
 		Current int `json:"Current"`
 		Recover int `json:"Recover"`
 	} `json:"Health"`
@@ -136,8 +134,6 @@ func buildPlayers(w *world.World) {
 
 		c.Core.Power.Base = rp.Power
 		c.Core.Agility.Base = rp.Agility
-		c.Core.Endurance.Base = rp.Endurance
-		c.Core.Talent.Base = rp.Talent
 		c.Core.Insight.Base = rp.Insight
 		c.Core.Will.Base = rp.Will
 

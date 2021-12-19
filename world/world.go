@@ -89,10 +89,6 @@ func (c *Player) ApplyModifiers(mods []modifiers.Modifier) {
 			c.Core.Power.Modify(mod.Value)
 		case modifiers.Agility:
 			c.Core.Agility.Modify(mod.Value)
-		case modifiers.Endurance:
-			c.Core.Endurance.Modify(mod.Value)
-		case modifiers.Talent:
-			c.Core.Talent.Modify(mod.Value)
 		case modifiers.Insight:
 			c.Core.Insight.Modify(mod.Value)
 		case modifiers.Will:
@@ -137,9 +133,9 @@ func (c *Player) Update(tick bool) {
 	c.CalculateModifiers()
 	// Adjust lines from core stats
 
-	c.Health.Maximum = c.Core.Endurance.Value() * 100
+	c.Health.Maximum = c.Core.Power.Value() * 100
 	c.Health.EnforceMaximum()
-	c.Spirit.Maximum = c.Core.Insight.Value() * 100
+	c.Spirit.Maximum = c.Core.Will.Value() * 100
 	c.Spirit.EnforceMaximum()
 
 	if tick {

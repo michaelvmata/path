@@ -10,8 +10,8 @@ type Stat struct {
 	Modifier int
 }
 
-func NewStat(base int, modifier int) *Stat {
-	return &Stat{
+func NewStat(base int, modifier int) Stat {
+	return Stat{
 		Base:     base,
 		Modifier: modifier,
 	}
@@ -40,20 +40,16 @@ func (s *Stat) Reset() {
 }
 
 type Core struct {
-	Power     *Stat
-	Agility   *Stat
-	Endurance *Stat
-	Talent    *Stat
-	Insight   *Stat
-	Will      *Stat
+	Power   Stat
+	Agility Stat
+	Insight Stat
+	Will    Stat
 }
 
 func (c *Core) Describe() string {
-	return fmt.Sprintf("%s Power %d  %s Agility %d  %s Endurance %d  %s Talent %d  %s Insight %d  %s Will %d",
+	return fmt.Sprintf("%s Power %d  %s Agility %d  %s Insight %d  %s Will %d",
 		symbols.HEAVY_GREEK_CROSS, c.Power.Value(),
 		symbols.HEAVY_GREEK_CROSS, c.Agility.Value(),
-		symbols.HEAVY_GREEK_CROSS, c.Endurance.Value(),
-		symbols.HEAVY_GREEK_CROSS, c.Talent.Value(),
 		symbols.HEAVY_GREEK_CROSS, c.Insight.Value(),
 		symbols.HEAVY_GREEK_CROSS, c.Will.Value())
 }
@@ -61,20 +57,16 @@ func (c *Core) Describe() string {
 func (c *Core) ResetModifier() {
 	c.Power.Reset()
 	c.Agility.Reset()
-	c.Endurance.Reset()
-	c.Talent.Reset()
 	c.Insight.Reset()
 	c.Will.Reset()
 }
 
 func NewCore() *Core {
 	return &Core{
-		Power:     NewStat(1, 0),
-		Agility:   NewStat(1, 0),
-		Endurance: NewStat(1, 0),
-		Talent:    NewStat(1, 0),
-		Insight:   NewStat(1, 0),
-		Will:      NewStat(1, 0),
+		Power:   NewStat(1, 0),
+		Agility: NewStat(1, 0),
+		Insight: NewStat(1, 0),
+		Will:    NewStat(1, 0),
 	}
 }
 
