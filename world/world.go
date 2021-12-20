@@ -12,6 +12,7 @@ import (
 )
 
 type Player struct {
+	UUID    string
 	Name    string
 	Room    *Room
 	Session *session.Session
@@ -28,8 +29,9 @@ type Player struct {
 	Attacking map[string]bool
 }
 
-func NewPlayer(handle string) *Player {
+func NewPlayer(UUID string, handle string) *Player {
 	return &Player{
+		UUID: UUID,
 		Name: handle,
 
 		Health: stats.Line{},

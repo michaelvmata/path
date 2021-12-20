@@ -14,8 +14,9 @@ func TestStat(t *testing.T) {
 }
 
 func TestPlayer(t *testing.T) {
+	UUID := "TestUUID"
 	handle := "Tester"
-	c := NewPlayer(handle)
+	c := NewPlayer(UUID, handle)
 	if c.Name != handle {
 		t.Fatalf("Player handle(%s) expect (%s)", c.Name, handle)
 	}
@@ -63,7 +64,7 @@ func TestRoom(t *testing.T) {
 		t.Fatalf("Room Size(%d) expected(%d)", r.Size, size)
 	}
 
-	c := NewPlayer("Tester")
+	c := NewPlayer("Test UUID", "Tester")
 	if r.IsFull() {
 		t.Fatalf("Room is unexpectedly full")
 	}

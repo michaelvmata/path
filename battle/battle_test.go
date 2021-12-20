@@ -7,13 +7,13 @@ import (
 )
 
 func TestCalculateHitDamage(t *testing.T) {
-	attacker := world.NewPlayer("Test Attacker")
+	attacker := world.NewPlayer("Test Attacker", "Test Handle")
 	w := item.NewWeapon("TestUUID", "Test Weapon", []string{"test"}, item.Crush)
 	w.MaximumDamage = 10
 	w.MinimumDamage = 5
 	attacker.Gear.Equip(w)
 
-	defender := world.NewPlayer("Test Defender")
+	defender := world.NewPlayer("TestUUID2", "Test Defender")
 
 	if damage := CalculateHitDamage(attacker, defender); damage < w.MinimumDamage || damage > w.MaximumDamage {
 		t.Fatalf("Damage max(%d), min(%d), actual(%d)", w.MaximumDamage, w.MinimumDamage, damage)

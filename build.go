@@ -86,6 +86,7 @@ func buildRooms(w *world.World) {
 }
 
 type RawPlayer struct {
+	UUID     string `json:"UUID"`
 	Name     string `json:"name"`
 	RoomUUID string `json:"roomUuid"`
 	Power    int    `json:"Power"`
@@ -130,7 +131,7 @@ func buildPlayers(w *world.World) {
 		if err != nil {
 			log.Fatalf("Error parsing %s", data)
 		}
-		c := world.NewPlayer(rp.Name)
+		c := world.NewPlayer(rp.UUID, rp.Name)
 
 		c.Core.Power.Base = rp.Power
 		c.Core.Agility.Base = rp.Agility
