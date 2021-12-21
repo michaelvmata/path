@@ -20,8 +20,8 @@ type Player struct {
 	Health stats.Line
 	Spirit stats.Line
 
-	Core   *stats.Core
-	Skills *skills.Skills
+	Core   stats.Core
+	Skills skills.Skills
 
 	Gear      *item.Gear
 	Inventory item.Container

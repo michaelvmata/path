@@ -22,8 +22,8 @@ func (s *Skills) Describe() string {
 	return strings.Join(parts, "\n")
 }
 
-func NewSkills() *Skills {
-	return &Skills{
+func NewSkills() Skills {
+	return Skills{
 		Dagger: stats.NewStat(0, 0),
 		Sword:  stats.NewStat(0, 0),
 		Spear:  stats.NewStat(0, 0),

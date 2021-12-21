@@ -61,8 +61,8 @@ func (c *Core) ResetModifier() {
 	c.Will.Reset()
 }
 
-func NewCore() *Core {
-	return &Core{
+func NewCore() Core {
+	return Core{
 		Power:   NewStat(1, 0),
 		Agility: NewStat(1, 0),
 		Insight: NewStat(1, 0),
