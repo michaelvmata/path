@@ -219,10 +219,107 @@ func buildPlayers(w *world.World) {
 	}
 }
 
+func buildMobiles(w *world.World) {
+	mobileFilePath := "data/mobile.jsonl"
+	data, err := ioutil.ReadFile(mobileFilePath)
+	if err != nil {
+		log.Fatalf("Error opening mobile %s", mobileFilePath)
+	}
+	d := json.NewDecoder(strings.NewReader(string(data)))
+	for d.More() {
+		rp := RawPlayer{}
+		err := d.Decode(&rp)
+		if err != nil {
+			log.Fatalf("Error parsing %s", data)
+		}
+		c := world.NewPlayer(rp.UUID, rp.Name)
+
+		c.Core.Power.Base = rp.Power
+		c.Core.Agility.Base = rp.Agility
+		c.Core.Insight.Base = rp.Insight
+		c.Core.Will.Base = rp.Will
+
+		c.Health.Current = rp.Health.Current
+		c.Health.RecoverRate = rp.Health.Recover
+
+		c.Spirit.Current = rp.Spirit.Current
+		c.Spirit.RecoverRate = rp.Spirit.Recover
+
+		if rp.Gear.Head != "" {
+			if i, ok := w.Items[rp.Gear.Head]; ok {
+				c.Gear.Equip(i)
+			}
+		}
+		if rp.Gear.Neck != "" {
+			if i, ok := w.Items[rp.Gear.Neck]; ok {
+				c.Gear.Equip(i)
+			}
+		}
+		if rp.Gear.Body != "" {
+			if i, ok := w.Items[rp.Gear.Body]; ok {
+				c.Gear.Equip(i)
+			}
+		}
+		if rp.Gear.Arms != "" {
+			if i, ok := w.Items[rp.Gear.Arms]; ok {
+				c.Gear.Equip(i)
+			}
+		}
+		if rp.Gear.Hands != "" {
+			if i, ok := w.Items[rp.Gear.Hands]; ok {
+				c.Gear.Equip(i)
+			}
+		}
+		if rp.Gear.Waist != "" {
+			if i, ok := w.Items[rp.Gear.Waist]; ok {
+				c.Gear.Equip(i)
+			}
+		}
+		if rp.Gear.Legs != "" {
+			if i, ok := w.Items[rp.Gear.Legs]; ok {
+				c.Gear.Equip(i)
+			}
+		}
+		if rp.Gear.Feet != "" {
+			if i, ok := w.Items[rp.Gear.Feet]; ok {
+				c.Gear.Equip(i)
+			}
+		}
+		if rp.Gear.Wrist != "" {
+			if i, ok := w.Items[rp.Gear.Wrist]; ok {
+				c.Gear.Equip(i)
+			}
+		}
+		if rp.Gear.Fingers != "" {
+			if i, ok := w.Items[rp.Gear.Fingers]; ok {
+				c.Gear.Equip(i)
+			}
+		}
+		if rp.Gear.OffHand != "" {
+			if i, ok := w.Items[rp.Gear.OffHand]; ok {
+				c.Gear.Equip(i)
+			}
+		}
+		if rp.Gear.MainHand != "" {
+			if i, ok := w.Items[rp.Gear.MainHand]; ok {
+				c.Gear.Equip(i)
+			}
+		}
+		for _, itemUUID := range rp.Inventory {
+			if i, ok := w.Items[itemUUID]; ok {
+				c.Inventory.AddItem(i)
+			}
+		}
+		c.Update(false)
+		w.Mobiles.AddPrototype(*c)
+	}
+}
+
 func build() *world.World {
 	world := world.NewWorld()
 	buildItems(world)
 	buildRooms(world)
 	buildPlayers(world)
+	buildMobiles(world)
 	return world
 }

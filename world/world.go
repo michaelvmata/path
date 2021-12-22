@@ -29,6 +29,22 @@ type Player struct {
 	Attacking map[string]bool
 }
 
+func (c Player) Clone(target Player) {
+	c.UUID = target.UUID
+	c.Name = target.Name
+	c.Room = nil
+	c.Session = nil
+
+	c.Core.Power.Base = target.Core.Power.Base
+	c.Core.Agility.Base = target.Core.Agility.Base
+	c.Core.Insight.Base = target.Core.Insight.Base
+	c.Core.Will.Base = target.Core.Will.Base
+
+	c.Gear = item.NewGear()
+	c.Inventory = item.NewContainer(10)
+	c.Attacking = make(map[string]bool)
+}
+
 func NewPlayer(UUID string, handle string) *Player {
 	return &Player{
 		UUID: UUID,
@@ -239,8 +255,30 @@ func (r *Room) IndexOfPlayer(target *Player) int {
 	return -1
 }
 
+type Mobiles struct {
+	Prototypes map[string]Player
+	Instances  []*Player
+	count      int
+}
+
+func (m *Mobiles) AddPrototype(p Player) {
+	m.Prototypes[p.UUID] = p
+}
+
+func (m *Mobiles) Spawn(UUID string) *Player {
+	if len(m.Instances) == m.count {
+		m.count += 1
+	}
+	prototype := m.Prototypes[UUID]
+	mobile := NewPlayer(UUID, prototype.Name)
+	mobile.Clone(prototype)
+	m.Instances[m.count-1] = mobile
+	return mobile
+}
+
 type World struct {
 	Players map[string]*Player
+	Mobiles Mobiles
 	Rooms   map[string]*Room
 	Items   map[string]item.Item
 }
@@ -248,8 +286,12 @@ type World struct {
 func NewWorld() *World {
 	w := World{
 		Players: make(map[string]*Player),
-		Rooms:   make(map[string]*Room),
-		Items:   make(map[string]item.Item),
+		Mobiles: Mobiles{
+			Prototypes: make(map[string]Player),
+			Instances:  make([]*Player, 0),
+		},
+		Rooms: make(map[string]*Room),
+		Items: make(map[string]item.Item),
 	}
 	return &w
 }
