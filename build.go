@@ -27,7 +27,7 @@ type RawItem struct {
 }
 
 func buildItems(w *world.World) {
-	itemFilePath := "data/item.ndjson"
+	itemFilePath := "data/item.jsonl"
 	data, err := ioutil.ReadFile(itemFilePath)
 	if err != nil {
 		log.Fatalf("Error opening room %s", itemFilePath)
@@ -68,7 +68,7 @@ type RawRoom struct {
 }
 
 func buildRooms(w *world.World) {
-	roomFilePath := "data/room.ndjson"
+	roomFilePath := "data/room.jsonl"
 	data, err := ioutil.ReadFile(roomFilePath)
 	if err != nil {
 		log.Fatalf("Error opening room %s", roomFilePath)
@@ -119,7 +119,7 @@ type RawPlayer struct {
 }
 
 func buildPlayers(w *world.World) {
-	playerFilePath := "data/player.ndjson"
+	playerFilePath := "data/player.jsonl"
 	data, err := ioutil.ReadFile(playerFilePath)
 	if err != nil {
 		log.Fatalf("Error opening players %s", playerFilePath)
