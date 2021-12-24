@@ -30,12 +30,12 @@ MainLoop:
 				break MainLoop
 			}
 			command := determineCommand(text)
-			player.Update(false)
+			player.Update(0)
 			ctx.Raw = text
 			command.Execute(ctx)
 			prompt <- true
 		case <-ticker.C:
-			world.Update(true)
+			world.Update()
 		}
 
 	}

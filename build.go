@@ -216,7 +216,7 @@ func buildPlayers(w *world.World) {
 				c.Inventory.AddItem(i)
 			}
 		}
-		c.Update(false)
+		c.Update(0)
 		w.Players[c.Name] = c
 		if room, ok := w.Rooms[rp.RoomUUID]; ok {
 			if err := room.Enter(c); err == nil {
@@ -317,7 +317,7 @@ func buildMobiles(w *world.World) {
 				c.Inventory.AddItem(i)
 			}
 		}
-		c.Update(false)
+		c.Update(0)
 		w.Mobiles.AddPrototype(*c)
 	}
 }

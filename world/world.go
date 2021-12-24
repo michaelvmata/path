@@ -147,7 +147,7 @@ func (c Player) IsDead() bool {
 	return c.Health.Current > 0
 }
 
-func (c *Player) Update(tick bool) {
+func (c *Player) Update(tick int) {
 	c.CalculateModifiers()
 	// Adjust lines from core stats
 
@@ -156,7 +156,7 @@ func (c *Player) Update(tick bool) {
 	c.Spirit.Maximum = c.Core.Will.Value() * 100
 	c.Spirit.EnforceMaximum()
 
-	if tick {
+	if tick > 0 {
 		c.Health.Recover()
 		c.Spirit.Recover()
 	}
@@ -209,6 +209,10 @@ func (r *Room) Describe() string {
 	parts = append(parts, "")
 	for _, i := range r.Items.Items {
 		parts = append(parts, i.Name())
+	}
+	parts = append(parts, "")
+	for _, p := range r.Players {
+		parts = append(parts, p.Name)
 	}
 	return strings.Join(parts, "\n")
 }
@@ -267,10 +271,20 @@ func (r *Room) IndexOfPlayer(target *Player) int {
 	return -1
 }
 
+func (r Room) MobileCount(mobileUUID string) int {
+	// Count number of mobiles with UUID in room
+	count := 0
+	for _, player := range r.Players {
+		if player.UUID == mobileUUID {
+			count += 1
+		}
+	}
+	return count
+}
+
 type Mobiles struct {
 	Prototypes map[string]Player
 	Instances  []*Player
-	count      int
 }
 
 func (m *Mobiles) AddPrototype(p Player) {
@@ -278,13 +292,10 @@ func (m *Mobiles) AddPrototype(p Player) {
 }
 
 func (m *Mobiles) Spawn(UUID string) *Player {
-	if len(m.Instances) == m.count {
-		m.count += 1
-	}
 	prototype := m.Prototypes[UUID]
 	mobile := NewPlayer(UUID, prototype.Name)
 	mobile.Clone(prototype)
-	m.Instances[m.count-1] = mobile
+	m.Instances = append(m.Instances, mobile)
 	return mobile
 }
 
@@ -294,6 +305,8 @@ type World struct {
 	Rooms       map[string]*Room
 	RoomMobiles map[string][]RoomMobile
 	Items       map[string]item.Item
+	Ticks       int
+	SpawnTicks  int
 }
 
 func NewWorld() *World {
@@ -306,12 +319,33 @@ func NewWorld() *World {
 		Rooms:       make(map[string]*Room),
 		RoomMobiles: make(map[string][]RoomMobile, 0),
 		Items:       make(map[string]item.Item),
+		SpawnTicks:  1,
 	}
 	return &w
 }
 
-func (w *World) Update(tick bool) {
+func (w *World) Update() {
+	w.Ticks++
 	for _, player := range w.Players {
-		player.Update(tick)
+		player.Update(w.Ticks)
+	}
+	if w.Ticks%w.SpawnTicks == 0 {
+		w.SpawnMobiles()
+	}
+}
+
+func (w *World) SpawnMobiles() {
+	for roomUUID, rms := range w.RoomMobiles {
+		room, ok := w.Rooms[roomUUID]
+		if !ok {
+			continue
+		}
+		for _, rm := range rms {
+			count := room.MobileCount(rm.MobileUUID)
+			for diff := rm.Count - count; diff > 0; diff-- {
+				mobile := w.Mobiles.Spawn(rm.MobileUUID)
+				room.Enter(mobile)
+			}
+		}
 	}
 }
