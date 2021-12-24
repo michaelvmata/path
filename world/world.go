@@ -168,6 +168,18 @@ func (c Player) Show(message string, args ...interface{}) {
 	}
 }
 
+type RoomMobile struct {
+	MobileUUID string
+	Count      int
+}
+
+func NewRoomMobile(mobileUUID string, count int) RoomMobile {
+	return RoomMobile{
+		MobileUUID: mobileUUID,
+		Count:      count,
+	}
+}
+
 type Room struct {
 	UUID        string
 	name        string
@@ -277,10 +289,11 @@ func (m *Mobiles) Spawn(UUID string) *Player {
 }
 
 type World struct {
-	Players map[string]*Player
-	Mobiles Mobiles
-	Rooms   map[string]*Room
-	Items   map[string]item.Item
+	Players     map[string]*Player
+	Mobiles     Mobiles
+	Rooms       map[string]*Room
+	RoomMobiles map[string][]RoomMobile
+	Items       map[string]item.Item
 }
 
 func NewWorld() *World {
@@ -290,8 +303,9 @@ func NewWorld() *World {
 			Prototypes: make(map[string]Player),
 			Instances:  make([]*Player, 0),
 		},
-		Rooms: make(map[string]*Room),
-		Items: make(map[string]item.Item),
+		Rooms:       make(map[string]*Room),
+		RoomMobiles: make(map[string][]RoomMobile, 0),
+		Items:       make(map[string]item.Item),
 	}
 	return &w
 }

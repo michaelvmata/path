@@ -61,10 +61,14 @@ func buildItems(w *world.World) {
 }
 
 type RawRoom struct {
-	UUID        string
-	Name        string
-	Description string
-	Size        int
+	UUID        string `json:"uuid"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Size        int    `json:"size"`
+	Mobiles     []struct {
+		UUID  string `json:"UUID"`
+		Count int    `json:"count"`
+	} `json:"mobiles"`
 }
 
 func buildRooms(w *world.World) {
@@ -82,6 +86,9 @@ func buildRooms(w *world.World) {
 		}
 		room := world.NewRoom(rr.UUID, rr.Name, rr.Description, rr.Size)
 		w.Rooms[room.UUID] = room
+		for _, mc := range rr.Mobiles {
+			w.RoomMobiles[room.UUID] = append(w.RoomMobiles[room.UUID], world.NewRoomMobile(mc.UUID, mc.Count))
+		}
 	}
 }
 
@@ -318,8 +325,8 @@ func buildMobiles(w *world.World) {
 func build() *world.World {
 	world := world.NewWorld()
 	buildItems(world)
+	buildMobiles(world)
 	buildRooms(world)
 	buildPlayers(world)
-	buildMobiles(world)
 	return world
 }
