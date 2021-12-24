@@ -120,7 +120,7 @@ type Look struct{}
 
 func (l Look) Execute(ctx Context) {
 	ctx.Player.Show("")
-	ctx.Player.Show(ctx.Player.Room.Describe())
+	ctx.Player.Show(ctx.Player.Room.Describe(ctx.Player))
 	ctx.Player.Show("")
 }
 

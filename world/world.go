@@ -168,6 +168,10 @@ func (c Player) Show(message string, args ...interface{}) {
 	}
 }
 
+func (c Player) Describe() string {
+	return fmt.Sprintf("%s is here.", c.Name)
+}
+
 type RoomMobile struct {
 	MobileUUID string
 	Count      int
@@ -201,7 +205,7 @@ func NewRoom(uuid string, name string, description string, size int) *Room {
 	return &room
 }
 
-func (r *Room) Describe() string {
+func (r *Room) Describe(firstPerson *Player) string {
 	parts := make([]string, 0)
 	parts = append(parts, r.name)
 	parts = append(parts, "")
@@ -210,9 +214,10 @@ func (r *Room) Describe() string {
 	for _, i := range r.Items.Items {
 		parts = append(parts, i.Name())
 	}
-	parts = append(parts, "")
 	for _, p := range r.Players {
-		parts = append(parts, p.Name)
+		if firstPerson != p {
+			parts = append(parts, p.Describe())
+		}
 	}
 	return strings.Join(parts, "\n")
 }
