@@ -324,7 +324,7 @@ func NewWorld() *World {
 		Rooms:       make(map[string]*Room),
 		RoomMobiles: make(map[string][]RoomMobile, 0),
 		Items:       make(map[string]item.Item),
-		SpawnTicks:  1,
+		SpawnTicks:  60,
 	}
 	return &w
 }
