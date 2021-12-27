@@ -8,6 +8,7 @@ import (
 	"github.com/michaelvmata/path/session"
 	"github.com/michaelvmata/path/skills"
 	"github.com/michaelvmata/path/stats"
+	"github.com/michaelvmata/path/symbols"
 	"strings"
 )
 
@@ -65,6 +66,16 @@ func NewPlayer(UUID string, handle string) *Player {
 
 		Attacking: make(map[string]*Player),
 	}
+}
+
+func (c Player) ShowPrompt() {
+	border := "<grey_62>>> "
+	c.Show("%s%s <red>%d%s <green>%d%s %s",
+		border,
+		c.Name,
+		c.Health.Current, symbols.HEART,
+		c.Spirit.Current, symbols.TWELVE_STAR,
+		border)
 }
 
 func (c Player) HasKeyword(target string) bool {

@@ -31,6 +31,7 @@ func ApplyDamage(p *world.Player, damage int) {
 }
 
 func Simulate(w *world.World) {
+	fighting := make(map[string]*world.Player)
 	for _, attacker := range w.Players {
 		if !attacker.IsFighting() {
 			continue
@@ -48,7 +49,12 @@ func Simulate(w *world.World) {
 				attacker.Gear.MainHand.WeaponType)
 			attacker.Update(0)
 			defender.Update(0)
+			fighting[attacker.UUID] = attacker
+			fighting[defender.UUID] = defender
 			break
 		}
+	}
+	for _, p := range fighting {
+		p.ShowPrompt()
 	}
 }

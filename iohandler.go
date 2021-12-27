@@ -20,14 +20,11 @@ func handleInput(incoming chan string) {
 	}
 }
 
-func handleOutput(session *session.Session, showPrompt chan bool, done chan bool, player *world.Player) {
-	prompt := NewPrompt(session, player)
+func handleOutput(session *session.Session, done chan bool, player *world.Player) {
 	for {
 		select {
 		case text := <-session.Outgoing:
 			fmt.Println(Colorize(text))
-		case <-showPrompt:
-			fmt.Printf(Colorize(prompt.Render()))
 		case <-done:
 			break
 		}

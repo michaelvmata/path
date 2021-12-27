@@ -13,11 +13,9 @@ func main() {
 	world := build()
 	player := world.Players[s.PlayerName]
 	player.Session = s
-	prompt := make(chan bool)
 	done := make(chan bool)
 	go handleInput(s.Incoming)
-	go handleOutput(s, prompt, done, player)
-	prompt <- true
+	go handleOutput(s, done, player)
 	ctx := Context{
 		World:  world,
 		Player: player,
@@ -34,7 +32,7 @@ MainLoop:
 			player.Update(0)
 			ctx.Raw = text
 			command.Execute(ctx)
-			prompt <- true
+			player.ShowPrompt()
 		case <-ticker.C:
 			world.Update()
 			if world.IsBattleTick() {

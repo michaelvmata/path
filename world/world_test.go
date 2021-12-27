@@ -31,17 +31,17 @@ func TestPlayer(t *testing.T) {
 		t.Fatalf("Player room(%v) expected(%v)", c.Room, r)
 	}
 
-	target := "SomeUUID"
+	target := NewPlayer("SomeUUID", "Somehandle")
 	if c.IsAttacking(target) {
-		t.Fatalf("Player attacking %s by default", target)
+		t.Fatalf("Player attacking %v by default", target)
 	}
 	c.StartAttacking(target)
 	if !c.IsAttacking(target) {
-		t.Fatalf("Player not attacking %s", target)
+		t.Fatalf("Player not attacking %v", target)
 	}
 	c.StopAttacking(target)
 	if c.IsAttacking(target) {
-		t.Fatalf("Player still attacking %s", target)
+		t.Fatalf("Player still attacking %v", target)
 	}
 
 	if !c.HasKeyword(handle) {
