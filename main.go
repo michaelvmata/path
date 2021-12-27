@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/michaelvmata/path/battle"
 	"github.com/michaelvmata/path/session"
 	"time"
 )
@@ -36,6 +37,9 @@ MainLoop:
 			prompt <- true
 		case <-ticker.C:
 			world.Update()
+			if world.IsBattleTick() {
+				battle.Simulate(world)
+			}
 		}
 
 	}

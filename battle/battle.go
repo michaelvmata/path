@@ -47,8 +47,8 @@ func Simulate(w *world.World) {
 				attacker.Name,
 				damage,
 				attacker.Gear.MainHand.WeaponType)
-			attacker.Update(false)
-			defender.Update(false)
+			attacker.Update(0)
+			defender.Update(0)
 			break
 		}
 	}

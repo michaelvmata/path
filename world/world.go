@@ -267,6 +267,15 @@ func (r *Room) Exit(c *Player) error {
 	return nil
 }
 
+func (r Room) IndexOfPlayerHandle(handle string) int {
+	for i, p := range r.Players {
+		if p.Name == handle {
+			return i
+		}
+	}
+	return -1
+}
+
 func (r *Room) IndexOfPlayer(target *Player) int {
 	for i, p := range r.Players {
 		if p == target {
