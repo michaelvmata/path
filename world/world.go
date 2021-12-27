@@ -310,8 +310,10 @@ type World struct {
 	Rooms       map[string]*Room
 	RoomMobiles map[string][]RoomMobile
 	Items       map[string]item.Item
+
 	Ticks       int
 	SpawnTicks  int
+	BattleTicks int
 }
 
 func NewWorld() *World {
@@ -325,6 +327,7 @@ func NewWorld() *World {
 		RoomMobiles: make(map[string][]RoomMobile, 0),
 		Items:       make(map[string]item.Item),
 		SpawnTicks:  60,
+		BattleTicks: 3,
 	}
 	return &w
 }
@@ -334,9 +337,17 @@ func (w *World) Update() {
 	for _, player := range w.Players {
 		player.Update(w.Ticks)
 	}
-	if w.Ticks%w.SpawnTicks == 0 {
+	if w.IsSpawnTick() {
 		w.SpawnMobiles()
 	}
+}
+
+func (w World) IsSpawnTick() bool {
+	return w.Ticks%w.SpawnTicks == 0
+}
+
+func (w World) IsBattleTick() bool {
+	return w.Ticks%w.BattleTicks == 0
 }
 
 func (w *World) SpawnMobiles() {
