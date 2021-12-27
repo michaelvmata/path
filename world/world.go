@@ -17,6 +17,8 @@ type Player struct {
 	Room    *Room
 	Session *session.Session
 
+	keywords []string
+
 	Health stats.Line
 	Spirit stats.Line
 
@@ -50,6 +52,8 @@ func NewPlayer(UUID string, handle string) *Player {
 		UUID: UUID,
 		Name: handle,
 
+		keywords: strings.Fields(strings.ToLower(handle)),
+
 		Health: stats.Line{},
 		Spirit: stats.Line{},
 
@@ -61,6 +65,16 @@ func NewPlayer(UUID string, handle string) *Player {
 
 		Attacking: make(map[string]bool),
 	}
+}
+
+func (c Player) HasKeyword(target string) bool {
+	target = strings.ToLower(target)
+	for _, keyword := range c.keywords {
+		if keyword == target {
+			return true
+		}
+	}
+	return false
 }
 
 func (c *Player) StartAttacking(defender string) {
@@ -269,7 +283,7 @@ func (r *Room) Exit(c *Player) error {
 
 func (r Room) IndexOfPlayerHandle(handle string) int {
 	for i, p := range r.Players {
-		if p.Name == handle {
+		if p.HasKeyword(handle) {
 			return i
 		}
 	}

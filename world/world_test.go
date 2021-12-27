@@ -43,6 +43,10 @@ func TestPlayer(t *testing.T) {
 	if c.IsAttacking(target) {
 		t.Fatalf("Player still attacking %s", target)
 	}
+
+	if !c.HasKeyword(handle) {
+		t.Fatalf("Player handle is not a keyword")
+	}
 }
 
 func TestRoom(t *testing.T) {
