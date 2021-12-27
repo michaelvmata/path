@@ -30,9 +30,9 @@ func (a Attack) Execute(ctx Context) {
 		return
 	}
 	defender := attacker.Room.Players[index]
-	attacker.StartAttacking(defender.Name)
+	attacker.StartAttacking(defender)
 	attacker.Show("You attack %s", defender.Name)
-	defender.StartAttacking(attacker.Name)
+	defender.StartAttacking(attacker)
 	defender.Show("%s attacks you.", attacker.Name)
 }
 

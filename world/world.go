@@ -28,7 +28,7 @@ type Player struct {
 	Gear      *item.Gear
 	Inventory item.Container
 
-	Attacking map[string]bool
+	Attacking map[string]*Player
 }
 
 func (c Player) Clone(target Player) {
@@ -44,7 +44,7 @@ func (c Player) Clone(target Player) {
 
 	c.Gear = item.NewGear()
 	c.Inventory = item.NewContainer(10)
-	c.Attacking = make(map[string]bool)
+	c.Attacking = make(map[string]*Player)
 }
 
 func NewPlayer(UUID string, handle string) *Player {
@@ -63,7 +63,7 @@ func NewPlayer(UUID string, handle string) *Player {
 		Gear:      item.NewGear(),
 		Inventory: item.NewContainer(10),
 
-		Attacking: make(map[string]bool),
+		Attacking: make(map[string]*Player),
 	}
 }
 
@@ -77,16 +77,16 @@ func (c Player) HasKeyword(target string) bool {
 	return false
 }
 
-func (c *Player) StartAttacking(defender string) {
-	c.Attacking[defender] = true
+func (c *Player) StartAttacking(defender *Player) {
+	c.Attacking[defender.UUID] = defender
 }
 
-func (c *Player) StopAttacking(defender string) {
-	delete(c.Attacking, defender)
+func (c *Player) StopAttacking(defender *Player) {
+	delete(c.Attacking, defender.UUID)
 }
 
-func (c Player) IsAttacking(defender string) bool {
-	_, ok := c.Attacking[defender]
+func (c Player) IsAttacking(defender *Player) bool {
+	_, ok := c.Attacking[defender.UUID]
 	return ok
 }
 

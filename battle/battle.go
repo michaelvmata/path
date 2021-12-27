@@ -35,8 +35,7 @@ func Simulate(w *world.World) {
 		if !attacker.IsFighting() {
 			continue
 		}
-		for UUID, _ := range attacker.Attacking {
-			defender := w.Players[UUID]
+		for _, defender := range attacker.Attacking {
 			damage := CalculateHitDamage(attacker, defender)
 			ApplyDamage(defender, damage)
 			attacker.Show("You do %d %s damage to %s",
