@@ -20,6 +20,7 @@ func main() {
 		World:  world,
 		Player: player,
 	}
+	world.SpawnMobiles()
 MainLoop:
 	for {
 		select {

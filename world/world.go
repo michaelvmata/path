@@ -32,6 +32,18 @@ type Player struct {
 	Attacking map[string]*Player
 }
 
+func (c Player) Weapon() *item.Weapon {
+	if c.Gear.MainHand != nil {
+		return c.Gear.MainHand
+	}
+	hand := item.NewWeapon("Barehand", "Barehand", []string{}, item.Crush)
+	hand.MinimumDamage = 5
+	hand.MaximumDamage = 10
+	hand.CriticalBonus = 1
+	hand.CriticalRate = 0
+	return hand
+}
+
 func (c Player) Clone(target Player) {
 	c.UUID = target.UUID
 	c.Name = target.Name

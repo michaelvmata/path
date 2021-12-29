@@ -3,10 +3,11 @@ package battle
 import (
 	"github.com/michaelvmata/path/world"
 	"math/rand"
+	"strings"
 )
 
 func CalculateHitDamage(attacker *world.Player, defender *world.Player) int {
-	weapon := attacker.Gear.MainHand
+	weapon := attacker.Weapon()
 
 	// Get Weapon base damage
 	damage := rand.Intn(weapon.MaximumDamage-weapon.MinimumDamage) + weapon.MinimumDamage
@@ -30,6 +31,21 @@ func ApplyDamage(p *world.Player, damage int) {
 	}
 }
 
+func DoAttack(attacker *world.Player, defender *world.Player) {
+	damage := CalculateHitDamage(attacker, defender)
+	ApplyDamage(defender, damage)
+	attacker.Show("You do %d %s damage to %s.",
+		damage,
+		strings.ToLower(attacker.Weapon().WeaponType),
+		defender.Name)
+	defender.Show("%s did %d %s damage to you.",
+		attacker.Name,
+		damage,
+		strings.ToLower(attacker.Weapon().WeaponType))
+	attacker.Update(0)
+	defender.Update(0)
+}
+
 func Simulate(w *world.World) {
 	fighting := make(map[string]*world.Player)
 	for _, attacker := range w.Players {
@@ -37,18 +53,18 @@ func Simulate(w *world.World) {
 			continue
 		}
 		for _, defender := range attacker.Attacking {
-			damage := CalculateHitDamage(attacker, defender)
-			ApplyDamage(defender, damage)
-			attacker.Show("You do %d %s damage to %s",
-				damage,
-				attacker.Gear.MainHand.WeaponType,
-				defender.Name)
-			defender.Show("%s did %d %s damage to you",
-				attacker.Name,
-				damage,
-				attacker.Gear.MainHand.WeaponType)
-			attacker.Update(0)
-			defender.Update(0)
+			DoAttack(attacker, defender)
+			fighting[attacker.UUID] = attacker
+			fighting[defender.UUID] = defender
+			break
+		}
+	}
+	for _, attacker := range w.Mobiles.Instances {
+		if !attacker.IsFighting() {
+			continue
+		}
+		for _, defender := range attacker.Attacking {
+			DoAttack(attacker, defender)
 			fighting[attacker.UUID] = attacker
 			fighting[defender.UUID] = defender
 			break
