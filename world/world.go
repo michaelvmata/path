@@ -206,6 +206,9 @@ func (c Character) Show(message string, args ...interface{}) {
 }
 
 func (c Character) Describe() string {
+	if len(c.Attacking) > 0 {
+		return fmt.Sprintf("%s is fighting.", c.Name)
+	}
 	return fmt.Sprintf("%s is here.", c.Name)
 }
 
