@@ -24,16 +24,9 @@ func CalculateHitDamage(attacker *world.Character, defender *world.Character) in
 	return damage
 }
 
-func ApplyDamage(p *world.Character, damage int) {
-	p.Health.Current -= damage
-	if p.IsDead() {
-		p.Health.Current = 1
-	}
-}
-
 func DoAttack(attacker *world.Character, defender *world.Character) {
 	damage := CalculateHitDamage(attacker, defender)
-	ApplyDamage(defender, damage)
+	defender.Health.Current -= damage
 	attacker.Show("You do %d %s damage to %s.",
 		damage,
 		strings.ToLower(attacker.Weapon().WeaponType),
