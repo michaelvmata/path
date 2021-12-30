@@ -102,11 +102,9 @@ type RawPlayer struct {
 	Will     int    `json:"Will"`
 	Health   struct {
 		Current int `json:"Current"`
-		Recover int `json:"Recover"`
 	} `json:"Health"`
 	Spirit struct {
 		Current int `json:"Current"`
-		Recover int `json:"Recover"`
 	} `json:"Spirit"`
 	Gear struct {
 		Head     string `json:"Head"`
@@ -146,10 +144,7 @@ func buildPlayers(w *world.World) {
 		c.Core.Will.Base = rp.Will
 
 		c.Health.Current = rp.Health.Current
-		c.Health.RecoverRate = rp.Health.Recover
-
 		c.Spirit.Current = rp.Spirit.Current
-		c.Spirit.RecoverRate = rp.Spirit.Recover
 
 		if rp.Gear.Head != "" {
 			if i, ok := w.Items[rp.Gear.Head]; ok {
@@ -247,10 +242,7 @@ func buildMobiles(w *world.World) {
 		c.Core.Will.Base = rp.Will
 
 		c.Health.Current = rp.Health.Current
-		c.Health.RecoverRate = rp.Health.Recover
-
 		c.Spirit.Current = rp.Spirit.Current
-		c.Spirit.RecoverRate = rp.Spirit.Recover
 
 		if rp.Gear.Head != "" {
 			if i, ok := w.Items[rp.Gear.Head]; ok {

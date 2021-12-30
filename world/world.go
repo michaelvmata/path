@@ -203,8 +203,10 @@ func (c *Character) Update(tick int) {
 
 	c.Health.Maximum = c.Core.Power.Value() * 100
 	c.Health.EnforceMaximum()
+	c.Health.RecoverRate = c.Core.Power.Value()
 	c.Spirit.Maximum = c.Core.Will.Value() * 100
 	c.Spirit.EnforceMaximum()
+	c.Spirit.RecoverRate = c.Core.Will.Value()
 
 	if tick > 0 {
 		c.Health.Recover()
