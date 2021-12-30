@@ -38,7 +38,7 @@ func DoAttack(attacker *world.Character, defender *world.Character) {
 		damage,
 		strings.ToLower(attacker.Weapon().WeaponType),
 		defender.Name)
-	defender.Show("%s did %d %s damage to you.",
+	defender.Show("%s does %d %s damage to you.",
 		attacker.Name,
 		damage,
 		strings.ToLower(attacker.Weapon().WeaponType))
