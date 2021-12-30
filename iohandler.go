@@ -20,7 +20,7 @@ func handleInput(incoming chan string) {
 	}
 }
 
-func handleOutput(session *session.Session, done chan bool, player *world.Player) {
+func handleOutput(session *session.Session, done chan bool, player *world.Character) {
 	for {
 		select {
 		case text := <-session.Outgoing:

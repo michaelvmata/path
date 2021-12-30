@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-type Player struct {
+type Character struct {
 	UUID    string
 	Name    string
 	Room    *Room
@@ -29,10 +29,10 @@ type Player struct {
 	Gear      *item.Gear
 	Inventory item.Container
 
-	Attacking map[string]*Player
+	Attacking map[string]*Character
 }
 
-func (c Player) Weapon() *item.Weapon {
+func (c Character) Weapon() *item.Weapon {
 	if c.Gear.MainHand != nil {
 		return c.Gear.MainHand
 	}
@@ -44,7 +44,7 @@ func (c Player) Weapon() *item.Weapon {
 	return hand
 }
 
-func (c Player) Clone(target Player) {
+func (c Character) Clone(target Character) {
 	c.UUID = target.UUID
 	c.Name = target.Name
 	c.Room = nil
@@ -57,11 +57,11 @@ func (c Player) Clone(target Player) {
 
 	c.Gear = item.NewGear()
 	c.Inventory = item.NewContainer(10)
-	c.Attacking = make(map[string]*Player)
+	c.Attacking = make(map[string]*Character)
 }
 
-func NewPlayer(UUID string, handle string) *Player {
-	return &Player{
+func NewPlayer(UUID string, handle string) *Character {
+	return &Character{
 		UUID: UUID,
 		Name: handle,
 
@@ -76,11 +76,11 @@ func NewPlayer(UUID string, handle string) *Player {
 		Gear:      item.NewGear(),
 		Inventory: item.NewContainer(10),
 
-		Attacking: make(map[string]*Player),
+		Attacking: make(map[string]*Character),
 	}
 }
 
-func (c Player) ShowPrompt() {
+func (c Character) ShowPrompt() {
 	border := "<grey_62>>> "
 	c.Show("%s%s <red>%d%s <green>%d%s %s",
 		border,
@@ -90,7 +90,7 @@ func (c Player) ShowPrompt() {
 		border)
 }
 
-func (c Player) HasKeyword(target string) bool {
+func (c Character) HasKeyword(target string) bool {
 	target = strings.ToLower(target)
 	for _, keyword := range c.keywords {
 		if keyword == target {
@@ -100,24 +100,24 @@ func (c Player) HasKeyword(target string) bool {
 	return false
 }
 
-func (c *Player) StartAttacking(defender *Player) {
+func (c *Character) StartAttacking(defender *Character) {
 	c.Attacking[defender.UUID] = defender
 }
 
-func (c *Player) StopAttacking(defender *Player) {
+func (c *Character) StopAttacking(defender *Character) {
 	delete(c.Attacking, defender.UUID)
 }
 
-func (c Player) IsAttacking(defender *Player) bool {
+func (c Character) IsAttacking(defender *Character) bool {
 	_, ok := c.Attacking[defender.UUID]
 	return ok
 }
 
-func (c Player) IsFighting() bool {
+func (c Character) IsFighting() bool {
 	return len(c.Attacking) > 0
 }
 
-func (c *Player) Discard(keyword string) item.Item {
+func (c *Character) Discard(keyword string) item.Item {
 	index := c.Inventory.IndexOfItem(keyword)
 	if index == -1 {
 		return nil
@@ -126,18 +126,18 @@ func (c *Player) Discard(keyword string) item.Item {
 	return i
 }
 
-func (c *Player) Receive(i item.Item) error {
+func (c *Character) Receive(i item.Item) error {
 	if err := c.Inventory.AddItem(i); err != nil {
 		return errors.New("player can't carry item")
 	}
 	return nil
 }
 
-func (c *Player) Move(r *Room) {
+func (c *Character) Move(r *Room) {
 	c.Room = r
 }
 
-func (c *Player) ApplyModifiers(mods []modifiers.Modifier) {
+func (c *Character) ApplyModifiers(mods []modifiers.Modifier) {
 	for _, mod := range mods {
 		switch mod.Type {
 		case modifiers.Power:
@@ -158,13 +158,13 @@ func (c *Player) ApplyModifiers(mods []modifiers.Modifier) {
 	}
 }
 
-func (c *Player) ApplyItemModifiers(i item.Item) {
+func (c *Character) ApplyItemModifiers(i item.Item) {
 	if !item.IsNil(i) {
 		c.ApplyModifiers(i.Modifiers())
 	}
 }
 
-func (c *Player) CalculateModifiers() {
+func (c *Character) CalculateModifiers() {
 	c.Core.ResetModifier()
 	c.ApplyItemModifiers(c.Gear.Head)
 	c.ApplyItemModifiers(c.Gear.Neck)
@@ -180,11 +180,11 @@ func (c *Player) CalculateModifiers() {
 	c.ApplyItemModifiers(c.Gear.MainHand)
 }
 
-func (c Player) IsDead() bool {
+func (c Character) IsDead() bool {
 	return c.Health.Current > 0
 }
 
-func (c *Player) Update(tick int) {
+func (c *Character) Update(tick int) {
 	c.CalculateModifiers()
 	// Adjust lines from core stats
 
@@ -199,13 +199,13 @@ func (c *Player) Update(tick int) {
 	}
 }
 
-func (c Player) Show(message string, args ...interface{}) {
+func (c Character) Show(message string, args ...interface{}) {
 	if c.Session != nil {
 		c.Session.Outgoing <- fmt.Sprintf(message, args...)
 	}
 }
 
-func (c Player) Describe() string {
+func (c Character) Describe() string {
 	return fmt.Sprintf("%s is here.", c.Name)
 }
 
@@ -225,7 +225,7 @@ type Room struct {
 	UUID        string
 	name        string
 	description string
-	Players     []*Player
+	Players     []*Character
 	Items       item.Container
 	Size        int
 }
@@ -236,13 +236,13 @@ func NewRoom(uuid string, name string, description string, size int) *Room {
 		name:        name,
 		description: description,
 		Size:        size,
-		Players:     make([]*Player, 0, size),
+		Players:     make([]*Character, 0, size),
 		Items:       item.NewContainer(100),
 	}
 	return &room
 }
 
-func (r *Room) Describe(firstPerson *Player) string {
+func (r *Room) Describe(firstPerson *Character) string {
 	parts := make([]string, 0)
 	parts = append(parts, r.name)
 	parts = append(parts, "")
@@ -281,7 +281,7 @@ func (r *Room) IsFull() bool {
 	return r.Size == len(r.Players)
 }
 
-func (r *Room) Enter(c *Player) error {
+func (r *Room) Enter(c *Character) error {
 	if r.IsFull() {
 		return errors.New("room is full")
 	}
@@ -292,7 +292,7 @@ func (r *Room) Enter(c *Player) error {
 	return nil
 }
 
-func (r *Room) Exit(c *Player) error {
+func (r *Room) Exit(c *Character) error {
 	i := r.IndexOfPlayer(c)
 	if i == -1 {
 		return errors.New("player not in room")
@@ -313,7 +313,7 @@ func (r Room) IndexOfPlayerHandle(handle string) int {
 	return -1
 }
 
-func (r *Room) IndexOfPlayer(target *Player) int {
+func (r *Room) IndexOfPlayer(target *Character) int {
 	for i, p := range r.Players {
 		if p == target {
 			return i
@@ -334,15 +334,15 @@ func (r Room) MobileCount(mobileUUID string) int {
 }
 
 type Mobiles struct {
-	Prototypes map[string]Player
-	Instances  []*Player
+	Prototypes map[string]Character
+	Instances  []*Character
 }
 
-func (m *Mobiles) AddPrototype(p Player) {
+func (m *Mobiles) AddPrototype(p Character) {
 	m.Prototypes[p.UUID] = p
 }
 
-func (m *Mobiles) Spawn(UUID string) *Player {
+func (m *Mobiles) Spawn(UUID string) *Character {
 	prototype := m.Prototypes[UUID]
 	mobile := NewPlayer(UUID, prototype.Name)
 	mobile.Clone(prototype)
@@ -351,7 +351,7 @@ func (m *Mobiles) Spawn(UUID string) *Player {
 }
 
 type World struct {
-	Players     map[string]*Player
+	Players     map[string]*Character
 	Mobiles     Mobiles
 	Rooms       map[string]*Room
 	RoomMobiles map[string][]RoomMobile
@@ -364,10 +364,10 @@ type World struct {
 
 func NewWorld() *World {
 	w := World{
-		Players: make(map[string]*Player),
+		Players: make(map[string]*Character),
 		Mobiles: Mobiles{
-			Prototypes: make(map[string]Player),
-			Instances:  make([]*Player, 0),
+			Prototypes: make(map[string]Character),
+			Instances:  make([]*Character, 0),
 		},
 		Rooms:       make(map[string]*Room),
 		RoomMobiles: make(map[string][]RoomMobile, 0),

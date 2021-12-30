@@ -18,7 +18,7 @@ func TestPlayer(t *testing.T) {
 	handle := "Tester"
 	c := NewPlayer(UUID, handle)
 	if c.Name != handle {
-		t.Fatalf("Player handle(%s) expect (%s)", c.Name, handle)
+		t.Fatalf("Character handle(%s) expect (%s)", c.Name, handle)
 	}
 
 	uuid := "b8712a40130e41dabb7e17adb2d1aef7"
@@ -28,24 +28,24 @@ func TestPlayer(t *testing.T) {
 	r := NewRoom(uuid, name, description, size)
 	c.Move(r)
 	if c.Room != r {
-		t.Fatalf("Player room(%v) expected(%v)", c.Room, r)
+		t.Fatalf("Character room(%v) expected(%v)", c.Room, r)
 	}
 
 	target := NewPlayer("SomeUUID", "Somehandle")
 	if c.IsAttacking(target) {
-		t.Fatalf("Player attacking %v by default", target)
+		t.Fatalf("Character attacking %v by default", target)
 	}
 	c.StartAttacking(target)
 	if !c.IsAttacking(target) {
-		t.Fatalf("Player not attacking %v", target)
+		t.Fatalf("Character not attacking %v", target)
 	}
 	c.StopAttacking(target)
 	if c.IsAttacking(target) {
-		t.Fatalf("Player still attacking %v", target)
+		t.Fatalf("Character still attacking %v", target)
 	}
 
 	if !c.HasKeyword(handle) {
-		t.Fatalf("Player handle is not a keyword")
+		t.Fatalf("Character handle is not a keyword")
 	}
 }
 
@@ -73,16 +73,16 @@ func TestRoom(t *testing.T) {
 		t.Fatalf("Room is unexpectedly full")
 	}
 	if err := r.Enter(c); err != nil {
-		t.Fatalf("Player unable to enter empty room")
+		t.Fatalf("Character unable to enter empty room")
 	}
 	if r.IndexOfPlayer(c) == -1 {
-		t.Fatalf("Player not found in room")
+		t.Fatalf("Character not found in room")
 	}
 	if !r.IsFull() {
 		t.Fatalf("Room is unexpectedly not full")
 	}
 	if err := r.Enter(c); err == nil {
-		t.Fatalf("Player entered full room")
+		t.Fatalf("Character entered full room")
 	}
 
 	r.Size += 1
@@ -90,17 +90,17 @@ func TestRoom(t *testing.T) {
 		t.Fatalf("Room is unexpectedly full after resize")
 	}
 	if err := r.Enter(c); err == nil {
-		t.Fatalf("Player able to enter room twice")
+		t.Fatalf("Character able to enter room twice")
 	}
 
 	if err := r.Exit(c); err != nil {
-		t.Fatalf("Player unable to exit room")
+		t.Fatalf("Character unable to exit room")
 	}
 	if r.IndexOfPlayer(c) != -1 {
-		t.Fatalf("Player present after exiting")
+		t.Fatalf("Character present after exiting")
 	}
 	if err := r.Exit(c); err == nil {
-		t.Fatalf("Player able to exit room twice")
+		t.Fatalf("Character able to exit room twice")
 	}
 
 	i := item.NewArmor("test UUID", "test item", item.Head, []string{"test"})

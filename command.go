@@ -10,7 +10,7 @@ import (
 
 type Context struct {
 	World  *world.World
-	Player *world.Player
+	Player *world.Character
 	Raw    string
 }
 

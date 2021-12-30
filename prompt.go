@@ -9,7 +9,7 @@ import (
 
 type Prompt struct {
 	Session *session.Session
-	Player  *world.Player
+	Player  *world.Character
 }
 
 func (p *Prompt) Render() string {
@@ -25,6 +25,6 @@ func (p *Prompt) Render() string {
 		border)
 }
 
-func NewPrompt(session *session.Session, p *world.Player) *Prompt {
+func NewPrompt(session *session.Session, p *world.Character) *Prompt {
 	return &Prompt{Session: session, Player: p}
 }

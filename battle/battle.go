@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func CalculateHitDamage(attacker *world.Player, defender *world.Player) int {
+func CalculateHitDamage(attacker *world.Character, defender *world.Character) int {
 	weapon := attacker.Weapon()
 
 	// Get Weapon base damage
@@ -24,14 +24,14 @@ func CalculateHitDamage(attacker *world.Player, defender *world.Player) int {
 	return damage
 }
 
-func ApplyDamage(p *world.Player, damage int) {
+func ApplyDamage(p *world.Character, damage int) {
 	p.Health.Current -= damage
 	if p.IsDead() {
 		p.Health.Current = 1
 	}
 }
 
-func DoAttack(attacker *world.Player, defender *world.Player) {
+func DoAttack(attacker *world.Character, defender *world.Character) {
 	damage := CalculateHitDamage(attacker, defender)
 	ApplyDamage(defender, damage)
 	attacker.Show("You do %d %s damage to %s.",
@@ -47,7 +47,7 @@ func DoAttack(attacker *world.Player, defender *world.Player) {
 }
 
 func Simulate(w *world.World) {
-	fighting := make(map[string]*world.Player)
+	fighting := make(map[string]*world.Character)
 	for _, attacker := range w.Players {
 		if !attacker.IsFighting() {
 			continue
