@@ -410,6 +410,7 @@ func (w *World) SpawnMobiles() {
 			for diff := rm.Count - count; diff > 0; diff-- {
 				mobile := w.Mobiles.Spawn(rm.MobileUUID)
 				room.Enter(mobile)
+				mobile.Room = room
 			}
 		}
 	}
