@@ -197,6 +197,18 @@ func (c *Character) CheckDead() {
 	c.Health.Current = 1
 }
 
+func (c *Character) Restore() {
+	c.CalculateModifiers()
+	// Adjust lines from core stats
+
+	c.Health.Maximum = c.Core.Power.Value() * 100
+	c.Health.Current = c.Health.Maximum
+	c.Health.RecoverRate = c.Core.Power.Value()
+	c.Spirit.Maximum = c.Core.Will.Value() * 100
+	c.Spirit.Current = c.Spirit.Maximum
+	c.Spirit.RecoverRate = c.Core.Will.Value()
+}
+
 func (c *Character) Update(tick int) {
 	c.CalculateModifiers()
 	// Adjust lines from core stats
@@ -427,6 +439,7 @@ func (w *World) SpawnMobiles() {
 				mobile := w.Mobiles.Spawn(rm.MobileUUID)
 				room.Enter(mobile)
 				mobile.Room = room
+				mobile.Restore()
 			}
 		}
 	}
