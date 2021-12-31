@@ -180,21 +180,8 @@ func (c *Character) CalculateModifiers() {
 	c.ApplyItemModifiers(c.Gear.MainHand)
 }
 
-func (c *Character) CheckDead() {
-	if c.Health.Current > 0 {
-		return
-	}
-
-	for _, p := range c.Room.Players {
-		if p == c {
-			continue
-		}
-		p.StopAttacking(c)
-		c.StopAttacking(p)
-		p.Show("%s died! R.I.P.", c.Name)
-	}
-	c.Show("You're dead! R.I.P.")
-	c.Health.Current = 1
+func (c *Character) IsDead() bool {
+	return c.Health.Current <= 0
 }
 
 func (c *Character) Restore() {
@@ -224,7 +211,6 @@ func (c *Character) Update(tick int) {
 		c.Health.Recover()
 		c.Spirit.Recover()
 	}
-	c.CheckDead()
 }
 
 func (c Character) Show(message string, args ...interface{}) {

@@ -1,6 +1,7 @@
 package battle
 
 import (
+	"github.com/michaelvmata/path/events"
 	"github.com/michaelvmata/path/world"
 	"math/rand"
 	"strings"
@@ -35,6 +36,12 @@ func DoAttack(attacker *world.Character, defender *world.Character) {
 		attacker.Name,
 		damage,
 		strings.ToLower(attacker.Weapon().WeaponType))
+	if defender.IsDead() {
+		events.CharacterDeath.Emit(events.CharacterDeathPayload{
+			Character: defender,
+			Killer:    attacker,
+		})
+	}
 	attacker.Update(0)
 	defender.Update(0)
 }
