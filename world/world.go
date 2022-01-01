@@ -213,6 +213,13 @@ func (c *Character) Update(tick int) {
 	}
 }
 
+func (c Character) Showln(message string, args ...interface{}) {
+	if c.Session != nil {
+		c.Session.Outgoing <- fmt.Sprintf(message, args...)
+		c.Session.Outgoing <- "\n"
+	}
+}
+
 func (c Character) Show(message string, args ...interface{}) {
 	if c.Session != nil {
 		c.Session.Outgoing <- fmt.Sprintf(message, args...)

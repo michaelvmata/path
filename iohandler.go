@@ -24,7 +24,7 @@ func handleOutput(session *session.Session, done chan bool, player *world.Charac
 	for {
 		select {
 		case text := <-session.Outgoing:
-			fmt.Println(Colorize(text))
+			fmt.Print(Colorize(text))
 		case <-done:
 			break
 		}
