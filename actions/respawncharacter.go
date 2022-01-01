@@ -6,9 +6,9 @@ import (
 	"log"
 )
 
-type RespawnPlayer struct{}
+type RespawnCharacter struct{}
 
-func (rp RespawnPlayer) Handle(payload events.CharacterDeathPayload) {
+func (rp RespawnCharacter) Handle(payload events.CharacterDeathPayload) {
 	char := payload.Character
 	payload.World.Mobiles.Unspawn(char)
 	if err := char.Room.Exit(char); err != nil {

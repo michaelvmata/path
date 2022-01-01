@@ -23,7 +23,7 @@ func main() {
 		Player: player,
 	}
 	world.SpawnMobiles()
-	events.CharacterDeath.Register(actions.RespawnPlayer{})
+	events.CharacterDeath.Register(actions.RespawnCharacter{})
 MainLoop:
 	for {
 		select {
