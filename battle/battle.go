@@ -25,7 +25,7 @@ func CalculateHitDamage(attacker *world.Character, defender *world.Character) in
 	return damage
 }
 
-func DoAttack(attacker *world.Character, defender *world.Character) {
+func DoAttack(world *world.World, attacker *world.Character, defender *world.Character) {
 	damage := CalculateHitDamage(attacker, defender)
 	defender.Health.Current -= damage
 	attacker.Show("You do %d %s damage to %s.",
@@ -40,6 +40,7 @@ func DoAttack(attacker *world.Character, defender *world.Character) {
 		events.CharacterDeath.Emit(events.CharacterDeathPayload{
 			Character: defender,
 			Killer:    attacker,
+			World:     world,
 		})
 	}
 	attacker.Update(0)
@@ -53,7 +54,7 @@ func Simulate(w *world.World) {
 			continue
 		}
 		for _, defender := range attacker.Attacking {
-			DoAttack(attacker, defender)
+			DoAttack(w, attacker, defender)
 			fighting[attacker.UUID] = attacker
 			fighting[defender.UUID] = defender
 			break
@@ -64,7 +65,7 @@ func Simulate(w *world.World) {
 			continue
 		}
 		for _, defender := range attacker.Attacking {
-			DoAttack(attacker, defender)
+			DoAttack(w, attacker, defender)
 			fighting[attacker.UUID] = attacker
 			fighting[defender.UUID] = defender
 			break

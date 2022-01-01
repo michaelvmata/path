@@ -1,7 +1,9 @@
 package main
 
 import (
+	"github.com/michaelvmata/path/actions"
 	"github.com/michaelvmata/path/battle"
+	"github.com/michaelvmata/path/events"
 	"github.com/michaelvmata/path/session"
 	"time"
 )
@@ -21,6 +23,7 @@ func main() {
 		Player: player,
 	}
 	world.SpawnMobiles()
+	events.CharacterDeath.Register(actions.RespawnPlayer{})
 MainLoop:
 	for {
 		select {

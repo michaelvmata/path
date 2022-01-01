@@ -8,6 +8,7 @@ import (
 type CharacterDeathPayload struct {
 	Character *world.Character
 	Killer    *world.Character
+	World     *world.World
 }
 
 type listenerSignature interface {
