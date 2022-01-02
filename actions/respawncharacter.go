@@ -18,14 +18,15 @@ func (rp RespawnCharacter) Handle(payload events.CharacterDeathPayload) {
 			c.Showln("%s defeated %s", payload.Killer.Name, char.Name)
 		}
 	}
-	if err := payload.World.Mobiles.Unspawn(char); err != nil {
-		char.Restore()
-		char.Showln("In a flash, you're made whole again.")
-	} else {
+	if payload.World.IsMobile(char) {
+		payload.World.Mobiles.Unspawn(char)
 		if err := char.Room.Exit(char); err != nil {
 			log.Fatalf("Character died without exiting room %v", payload)
 		}
 		char.Room = nil
+	} else {
+		char.Restore()
+		char.Showln("In a flash, you're made whole again.")
 	}
 
 	opponents := make([]*world.Character, 0)

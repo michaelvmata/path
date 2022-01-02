@@ -389,6 +389,15 @@ func (m *Mobiles) Unspawn(c *Character) error {
 	return errors.New("not a mobile")
 }
 
+func (m Mobiles) IsInstance(c *Character) bool {
+	for _, instance := range m.Instances {
+		if instance == c {
+			return true
+		}
+	}
+	return false
+}
+
 type World struct {
 	Players     map[string]*Character
 	Mobiles     Mobiles
@@ -415,6 +424,10 @@ func NewWorld() *World {
 		BattleTicks: 3,
 	}
 	return &w
+}
+
+func (w World) IsMobile(c *Character) bool {
+	return w.Mobiles.IsInstance(c)
 }
 
 func (w *World) Update() {
