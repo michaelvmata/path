@@ -22,7 +22,8 @@ func CalculateHitDamage(attacker *world.Character, defender *world.Character) in
 		criticalBonus := weapon.CriticalBonus + (insightDiff * .01)
 		damage = int(float64(damage) * (1.0 + criticalBonus))
 	}
-	return damage
+
+	return damage + (10 * attacker.Core.Power.Value())
 }
 
 func DoAttack(world *world.World, attacker *world.Character, defender *world.Character) {
