@@ -44,7 +44,7 @@ func (c Character) Weapon() *item.Weapon {
 	return hand
 }
 
-func (c Character) Clone(target Character) {
+func (c *Character) Clone(target Character) {
 	c.UUID = target.UUID
 	c.Name = target.Name
 	c.Room = nil
