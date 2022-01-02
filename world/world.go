@@ -374,7 +374,7 @@ func (m *Mobiles) Spawn(UUID string) *Character {
 	return mobile
 }
 
-func (m *Mobiles) Unspawn(c *Character) {
+func (m *Mobiles) Unspawn(c *Character) error {
 	index := -1
 	for i, m := range m.Instances {
 		if m == c {
@@ -384,7 +384,9 @@ func (m *Mobiles) Unspawn(c *Character) {
 	// Players wil be not found
 	if index != -1 {
 		m.Instances = append(m.Instances[:index], m.Instances[index+1:]...)
+		return nil
 	}
+	return errors.New("not a mobile")
 }
 
 type World struct {
