@@ -2,7 +2,6 @@ package events
 
 import (
 	"github.com/michaelvmata/path/world"
-	"log"
 )
 
 type CharacterDeathPayload struct {
@@ -26,7 +25,6 @@ func (cd *characterDeath) Register(listener listenerSignature) {
 }
 
 func (cd characterDeath) Emit(payload CharacterDeathPayload) {
-	log.Println("Emitting")
 	for _, listener := range cd.listeners {
 		listener.Handle(payload)
 	}
