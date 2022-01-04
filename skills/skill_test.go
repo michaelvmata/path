@@ -5,5 +5,6 @@ import (
 )
 
 func TestSkill(t *testing.T) {
-	NewSkills()
+	s := NewSkills()
+	s.Describe()
 }
