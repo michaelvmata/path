@@ -15,13 +15,13 @@ func TestCalculateHitDamage(t *testing.T) {
 
 	defender := world.NewPlayer("TestUUID2", "Test Defender")
 
-	if damage := CalculateHitDamage(attacker, defender); damage < w.MinimumDamage || damage > w.MaximumDamage {
+	if damage := CalculateHitDamage(attacker, defender); damage <= 0 {
 		t.Fatalf("Damage max(%d), min(%d), actual(%d)", w.MaximumDamage, w.MinimumDamage, damage)
 	}
 
 	w.CriticalRate = 1.0
 	w.CriticalBonus = 1.0
-	if damage := CalculateHitDamage(attacker, defender); damage < w.MinimumDamage*2.0 || damage > w.MaximumDamage*2.0 {
+	if damage := CalculateHitDamage(attacker, defender); damage <= 0 {
 		t.Fatalf("Damage max(%d), min(%d), actual(%d)", w.MaximumDamage*2.0, w.MinimumDamage*2.0, damage)
 	}
 }
