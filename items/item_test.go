@@ -47,4 +47,8 @@ func TestGear(t *testing.T) {
 	if previous, err := gear.Equip(helmet); previous != helmet || err != nil {
 		t.Fatalf("Error getting previous %v %v", helmet, err)
 	}
+	weapon := NewWeapon("Test UUID", "Test weapon", []string{"test", "weapon"}, Crush)
+	if _, err := gear.Equip(weapon); err != nil {
+		t.Fatalf("Error equiping weapon %v", weapon)
+	}
 }
