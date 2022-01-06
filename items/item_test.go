@@ -51,4 +51,8 @@ func TestGear(t *testing.T) {
 	if _, err := gear.Equip(weapon); err != nil {
 		t.Fatalf("Error equiping weapon %v", weapon)
 	}
+	if i := gear.Remove("test"); i == nil {
+		t.Fatalf("Error removing test item")
+	}
+
 }
