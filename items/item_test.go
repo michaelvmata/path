@@ -28,6 +28,12 @@ func TestContainer(t *testing.T) {
 	if err := container.AddItem(item); err != nil {
 		t.Fatalf("Unable to add item to container")
 	}
+
+	boots := NewArmor("Test UUID", "test boots", Head, []string{"test", "boots"})
+	if err := container.AddItem(boots); err == nil {
+		t.Fatalf("Able to add 2 items to container")
+	}
+
 	index := container.IndexOfItem("test")
 	if index != 0 {
 		t.Fatalf("Armor not found in container")
