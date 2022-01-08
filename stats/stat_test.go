@@ -20,4 +20,6 @@ func TestCore(t *testing.T) {
 	if c.Power.Modifier != oldModifier {
 		t.Fatalf("Reset didn't set to initial state")
 	}
+	c.ResetModifier()
+	c.Describe()
 }
