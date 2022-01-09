@@ -321,10 +321,7 @@ func (r *Room) Exit(c *Character) error {
 	if i == -1 {
 		return errors.New("player not in room")
 	}
-	copy(r.Players[i:], r.Players[:i+1])
-	length := len(r.Players) - 1
-	r.Players[length] = nil
-	r.Players = r.Players[:length]
+	r.Players = append(r.Players[:i], r.Players[i+1:]...)
 	return nil
 }
 

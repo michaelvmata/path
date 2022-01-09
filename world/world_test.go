@@ -53,7 +53,7 @@ func TestRoom(t *testing.T) {
 	uuid := "b8712a40130e41dabb7e17adb2d1aef7"
 	name := "The Void"
 	description := "An unending abyss."
-	size := 1
+	size := 2
 	r := NewRoom(uuid, name, description, size)
 	if r.UUID != uuid {
 		t.Fatalf("Rooom UUID(%s) expected(%s)", r.UUID, uuid)
@@ -78,11 +78,21 @@ func TestRoom(t *testing.T) {
 	if r.IndexOfPlayer(c) == -1 {
 		t.Fatalf("Character not found in room")
 	}
+
+	c2 := NewPlayer("Test UUID", "Tester 2")
+	if err := r.Enter(c2); err != nil {
+		t.Fatalf("2nd character unable to enter room %v", err)
+	}
+	if r.IndexOfPlayer(c2) == -1 {
+		t.Fatalf("Character not found in room")
+	}
 	if !r.IsFull() {
 		t.Fatalf("Room is unexpectedly not full")
 	}
-	if err := r.Enter(c); err == nil {
-		t.Fatalf("Character entered full room")
+
+	c3 := NewPlayer("Test UUID", "Tester 3")
+	if err := r.Enter(c3); err == nil {
+		t.Fatalf("3rd character entered full room")
 	}
 
 	r.Size += 1
