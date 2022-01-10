@@ -23,3 +23,15 @@ func TestCore(t *testing.T) {
 	c.ResetModifier()
 	c.Describe()
 }
+
+func TestLine(t *testing.T) {
+	l := Line{
+		Current:     0,
+		Maximum:     10,
+		RecoverRate: 100,
+	}
+	l.Recover()
+	if l.Current > l.Maximum {
+		t.Fatalf("Line went over maximum")
+	}
+}
