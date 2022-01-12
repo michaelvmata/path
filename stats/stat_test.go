@@ -36,7 +36,7 @@ func TestLine(t *testing.T) {
 	}
 	l.Current = l.Maximum + 1
 	l.Recover()
-	if l.Current > l.Maximum {
-		t.Fatalf("Line went over maximum")
+	if l.Current <= l.Maximum {
+		t.Fatalf("Line recover dropped maximum")
 	}
 }
