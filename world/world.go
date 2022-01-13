@@ -29,7 +29,13 @@ type Character struct {
 	Gear      *item.Gear
 	Inventory item.Container
 
+	Essence int
+
 	Attacking map[string]*Character
+}
+
+func (c *Character) CreditEssence(amount int) {
+	c.Essence += amount
 }
 
 func (c Character) Weapon() *item.Weapon {

@@ -24,6 +24,7 @@ func main() {
 	}
 	world.SpawnMobiles()
 	events.CharacterDeath.Register(actions.RespawnCharacter{})
+	events.CharacterDeath.Register(actions.EssenceOnDeath{})
 MainLoop:
 	for {
 		select {

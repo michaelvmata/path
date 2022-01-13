@@ -190,6 +190,8 @@ func (sc Score) Execute(ctx Context) {
 	p.Showln("")
 	p.Showln(p.Core.Describe())
 	p.Showln("")
+	p.Showln("<yellow>%s<reset> Essence %d", symbols.FIVE_STAR, p.Essence)
+	p.Showln("")
 	p.Showln(p.Skills.Describe())
 	p.Showln("")
 }
