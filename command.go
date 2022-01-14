@@ -143,6 +143,16 @@ func (i Inventory) Label() string {
 	return "inventory"
 }
 
+type Invest struct{}
+
+func (i Invest) Execute(ctx Context) {
+
+}
+
+func (i Invest) Label() string {
+	return "invest"
+}
+
 type Look struct{}
 
 func (l Look) Execute(ctx Context) {
@@ -265,6 +275,7 @@ func buildCommands() map[string]Executor {
 		Gear{},
 		Get{},
 		Inventory{},
+		Invest{},
 		Look{},
 		Noop{},
 		Remove{},
