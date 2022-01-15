@@ -146,6 +146,29 @@ func (i Inventory) Label() string {
 type Invest struct{}
 
 func (i Invest) Execute(ctx Context) {
+	player := ctx.Player
+	parts := strings.SplitN(ctx.Raw, " ", 2)
+	if len(parts) == 1 {
+		player.Showln("Invest what?")
+		return
+	}
+	keyword := strings.ToLower(parts[1])
+	switch keyword {
+	case "power":
+		player.Core.Power.Increment()
+		player.Showln("Power courses through you.")
+	case "agility":
+		player.Core.Agility.Increment()
+		player.Showln("Balance flows through you.")
+	case "insight":
+		player.Core.Insight.Increment()
+		player.Showln("The world becomes clearer.")
+	case "will":
+		player.Core.Will.Increment()
+		player.Showln("Reality itself warps before you.")
+	default:
+		player.Showln("Invest what?")
+	}
 
 }
 
