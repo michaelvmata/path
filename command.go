@@ -5,6 +5,7 @@ import (
 	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/symbols"
 	"github.com/michaelvmata/path/world"
+	"math"
 	"strings"
 )
 
@@ -146,13 +147,19 @@ func (i Inventory) Label() string {
 type Invest struct{}
 
 func spendEssence(p *world.Character, amount int) bool {
-	if p.Essence < amount {
-		p.Showln("You don't have enough essence.")
+	cost := essenceCost(amount)
+	if p.Essence < cost {
+		p.Showln("You need %d more essence.", cost-p.Essence)
 		return false
 	}
-	p.Essence -= amount
+	p.Essence -= cost
 	return true
 }
+
+func essenceCost(amount int) int {
+	return int(math.Pow(1.2, float64(amount))) + amount
+}
+
 func (i Invest) Execute(ctx Context) {
 	player := ctx.Player
 	parts := strings.SplitN(ctx.Raw, " ", 2)
@@ -161,25 +168,26 @@ func (i Invest) Execute(ctx Context) {
 		return
 	}
 	keyword := strings.ToLower(parts[1])
+	core := &player.Core
 	switch keyword {
 	case "power":
-		if spendEssence(player, 1) {
-			player.Core.Power.Increment()
+		if spendEssence(player, core.Power.Base) {
+			core.Power.Increment()
 			player.Showln("Power courses through you.")
 		}
 	case "agility":
-		if spendEssence(player, 1) {
-			player.Core.Agility.Increment()
+		if spendEssence(player, core.Agility.Base) {
+			core.Agility.Increment()
 			player.Showln("Balance flows through you.")
 		}
 	case "insight":
-		if spendEssence(player, 1) {
-			player.Core.Insight.Increment()
+		if spendEssence(player, core.Insight.Base) {
+			core.Insight.Increment()
 			player.Showln("The world becomes clearer.")
 		}
 	case "will":
-		if spendEssence(player, 1) {
-			player.Core.Will.Increment()
+		if spendEssence(player, core.Will.Base) {
+			core.Will.Increment()
 			player.Showln("Reality itself warps before you.")
 		}
 	default:
