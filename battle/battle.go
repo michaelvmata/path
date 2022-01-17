@@ -54,7 +54,14 @@ func Simulate(w *world.World) {
 		if !attacker.IsFighting() {
 			continue
 		}
+		if _, ok := fighting[attacker.UUID]; !ok {
+			attacker.Showln("")
+		}
+
 		for _, defender := range attacker.Attacking {
+			if _, ok := fighting[defender.UUID]; !ok {
+				defender.Showln("")
+			}
 			DoAttack(w, attacker, defender)
 			fighting[attacker.UUID] = attacker
 			fighting[defender.UUID] = defender
@@ -65,7 +72,14 @@ func Simulate(w *world.World) {
 		if !attacker.IsFighting() {
 			continue
 		}
+		if _, ok := fighting[attacker.UUID]; !ok {
+			attacker.Showln("")
+		}
+
 		for _, defender := range attacker.Attacking {
+			if _, ok := fighting[defender.UUID]; !ok {
+				defender.Showln("")
+			}
 			DoAttack(w, attacker, defender)
 			fighting[attacker.UUID] = attacker
 			fighting[defender.UUID] = defender
