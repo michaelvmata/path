@@ -1,12 +1,10 @@
 package modifiers
 
 const (
-	Power     = "Power"
-	Agility   = "Agility"
-	Endurance = "Endurance"
-	Talent    = "Talent"
-	Insight   = "Insight"
-	Will      = "Will"
+	Power   = "Power"
+	Agility = "Agility"
+	Insight = "Insight"
+	Will    = "Will"
 
 	Dagger = "Dagger"
 	Sword  = "Sword"
