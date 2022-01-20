@@ -52,47 +52,34 @@ func NumberOfAttacks(character *world.Character) int {
 	return 1
 }
 
+func Round(w *world.World, fighting map[string]*world.Character, attacker *world.Character) {
+	if !attacker.IsFighting() {
+		return
+	}
+	if _, ok := fighting[attacker.UUID]; !ok {
+		attacker.Showln("")
+	}
+
+	for _, defender := range attacker.Attacking {
+		if _, ok := fighting[defender.UUID]; !ok {
+			defender.Showln("")
+		}
+		for i := 1; i <= NumberOfAttacks(attacker); i++ {
+			DoAttack(w, attacker, defender)
+		}
+		fighting[attacker.UUID] = attacker
+		fighting[defender.UUID] = defender
+		break
+	}
+}
+
 func Simulate(w *world.World) {
 	fighting := make(map[string]*world.Character)
 	for _, attacker := range w.Players {
-		if !attacker.IsFighting() {
-			continue
-		}
-		if _, ok := fighting[attacker.UUID]; !ok {
-			attacker.Showln("")
-		}
-
-		for _, defender := range attacker.Attacking {
-			if _, ok := fighting[defender.UUID]; !ok {
-				defender.Showln("")
-			}
-			for i := 1; i <= NumberOfAttacks(attacker); i++ {
-				DoAttack(w, attacker, defender)
-			}
-			fighting[attacker.UUID] = attacker
-			fighting[defender.UUID] = defender
-			break
-		}
+		Round(w, fighting, attacker)
 	}
 	for _, attacker := range w.Mobiles.Instances {
-		if !attacker.IsFighting() {
-			continue
-		}
-		if _, ok := fighting[attacker.UUID]; !ok {
-			attacker.Showln("")
-		}
-
-		for _, defender := range attacker.Attacking {
-			if _, ok := fighting[defender.UUID]; !ok {
-				defender.Showln("")
-			}
-			for i := 1; i <= NumberOfAttacks(attacker); i++ {
-				DoAttack(w, attacker, defender)
-			}
-			fighting[attacker.UUID] = attacker
-			fighting[defender.UUID] = defender
-			break
-		}
+		Round(w, fighting, attacker)
 	}
 	for _, p := range fighting {
 		p.ShowPrompt()
