@@ -12,6 +12,12 @@ import (
 	"strings"
 )
 
+type Buff interface {
+	Update(int)
+	IsExpired() bool
+	Name() string
+}
+
 type Character struct {
 	UUID    string
 	Name    string
@@ -32,10 +38,26 @@ type Character struct {
 	Essence int
 
 	Attacking map[string]*Character
+
+	Buffs []Buff
 }
 
 func (c *Character) CreditEssence(amount int) {
 	c.Essence += amount
+}
+
+func (c *Character) Apply(buff Buff) {
+	c.Buffs = append(c.Buffs, buff)
+}
+
+func (c *Character) UnapplyExpiredBuffs() {
+	buffs := make([]Buff, 0)
+	for _, b := range c.Buffs {
+		if !b.IsExpired() {
+			buffs = append(buffs, b)
+		}
+	}
+	c.Buffs = buffs
 }
 
 func (c Character) Weapon() *item.Weapon {
@@ -216,6 +238,10 @@ func (c *Character) Update(tick int) {
 	if tick > 0 {
 		c.Health.Recover()
 		c.Spirit.Recover()
+		for _, buff := range c.Buffs {
+			buff.Update(tick)
+		}
+		c.UnapplyExpiredBuffs()
 	}
 }
 

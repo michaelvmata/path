@@ -49,6 +49,32 @@ func TestPlayer(t *testing.T) {
 	}
 }
 
+type TestBuff struct {
+	Expired bool
+}
+
+func (t TestBuff) Update(tick int) {}
+func (t TestBuff) IsExpired() bool { return t.Expired }
+func (t TestBuff) Name() string    { return "TestBuff" }
+
+func TestPlayerBuff(t *testing.T) {
+	player := NewPlayer("Test UUID", "Test Handle")
+	buff := TestBuff{Expired: false}
+	player.Apply(&buff)
+	if len(player.Buffs) != 1 {
+		t.Fatalf("Unable to apply buff %v", buff)
+	}
+	player.Update(1)
+	if len(player.Buffs) != 1 {
+		t.Fatalf("Buff removed before expired")
+	}
+	buff.Expired = true
+	player.Update(1)
+	if len(player.Buffs) != 0 {
+		t.Fatalf("Expired buff still applied")
+	}
+}
+
 func TestRoom(t *testing.T) {
 	uuid := "b8712a40130e41dabb7e17adb2d1aef7"
 	name := "The Void"
