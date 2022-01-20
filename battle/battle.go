@@ -48,6 +48,10 @@ func DoAttack(world *world.World, attacker *world.Character, defender *world.Cha
 	defender.Update(0)
 }
 
+func NumberOfAttacks(character *world.Character) int {
+	return 1
+}
+
 func Simulate(w *world.World) {
 	fighting := make(map[string]*world.Character)
 	for _, attacker := range w.Players {
@@ -62,7 +66,9 @@ func Simulate(w *world.World) {
 			if _, ok := fighting[defender.UUID]; !ok {
 				defender.Showln("")
 			}
-			DoAttack(w, attacker, defender)
+			for i := 1; i <= NumberOfAttacks(attacker); i++ {
+				DoAttack(w, attacker, defender)
+			}
 			fighting[attacker.UUID] = attacker
 			fighting[defender.UUID] = defender
 			break
@@ -80,7 +86,9 @@ func Simulate(w *world.World) {
 			if _, ok := fighting[defender.UUID]; !ok {
 				defender.Showln("")
 			}
-			DoAttack(w, attacker, defender)
+			for i := 1; i <= NumberOfAttacks(attacker); i++ {
+				DoAttack(w, attacker, defender)
+			}
 			fighting[attacker.UUID] = attacker
 			fighting[defender.UUID] = defender
 			break
