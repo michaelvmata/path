@@ -1,6 +1,7 @@
 package battle
 
 import (
+	"github.com/michaelvmata/path/buffs"
 	item "github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/world"
 	"testing"
@@ -23,5 +24,14 @@ func TestCalculateHitDamage(t *testing.T) {
 	w.CriticalBonus = 1.0
 	if damage := CalculateHitDamage(attacker, defender); damage <= 0 {
 		t.Fatalf("Damage max(%d), min(%d), actual(%d)", w.MaximumDamage*2.0, w.MinimumDamage*2.0, damage)
+	}
+}
+
+func TestNumberOfAttacks(t *testing.T) {
+	character := world.NewPlayer("Test UUID", "Test Handle")
+	buff := buffs.NewHaste(10)
+	character.Apply(buff)
+	if NumberOfAttacks(character) != 2 {
+		t.Fatalf("Haste didn't increase number of attacks")
 	}
 }

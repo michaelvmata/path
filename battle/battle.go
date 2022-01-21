@@ -1,6 +1,7 @@
 package battle
 
 import (
+	"github.com/michaelvmata/path/buffs"
 	"github.com/michaelvmata/path/events"
 	"github.com/michaelvmata/path/world"
 	"math/rand"
@@ -49,7 +50,13 @@ func DoAttack(world *world.World, attacker *world.Character, defender *world.Cha
 }
 
 func NumberOfAttacks(character *world.Character) int {
-	return 1
+	attackNumber := 1
+	for _, buff := range character.Buffs {
+		if buff.Name() == buffs.HasteName {
+			attackNumber++
+		}
+	}
+	return attackNumber
 }
 
 func Round(w *world.World, fighting map[string]*world.Character, attacker *world.Character) {
