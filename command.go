@@ -136,7 +136,6 @@ func (h Haste) Execute(ctx Context) {
 	buff := buffs.NewHaste(10)
 	player := ctx.Player
 	player.Apply(buff)
-	player.Showln("The world slows perceptibly.")
 }
 
 func (h Haste) Label() string {

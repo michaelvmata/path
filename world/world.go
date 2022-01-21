@@ -16,6 +16,8 @@ type Buff interface {
 	Update(int)
 	IsExpired() bool
 	Name() string
+	ApplyMessage() string
+	UnapplyMessage() string
 }
 
 type Character struct {
@@ -48,16 +50,27 @@ func (c *Character) CreditEssence(amount int) {
 
 func (c *Character) Apply(buff Buff) {
 	c.Buffs = append(c.Buffs, buff)
+	c.Showln(buff.ApplyMessage())
 }
 
 func (c *Character) UnapplyExpiredBuffs() {
 	buffs := make([]Buff, 0)
+	messages := make([]string, 0)
 	for _, b := range c.Buffs {
 		if !b.IsExpired() {
 			buffs = append(buffs, b)
+		} else {
+			messages = append(messages, b.UnapplyMessage())
 		}
 	}
 	c.Buffs = buffs
+	if len(messages) > 0 {
+		c.ShowNewline()
+		message := strings.Join(messages, "\n")
+		c.Showln(message)
+		c.ShowNewline()
+		c.ShowPrompt()
+	}
 }
 
 func (c Character) Weapon() *item.Weapon {
@@ -242,6 +255,12 @@ func (c *Character) Update(tick int) {
 			buff.Update(tick)
 		}
 		c.UnapplyExpiredBuffs()
+	}
+}
+
+func (c Character) ShowNewline() {
+	if c.Session != nil {
+		c.Session.Outgoing <- "\n"
 	}
 }
 
