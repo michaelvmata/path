@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/michaelvmata/path/buffs"
 	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/symbols"
 	"github.com/michaelvmata/path/world"
@@ -127,6 +128,19 @@ func (g Get) Execute(ctx Context) {
 
 func (g Get) Label() string {
 	return "get"
+}
+
+type Haste struct{}
+
+func (h Haste) Execute(ctx Context) {
+	buff := buffs.NewHaste(10)
+	player := ctx.Player
+	player.Apply(buff)
+	player.Showln("The world slows perceptibly.")
+}
+
+func (h Haste) Label() string {
+	return "haste"
 }
 
 type Inventory struct{}
@@ -321,6 +335,7 @@ func buildCommands() map[string]Executor {
 		Drop{},
 		Gear{},
 		Get{},
+		Haste{},
 		Inventory{},
 		Invest{},
 		Look{},
