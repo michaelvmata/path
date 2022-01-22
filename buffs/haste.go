@@ -26,6 +26,10 @@ func (h Haste) UnapplyMessage() string {
 	return "The world speeds up perceptibly."
 }
 
+func (h Haste) AlreadyApplied() string {
+	return "You already move with haste."
+}
+
 func NewHaste(level int) *Haste {
 	return &Haste{Lifetime: level * 60}
 }

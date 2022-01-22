@@ -18,6 +18,7 @@ type Buff interface {
 	Name() string
 	ApplyMessage() string
 	UnapplyMessage() string
+	AlreadyApplied() string
 }
 
 type Character struct {
@@ -49,6 +50,12 @@ func (c *Character) CreditEssence(amount int) {
 }
 
 func (c *Character) Apply(buff Buff) {
+	for _, b := range c.Buffs {
+		if b.Name() == buff.Name() {
+			c.Showln(buff.AlreadyApplied())
+			return
+		}
+	}
 	c.Buffs = append(c.Buffs, buff)
 	c.Showln(buff.ApplyMessage())
 }

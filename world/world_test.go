@@ -53,9 +53,12 @@ type TestBuff struct {
 	Expired bool
 }
 
-func (t TestBuff) Update(tick int) {}
-func (t TestBuff) IsExpired() bool { return t.Expired }
-func (t TestBuff) Name() string    { return "TestBuff" }
+func (t TestBuff) Update(tick int)        {}
+func (t TestBuff) IsExpired() bool        { return t.Expired }
+func (t TestBuff) Name() string           { return "TestBuff" }
+func (t TestBuff) ApplyMessage() string   { return "TestBuff" }
+func (t TestBuff) UnapplyMessage() string { return "TestBuff" }
+func (t TestBuff) AlreadyApplied() string { return "TestBuff" }
 
 func TestPlayerBuff(t *testing.T) {
 	player := NewPlayer("Test UUID", "Test Handle")
