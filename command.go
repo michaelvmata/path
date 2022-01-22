@@ -133,7 +133,7 @@ func (g Get) Label() string {
 type Haste struct{}
 
 func (h Haste) Execute(ctx Context) {
-	buff := buffs.NewHaste(10)
+	buff := buffs.NewHaste(1)
 	player := ctx.Player
 	player.Apply(buff)
 }

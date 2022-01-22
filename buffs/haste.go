@@ -27,5 +27,5 @@ func (h Haste) UnapplyMessage() string {
 }
 
 func NewHaste(level int) *Haste {
-	return &Haste{Lifetime: level}
+	return &Haste{Lifetime: level * 60}
 }
