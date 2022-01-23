@@ -256,8 +256,10 @@ func (c *Character) Update(tick int) {
 	c.Spirit.RecoverRate = c.Core.Will.Value()
 
 	if tick > 0 {
-		c.Health.Recover()
-		c.Spirit.Recover()
+		if tick%5 == 0 {
+			c.Health.Recover()
+			c.Spirit.Recover()
+		}
 		for _, buff := range c.Buffs {
 			buff.Update(tick)
 		}
