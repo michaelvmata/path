@@ -89,3 +89,11 @@ func (l *Line) Recover() {
 	l.Current += l.RecoverRate
 	l.EnforceMaximum()
 }
+
+func (l *Line) IsAvailable(amount int) bool {
+	return l.Current >= amount
+}
+
+func (l *Line) Consume(amount int) {
+	l.Current -= amount
+}

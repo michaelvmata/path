@@ -14,11 +14,13 @@ import (
 
 type Buff interface {
 	Update(int)
+	Expire()
 	IsExpired() bool
 	Name() string
 	ApplyMessage() string
 	UnapplyMessage() string
 	AlreadyApplied() string
+	Upkeep() int
 }
 
 type Character struct {
