@@ -8,11 +8,19 @@ import (
 	"strings"
 )
 
-func CalculateHitDamage(attacker *world.Character, defender *world.Character) int {
-	weapon := attacker.Weapon()
+type Damage struct {
+	Amount   int
+	Type     string
+	Critical bool
+}
 
-	// Get Weapon base damage
-	damage := rand.Intn(weapon.MaximumDamage-weapon.MinimumDamage) + weapon.MinimumDamage
+func CalculateHitDamage(attacker *world.Character, defender *world.Character) Damage {
+	weapon := attacker.Weapon()
+	damage := Damage{
+		Type:     strings.ToLower(weapon.WeaponType),
+		Amount:   rand.Intn(weapon.MaximumDamage-weapon.MinimumDamage) + weapon.MinimumDamage,
+		Critical: false,
+	}
 
 	// Check if a critical hit
 	agilityDiff := float64(attacker.Core.Agility.Value() - defender.Core.Agility.Value())
@@ -21,23 +29,25 @@ func CalculateHitDamage(attacker *world.Character, defender *world.Character) in
 		// Apply critical bonus
 		insightDiff := float64(attacker.Core.Insight.Value() - defender.Core.Insight.Value())
 		criticalBonus := weapon.CriticalBonus + (insightDiff * .01)
-		damage = int(float64(damage) * (1.0 + criticalBonus))
+		damage.Amount = int(float64(damage.Amount) * (1.0 + criticalBonus))
+		damage.Critical = true
 	}
 
-	return damage + (10 * attacker.Core.Power.Value())
+	damage.Amount = damage.Amount + (10 * attacker.Core.Power.Value())
+	return damage
 }
 
 func DoAttack(world *world.World, attacker *world.Character, defender *world.Character) {
 	damage := CalculateHitDamage(attacker, defender)
-	defender.Health.Current -= damage
+	defender.Health.Current -= damage.Amount
 	attacker.Showln("You do %d %s damage to %s.",
-		damage,
-		strings.ToLower(attacker.Weapon().WeaponType),
+		damage.Amount,
+		damage.Type,
 		defender.Name)
 	defender.Showln("%s does %d %s damage to you.",
 		attacker.Name,
-		damage,
-		strings.ToLower(attacker.Weapon().WeaponType))
+		damage.Amount,
+		damage.Type)
 	if defender.IsDead() {
 		events.CharacterDeath.Emit(events.CharacterDeathPayload{
 			Character: defender,
