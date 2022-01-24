@@ -40,14 +40,22 @@ func CalculateHitDamage(attacker *world.Character, defender *world.Character) Da
 func DoAttack(world *world.World, attacker *world.Character, defender *world.Character) {
 	damage := CalculateHitDamage(attacker, defender)
 	defender.Health.Current -= damage.Amount
-	attacker.Showln("You do %d %s damage to %s.",
+	highlight := "white"
+	if damage.Critical {
+		highlight = "orange_3"
+	}
+
+	attacker.Showln("You do <%s>%d<reset> %s damage to %s.",
+		highlight,
 		damage.Amount,
 		damage.Type,
 		defender.Name)
-	defender.Showln("%s does %d %s damage to you.",
+	defender.Showln("%s does <%s>%d<reset> %s damage to you.",
 		attacker.Name,
+		highlight,
 		damage.Amount,
 		damage.Type)
+
 	if defender.IsDead() {
 		events.CharacterDeath.Emit(events.CharacterDeathPayload{
 			Character: defender,
