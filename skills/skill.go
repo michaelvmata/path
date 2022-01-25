@@ -11,6 +11,8 @@ type Skills struct {
 	Dagger stats.Stat
 	Sword  stats.Stat
 	Spear  stats.Stat
+
+	Haste stats.Stat
 }
 
 func (s *Skills) Describe() string {
@@ -27,5 +29,7 @@ func NewSkills() Skills {
 		Dagger: stats.NewStat(0, 0),
 		Sword:  stats.NewStat(0, 0),
 		Spear:  stats.NewStat(0, 0),
+
+		Haste: stats.NewStat(0, 0),
 	}
 }
