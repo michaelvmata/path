@@ -10,6 +10,10 @@ type Stat struct {
 	Modifier int
 }
 
+func (s Stat) IsAvailable() bool {
+	return s.Base > 0
+}
+
 func NewStat(base int, modifier int) Stat {
 	return Stat{
 		Base:     base,

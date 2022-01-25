@@ -19,7 +19,12 @@ func TestHasteCommand(t *testing.T) {
 	ctx := Context{Player: player}
 	h := Haste{}
 	h.Execute(ctx)
-	if len(player.Buffs) < 1 {
+	if len(player.Buffs) > 1 || player.Skills.Haste.IsAvailable() {
+		t.Fatalf("Haste command applied without investing.")
+	}
+	player.Skills.Haste.Increment()
+	h.Execute(ctx)
+	if len(player.Buffs) < 1 || !player.Skills.Haste.IsAvailable() {
 		t.Fatalf("Haste command didn't apply haste.")
 	}
 	h.Execute(ctx)

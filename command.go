@@ -133,8 +133,12 @@ func (g Get) Label() string {
 type Haste struct{}
 
 func (h Haste) Execute(ctx Context) {
-	buff := buffs.NewHaste(1)
 	player := ctx.Player
+	if !player.Skills.Haste.IsAvailable() {
+		player.Showln("You fail to move with haste.")
+		return
+	}
+	buff := buffs.NewHaste(1)
 	player.Apply(buff)
 }
 
@@ -182,6 +186,7 @@ func (i Invest) Execute(ctx Context) {
 	}
 	keyword := strings.ToLower(parts[1])
 	core := &player.Core
+	skills := &player.Skills
 	switch keyword {
 	case "power":
 		if spendEssence(player, core.Power.Base) {
@@ -202,6 +207,11 @@ func (i Invest) Execute(ctx Context) {
 		if spendEssence(player, core.Will.Base) {
 			core.Will.Increment()
 			player.Showln("Reality itself warps before you.")
+		}
+	case "haste":
+		if spendEssence(player, skills.Haste.Base) {
+			skills.Haste.Increment()
+			player.Showln("Your mastery of haste improves.")
 		}
 	default:
 		player.Showln("Invest what?")
