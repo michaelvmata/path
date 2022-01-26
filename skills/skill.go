@@ -20,6 +20,7 @@ func (s *Skills) Describe() string {
 		fmt.Sprintf("%s Dagger: %d", symbols.TRIANGULAR_BULLET, s.Dagger.Value()),
 		fmt.Sprintf("%s Sword: %d", symbols.TRIANGULAR_BULLET, s.Sword.Value()),
 		fmt.Sprintf("%s Spear: %d", symbols.TRIANGULAR_BULLET, s.Spear.Value()),
+		fmt.Sprintf("%s Haste: %d", symbols.TRIANGULAR_BULLET, s.Haste.Value()),
 	}
 	return strings.Join(parts, "\n")
 }
