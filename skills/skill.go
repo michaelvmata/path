@@ -15,7 +15,7 @@ type Skills struct {
 	Haste stats.Stat
 }
 
-func (s *Skills) Describe() string {
+func (s Skills) Describe() string {
 	parts := []string{
 		fmt.Sprintf("%s Dagger: %d", symbols.TRIANGULAR_BULLET, s.Dagger.Value()),
 		fmt.Sprintf("%s Sword: %d", symbols.TRIANGULAR_BULLET, s.Sword.Value()),
