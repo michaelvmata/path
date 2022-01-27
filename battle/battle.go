@@ -70,11 +70,11 @@ func DoAttack(world *world.World, attacker *world.Character, defender *world.Cha
 func NumberOfAttacks(character *world.Character) int {
 	attackNumber := 1
 	for _, buff := range character.Buffs {
-		if buff.Name() == buffs.HasteName && buff.IsExpired() == false {
+		if buffHaste, ok := buff.(*buffs.Haste); ok && !buff.IsExpired() {
 			upkeep := buff.Upkeep()
 			if character.Spirit.IsAvailable(upkeep) {
 				character.Spirit.Consume(upkeep)
-				attackNumber++
+				attackNumber += buffHaste.NumberOfAttacks()
 			} else {
 				buff.Expire()
 			}

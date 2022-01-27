@@ -38,6 +38,10 @@ func (h Haste) Upkeep() int {
 	return h.Level
 }
 
+func (h Haste) NumberOfAttacks() int {
+	return h.Level
+}
+
 func NewHaste(level int) *Haste {
 	return &Haste{Lifetime: 60, Level: level}
 }

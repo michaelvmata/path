@@ -33,7 +33,7 @@ func TestCalculateHitDamage(t *testing.T) {
 func TestNumberOfAttacks(t *testing.T) {
 	character := world.NewPlayer("Test UUID", "Test Handle")
 
-	buff := buffs.NewHaste(10)
+	buff := buffs.NewHaste(1)
 	character.Core.Will.Modify(buff.Upkeep())
 	character.Spirit.Maximum = buff.Upkeep()
 	character.Spirit.Current = buff.Upkeep()
