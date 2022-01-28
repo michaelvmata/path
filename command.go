@@ -208,6 +208,16 @@ func (i Invest) Execute(ctx Context) {
 			core.Will.Increment()
 			player.Showln("Reality itself warps before you.")
 		}
+	case "evasion":
+		if spendEssence(player, skills.Evasion.Base) {
+			skills.Evasion.Increment()
+			player.Showln("You'll evade more alacrity.")
+		}
+	case "parry":
+		if spendEssence(player, skills.Parry.Base) {
+			skills.Parry.Increment()
+			player.Showln("You'll parry with ease.")
+		}
 	case "haste":
 		if spendEssence(player, skills.Haste.Base) {
 			skills.Haste.Increment()
