@@ -37,6 +37,15 @@ func CalculateHitDamage(attacker *world.Character, defender *world.Character) Da
 	return damage
 }
 
+func ShouldEvade(defender *world.Character) bool {
+	evasionLevel := defender.Skills.Evasion.Value()
+	if evasionLevel <= 0 {
+		return false
+	}
+	evasionRate := float64(evasionLevel)*.01 + float64(defender.Core.Agility.Value())*.01
+	return rand.Float64() <= evasionRate
+}
+
 func DoAttack(world *world.World, attacker *world.Character, defender *world.Character) {
 	damage := CalculateHitDamage(attacker, defender)
 	defender.Health.Current -= damage.Amount

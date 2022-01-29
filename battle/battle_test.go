@@ -42,3 +42,16 @@ func TestNumberOfAttacks(t *testing.T) {
 		t.Fatalf("Haste didn't increase number of attacks")
 	}
 }
+
+func TestShouldEvade(t *testing.T) {
+	character := world.NewPlayer("Test UUID", "Test Handle")
+	character.Core.Agility.Increment()
+	if ShouldEvade(character) {
+		t.Fatalf("Character evaded without skill")
+	}
+	character.Skills.Evasion.Modifier = 100
+	if !ShouldEvade(character) {
+		t.Fatalf("Character with 100 evasion failed to evade")
+	}
+
+}
