@@ -46,6 +46,11 @@ func ShouldEvade(defender *world.Character) bool {
 	return rand.Float64() <= evasionRate
 }
 
+func DoEvade(attacker *world.Character, defender *world.Character) {
+	attacker.Showln("%s evades you.", defender.Name)
+	defender.Showln("You evade %s.", attacker.Name)
+}
+
 func DoAttack(world *world.World, attacker *world.Character, defender *world.Character) {
 	damage := CalculateHitDamage(attacker, defender)
 	defender.Health.Current -= damage.Amount
@@ -105,7 +110,11 @@ func Round(w *world.World, fighting map[string]*world.Character, attacker *world
 			defender.Showln("")
 		}
 		for i := 1; i <= NumberOfAttacks(attacker); i++ {
-			DoAttack(w, attacker, defender)
+			if ShouldEvade(defender) {
+				DoEvade(attacker, defender)
+			} else {
+				DoAttack(w, attacker, defender)
+			}
 		}
 		fighting[attacker.UUID] = attacker
 		fighting[defender.UUID] = defender
