@@ -44,7 +44,8 @@ type Character struct {
 
 	Attacking map[string]*Character
 
-	Buffs []Buff
+	Buffs   []Buff
+	Stunned int
 }
 
 func (c *Character) CreditEssence(amount int) {
@@ -80,6 +81,20 @@ func (c *Character) UnapplyExpiredBuffs() {
 		c.ShowNewline()
 		c.ShowPrompt()
 	}
+}
+
+func (c *Character) Stun(length int) {
+	c.Stunned += length
+}
+
+func (c *Character) ReduceStun() {
+	if c.Stunned > 0 {
+		c.Stunned--
+	}
+}
+
+func (c Character) IsStunned() bool {
+	return c.Stunned > 0
 }
 
 func (c Character) Weapon() *item.Weapon {
@@ -266,6 +281,7 @@ func (c *Character) Update(tick int) {
 			buff.Update(tick)
 		}
 		c.UnapplyExpiredBuffs()
+		c.ReduceStun()
 	}
 }
 

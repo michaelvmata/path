@@ -33,7 +33,7 @@ MainLoop:
 				done <- true
 				break MainLoop
 			}
-			command := determineCommand(text)
+			command := determineCommand(text, ctx)
 			player.Update(0)
 			ctx.Raw = text
 			command.Execute(ctx)

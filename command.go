@@ -290,6 +290,16 @@ func (sc Score) Label() string {
 	return "score"
 }
 
+type StunLocked struct{}
+
+func (s StunLocked) Execute(ctx Context) {
+	ctx.Player.Showln("You are too stunned.")
+}
+
+func (s StunLocked) Label() string {
+	return ""
+}
+
 type Typo struct{}
 
 func (t Typo) Execute(ctx Context) {
@@ -374,7 +384,10 @@ func buildCommands() map[string]Executor {
 	return aliases
 }
 
-func determineCommand(raw string) Executor {
+func determineCommand(raw string, ctx Context) Executor {
+	if ctx.Player.IsStunned() {
+		return StunLocked{}
+	}
 	rawCmd := strings.SplitN(raw, " ", 2)[0]
 	command, ok := commands[rawCmd]
 	if !ok {
