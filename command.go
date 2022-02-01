@@ -42,6 +42,33 @@ func (a Attack) Label() string {
 	return "attack"
 }
 
+type Bash struct{}
+
+func (b Bash) Execute(ctx Context) {
+	attacker := ctx.Player
+	parts := strings.SplitN(ctx.Raw, " ", 2)
+	if len(parts) == 1 {
+		attacker.Showln("Bash who?")
+		return
+	}
+	handle := parts[1]
+	index := attacker.Room.IndexOfPlayerHandle(handle)
+	if index == -1 {
+		attacker.Showln("You don't see '%s'.", handle)
+		return
+	}
+	defender := attacker.Room.Players[index]
+	attacker.StartAttacking(defender)
+	attacker.Showln("You bash %s.", defender.Name)
+	defender.StartAttacking(attacker)
+	defender.Showln("%s bashes you.", attacker.Name)
+	defender.Stun(1)
+}
+
+func (b Bash) Label() string {
+	return "bash"
+}
+
 type Drop struct{}
 
 func (d Drop) Execute(ctx Context) {
@@ -361,6 +388,7 @@ var commands = buildCommands()
 func buildCommands() map[string]Executor {
 	commands := []Executor{
 		Attack{},
+		Bash{},
 		Drop{},
 		Gear{},
 		Get{},
