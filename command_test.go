@@ -9,9 +9,27 @@ import (
 func TestDetermineCommand(t *testing.T) {
 	input := Noop{}.Label()
 	world := build()
-	c := determineCommand(input)
 	ctx := Context{World: world, Player: world.Players["gaigen"], Raw: input}
+	c := determineCommand(input, ctx)
 	c.Execute(ctx)
+}
+
+func TestBashCommand(t *testing.T) {
+	world := build()
+	world.SpawnMobiles()
+
+	// Missing target
+	ctx := Context{World: world, Player: world.Players["gaigen"], Raw: "bash target"}
+	b := Bash{}
+	b.Execute(ctx)
+
+	// No taret
+	ctx.Raw = "bash"
+	b.Execute(ctx)
+
+	// Happy case
+	ctx.Raw = "bash dummy"
+	b.Execute(ctx)
 }
 
 func TestHasteCommand(t *testing.T) {
