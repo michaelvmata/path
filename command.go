@@ -52,6 +52,11 @@ func (b Bash) Execute(ctx Context) {
 		return
 
 	}
+	if !attacker.Spirit.IsAvailable(level) {
+		attacker.Showln("You're spirit isn't strong enough.")
+		return
+	}
+	attacker.Spirit.Consume(level)
 	parts := strings.SplitN(ctx.Raw, " ", 2)
 	if len(parts) == 1 {
 		attacker.Showln("Bash who?")
