@@ -15,6 +15,7 @@ type Skills struct {
 	Evasion stats.Stat
 	Parry   stats.Stat
 
+	Bash  stats.Stat
 	Haste stats.Stat
 }
 

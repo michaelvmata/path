@@ -46,6 +46,12 @@ type Bash struct{}
 
 func (b Bash) Execute(ctx Context) {
 	attacker := ctx.Player
+	level := attacker.Skills.Bash.Value()
+	if level <= 0 {
+		attacker.Showln("You try and fail.")
+		return
+
+	}
 	parts := strings.SplitN(ctx.Raw, " ", 2)
 	if len(parts) == 1 {
 		attacker.Showln("Bash who?")
@@ -244,6 +250,11 @@ func (i Invest) Execute(ctx Context) {
 		if spendEssence(player, skills.Parry.Base) {
 			skills.Parry.Increment()
 			player.Showln("You'll parry with ease.")
+		}
+	case "bash":
+		if spendEssence(player, skills.Bash.Base) {
+			skills.Bash.Increment()
+			player.Showln("Your mastery of bash improves.")
 		}
 	case "haste":
 		if spendEssence(player, skills.Haste.Base) {
