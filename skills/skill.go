@@ -43,3 +43,20 @@ func NewSkills() Skills {
 		Haste: stats.NewStat(0, 0),
 	}
 }
+
+type CoolDown struct {
+	Duration int
+	Skill    string
+}
+
+func (cd CoolDown) IsExpired() bool {
+	return cd.Duration <= 0
+}
+
+func (cd *CoolDown) Increase(amount int) {
+	cd.Duration += amount
+}
+
+func (cd *CoolDown) Update() {
+	cd.Duration--
+}
