@@ -23,6 +23,11 @@ type Buff interface {
 	Upkeep() int
 }
 
+type CoolDown interface {
+	Update(int)
+	IsExpired() bool
+}
+
 type Character struct {
 	UUID    string
 	Name    string
@@ -44,7 +49,9 @@ type Character struct {
 
 	Attacking map[string]*Character
 
-	Buffs   []Buff
+	Buffs     []Buff
+	CoolDowns []CoolDown
+
 	Stunned int
 }
 

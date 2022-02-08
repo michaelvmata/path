@@ -3,23 +3,12 @@ package buffs
 var HasteName = "haste"
 
 type Haste struct {
-	Level    int
-	Lifetime int
+	CoolDown
+	Level int
 }
 
 func (h Haste) Name() string {
 	return HasteName
-}
-
-func (h *Haste) Update(tick int) {
-	h.Lifetime--
-}
-
-func (h *Haste) Expire() {
-	h.Lifetime = 0
-}
-func (h Haste) IsExpired() bool {
-	return h.Lifetime <= 0
 }
 
 func (h Haste) ApplyMessage() string {
@@ -43,5 +32,5 @@ func (h Haste) NumberOfAttacks() int {
 }
 
 func NewHaste(level int) *Haste {
-	return &Haste{Lifetime: 60, Level: level}
+	return &Haste{CoolDown: CoolDown{Lifetime: 60}, Level: level}
 }
