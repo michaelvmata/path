@@ -2,6 +2,11 @@ package buffs
 
 type CoolDown struct {
 	Lifetime int
+	name     string
+}
+
+func (cd CoolDown) Name() string {
+	return cd.name
 }
 
 func (cd *CoolDown) Update(tick int) {
@@ -14,4 +19,11 @@ func (cd *CoolDown) Expire() {
 
 func (cd CoolDown) IsExpired() bool {
 	return cd.Lifetime <= 0
+}
+
+func NewCoolDown(lifetime int, name string) CoolDown {
+	return CoolDown{
+		Lifetime: lifetime,
+		name:     name,
+	}
 }

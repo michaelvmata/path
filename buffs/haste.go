@@ -7,10 +7,6 @@ type Haste struct {
 	Level int
 }
 
-func (h Haste) Name() string {
-	return HasteName
-}
-
 func (h Haste) ApplyMessage() string {
 	return "The world slows perceptibly."
 }
@@ -32,5 +28,5 @@ func (h Haste) NumberOfAttacks() int {
 }
 
 func NewHaste(level int) *Haste {
-	return &Haste{CoolDown: CoolDown{Lifetime: 60}, Level: level}
+	return &Haste{CoolDown: NewCoolDown(60, HasteName), Level: level}
 }
