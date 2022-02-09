@@ -113,6 +113,15 @@ func (c *Character) UnapplyExpiredCoolDowns() {
 	c.CoolDowns = coolDowns
 }
 
+func (c Character) OnCoolDown(name string) bool {
+	for _, cd := range c.CoolDowns {
+		if cd.Name() == name {
+			return true
+		}
+	}
+	return false
+}
+
 func (c *Character) Stun(length int) {
 	c.Stunned += length
 }

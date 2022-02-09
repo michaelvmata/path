@@ -56,6 +56,10 @@ func (b Bash) Execute(ctx Context) {
 		attacker.Showln("You're spirit isn't strong enough.")
 		return
 	}
+	if attacker.OnCoolDown("bash") {
+		attacker.Showln("It's on cool down.")
+		return
+	}
 	attacker.Spirit.Consume(level)
 	parts := strings.SplitN(ctx.Raw, " ", 2)
 	if len(parts) == 1 {
