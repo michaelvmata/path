@@ -74,6 +74,9 @@ func (b Bash) Execute(ctx Context) {
 	defender.StartAttacking(attacker)
 	defender.Showln("%s bashes you.", attacker.Name)
 	defender.Stun(1)
+
+	coolDown := buffs.NewCoolDown(9, "bash")
+	attacker.ApplyCoolDown(&coolDown)
 }
 
 func (b Bash) Label() string {

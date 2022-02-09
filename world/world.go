@@ -26,6 +26,7 @@ type Buff interface {
 type CoolDown interface {
 	Update(int)
 	IsExpired() bool
+	Name() string
 }
 
 type Character struct {
@@ -88,6 +89,28 @@ func (c *Character) UnapplyExpiredBuffs() {
 		c.ShowNewline()
 		c.ShowPrompt()
 	}
+}
+
+func (c *Character) ApplyCoolDown(coolDown CoolDown) {
+	for _, cd := range c.CoolDowns {
+		if cd.Name() == coolDown.Name() {
+			c.Showln("CoolDown already applied")
+			return
+		}
+	}
+	c.CoolDowns = append(c.CoolDowns, coolDown)
+}
+
+func (c *Character) UnapplyExpiredCoolDowns() {
+	coolDowns := make([]CoolDown, 0)
+	for _, cd := range c.CoolDowns {
+		if !cd.IsExpired() {
+			coolDowns = append(coolDowns, cd)
+		} else {
+			c.Showln("Removing cool down %s", cd.Name())
+		}
+	}
+	c.CoolDowns = coolDowns
 }
 
 func (c *Character) Stun(length int) {
@@ -288,6 +311,10 @@ func (c *Character) Update(tick int) {
 			buff.Update(tick)
 		}
 		c.UnapplyExpiredBuffs()
+		for _, cd := range c.CoolDowns {
+			cd.Update(tick)
+		}
+		c.UnapplyExpiredCoolDowns()
 		c.ReduceStun()
 	}
 }
