@@ -121,6 +121,14 @@ type RawPlayer struct {
 		MainHand string `json:"MainHand"`
 	} `json:"Gear"`
 	Inventory []string `json:"Inventory"`
+	Skills    struct {
+		Dagger  int `json:"Dagger"`
+		Evasion int `json:"Evasion"`
+		Haste   int `json:"Haste"`
+		Parry   int `json:"Parry"`
+		Spear   int `json:"Spear"`
+		Sword   int `json:"Sword"`
+	} `json:"Skills"`
 }
 
 func buildPlayers(w *world.World) {
@@ -211,6 +219,12 @@ func buildPlayers(w *world.World) {
 				c.Inventory.AddItem(i)
 			}
 		}
+		c.Skills.Dagger.Base = rp.Skills.Dagger
+		c.Skills.Evasion.Base = rp.Skills.Evasion
+		c.Skills.Haste.Base = rp.Skills.Haste
+		c.Skills.Parry.Base = rp.Skills.Parry
+		c.Skills.Spear.Base = rp.Skills.Spear
+		c.Skills.Sword.Base = rp.Skills.Sword
 		c.Update(0)
 		w.Players[c.Name] = c
 		if room, ok := w.Rooms[rp.RoomUUID]; ok {
