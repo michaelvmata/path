@@ -122,6 +122,7 @@ type RawPlayer struct {
 	} `json:"Gear"`
 	Inventory []string `json:"Inventory"`
 	Skills    struct {
+		Bash    int `json:"Bash"`
 		Dagger  int `json:"Dagger"`
 		Evasion int `json:"Evasion"`
 		Haste   int `json:"Haste"`
@@ -219,6 +220,7 @@ func buildPlayers(w *world.World) {
 				c.Inventory.AddItem(i)
 			}
 		}
+		c.Skills.Bash.Base = rp.Skills.Bash
 		c.Skills.Dagger.Base = rp.Skills.Dagger
 		c.Skills.Evasion.Base = rp.Skills.Evasion
 		c.Skills.Haste.Base = rp.Skills.Haste

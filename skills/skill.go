@@ -26,6 +26,7 @@ func (s Skills) Describe() string {
 		fmt.Sprintf("%s Spear: %d", symbols.TRIANGULAR_BULLET, s.Spear.Value()),
 		fmt.Sprintf("%s Evasion: %d", symbols.TRIANGULAR_BULLET, s.Evasion.Value()),
 		fmt.Sprintf("%s Parry: %d", symbols.TRIANGULAR_BULLET, s.Parry.Value()),
+		fmt.Sprintf("%s Bash: %d", symbols.TRIANGULAR_BULLET, s.Bash.Value()),
 		fmt.Sprintf("%s Haste: %d", symbols.TRIANGULAR_BULLET, s.Haste.Value()),
 	}
 	return strings.Join(parts, "\n")
@@ -40,6 +41,7 @@ func NewSkills() Skills {
 		Evasion: stats.NewStat(0, 0),
 		Parry:   stats.NewStat(0, 0),
 
+		Bash:  stats.NewStat(0, 0),
 		Haste: stats.NewStat(0, 0),
 	}
 }
