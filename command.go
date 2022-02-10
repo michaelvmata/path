@@ -432,6 +432,7 @@ func buildCommands() map[string]Executor {
 			aliases[alias] = command
 		}
 	}
+	aliases[Noop{}.Label()] = Noop{}
 	return aliases
 }
 
