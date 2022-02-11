@@ -23,12 +23,10 @@ func CalculateHitDamage(attacker *world.Character, defender *world.Character) Da
 	}
 
 	// Check if a critical hit
-	agilityDiff := float64(attacker.Core.Agility.Value() - defender.Core.Agility.Value())
-	criticalRate := weapon.CriticalRate + (agilityDiff * .01)
+	criticalRate := weapon.CriticalRate + (float64(attacker.Core.Agility.Value()) * .01)
 	if rand.Float64() <= criticalRate {
 		// Apply critical bonus
-		insightDiff := float64(attacker.Core.Insight.Value() - defender.Core.Insight.Value())
-		criticalBonus := weapon.CriticalBonus + (insightDiff * .01)
+		criticalBonus := weapon.CriticalBonus + (float64(attacker.Core.Insight.Value()) * .01)
 		damage.Amount = int(float64(damage.Amount) * (1.0 + criticalBonus))
 		damage.Critical = true
 	}
