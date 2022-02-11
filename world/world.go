@@ -312,7 +312,7 @@ func (c *Character) Update(tick int) {
 	c.Spirit.RecoverRate = c.Core.Will.Value()
 
 	if tick > 0 {
-		if tick%5 == 0 {
+		if tick%5 == 0 && !c.IsFighting() {
 			c.Health.Recover()
 			c.Spirit.Recover()
 		}
