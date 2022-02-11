@@ -153,6 +153,7 @@ func (c *Character) Clone(target Character) {
 	c.Name = target.Name
 	c.Room = nil
 	c.Session = nil
+	c.Essence = target.Essence
 
 	c.Core.Power.Base = target.Core.Power.Base
 	c.Core.Agility.Base = target.Core.Agility.Base

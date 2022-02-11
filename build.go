@@ -96,6 +96,7 @@ type RawPlayer struct {
 	UUID     string `json:"UUID"`
 	Name     string `json:"name"`
 	RoomUUID string `json:"roomUuid"`
+	Essence  int    `json:"Essence"`
 	Power    int    `json:"Power"`
 	Agility  int    `json:"Agility"`
 	Insight  int    `json:"Insight"`
@@ -147,6 +148,7 @@ func buildPlayers(w *world.World) {
 		}
 		c := world.NewPlayer(rp.UUID, rp.Name)
 
+		c.Essence = rp.Essence
 		c.Core.Power.Base = rp.Power
 		c.Core.Agility.Base = rp.Agility
 		c.Core.Insight.Base = rp.Insight
@@ -252,6 +254,7 @@ func buildMobiles(w *world.World) {
 		}
 		c := world.NewPlayer(rp.UUID, rp.Name)
 
+		c.Essence = rp.Essence
 		c.Core.Power.Base = rp.Power
 		c.Core.Agility.Base = rp.Agility
 		c.Core.Insight.Base = rp.Insight
