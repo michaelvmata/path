@@ -214,7 +214,7 @@ func spendEssence(p *world.Character, amount int) bool {
 		p.Showln("You need %d more essence.", cost-p.Essence)
 		return false
 	}
-	p.Essence -= cost
+	p.DebitEssence(cost)
 	return true
 }
 

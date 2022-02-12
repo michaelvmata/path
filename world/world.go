@@ -60,6 +60,10 @@ func (c *Character) CreditEssence(amount int) {
 	c.Essence += amount
 }
 
+func (c *Character) DebitEssence(amount int) {
+	c.Essence -= amount
+}
+
 func (c *Character) Apply(buff Buff) {
 	for _, b := range c.Buffs {
 		if b.Name() == buff.Name() {
