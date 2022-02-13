@@ -49,7 +49,7 @@ func DoEvade(attacker *world.Character, defender *world.Character) {
 	defender.Showln("You evade %s.", attacker.Name)
 }
 
-func DoAttack(world *world.World, attacker *world.Character, defender *world.Character) {
+func DoAttack(world *world.World, attacker *world.Character, defender *world.Character) bool {
 	damage := CalculateHitDamage(attacker, defender)
 	defender.Health.Current -= damage.Amount
 	highlight := "white"
@@ -68,7 +68,8 @@ func DoAttack(world *world.World, attacker *world.Character, defender *world.Cha
 		damage.Amount,
 		damage.Type)
 
-	if defender.IsDead() {
+	dead := defender.IsDead()
+	if dead {
 		events.CharacterDeath.Emit(events.CharacterDeathPayload{
 			Character: defender,
 			Killer:    attacker,
@@ -77,6 +78,7 @@ func DoAttack(world *world.World, attacker *world.Character, defender *world.Cha
 	}
 	attacker.Update(0)
 	defender.Update(0)
+	return dead
 }
 
 func NumberOfAttacks(character *world.Character) int {
@@ -111,7 +113,10 @@ func Round(w *world.World, fighting map[string]*world.Character, attacker *world
 			if ShouldEvade(defender) {
 				DoEvade(attacker, defender)
 			} else {
-				DoAttack(w, attacker, defender)
+				if DoAttack(w, attacker, defender) {
+					// Stop attacking after death
+					break
+				}
 			}
 		}
 		fighting[attacker.UUID] = attacker
