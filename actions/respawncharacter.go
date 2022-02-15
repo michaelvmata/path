@@ -13,7 +13,7 @@ func (rp RespawnCharacter) Handle(payload events.CharacterDeathPayload) {
 	char.Showln("You were defeated by %s.", payload.Killer.Name)
 	for _, c := range char.Room.Players {
 		if c == payload.Killer {
-			c.Showln("You defeated %s", char.Name)
+			c.Showln("Victory!  %s falls at your hand.", char.Name)
 		} else if c != char {
 			c.Showln("%s defeated %s", payload.Killer.Name, char.Name)
 		}
