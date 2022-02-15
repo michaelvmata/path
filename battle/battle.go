@@ -31,7 +31,7 @@ func CalculateHitDamage(attacker *world.Character, defender *world.Character) Da
 		damage.Critical = true
 	}
 
-	damage.Amount = damage.Amount + (10 * attacker.Core.Power.Value())
+	damage.Amount = damage.Amount + attacker.Core.Power.Value()
 	return damage
 }
 

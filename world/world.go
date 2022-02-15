@@ -145,8 +145,8 @@ func (c Character) Weapon() *item.Weapon {
 		return c.Gear.MainHand
 	}
 	hand := item.NewWeapon("Barehand", "Barehand", []string{}, item.Crush)
-	hand.MinimumDamage = 5
-	hand.MaximumDamage = 10
+	hand.MinimumDamage = 1
+	hand.MaximumDamage = 5
 	hand.CriticalBonus = 1
 	hand.CriticalRate = 0
 	return hand
