@@ -94,8 +94,8 @@ func buildRooms(w *world.World) {
 
 type RawPlayer struct {
 	UUID     string `json:"UUID"`
-	Name     string `json:"name"`
-	RoomUUID string `json:"roomUuid"`
+	Name     string `json:"Name"`
+	RoomUUID string `json:"RoomUUID"`
 	Essence  int    `json:"Essence"`
 	Power    int    `json:"Power"`
 	Agility  int    `json:"Agility"`
@@ -123,6 +123,7 @@ type RawPlayer struct {
 	} `json:"Gear"`
 	Inventory []string `json:"Inventory"`
 	Skills    struct {
+		Barrier int `json:"Barrier"`
 		Bash    int `json:"Bash"`
 		Dagger  int `json:"Dagger"`
 		Evasion int `json:"Evasion"`
@@ -223,6 +224,7 @@ func buildPlayers(w *world.World) {
 			}
 		}
 		c.Skills.Bash.Base = rp.Skills.Bash
+		c.Skills.Barrier.Base = rp.Skills.Barrier
 		c.Skills.Dagger.Base = rp.Skills.Dagger
 		c.Skills.Evasion.Base = rp.Skills.Evasion
 		c.Skills.Haste.Base = rp.Skills.Haste

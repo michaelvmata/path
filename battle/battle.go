@@ -32,6 +32,16 @@ func CalculateHitDamage(attacker *world.Character, defender *world.Character) Da
 	}
 
 	damage.Amount = damage.Amount + attacker.Core.Power.Value()
+
+	// Apply adjustments
+	for _, buff := range defender.Buffs {
+		if barrier, ok := buff.(*buffs.Barrier); ok && !buff.IsExpired() {
+			damage.Amount -= barrier.DamageReduction()
+		}
+	}
+	if damage.Amount < 0 {
+		damage.Amount = 0
+	}
 	return damage
 }
 

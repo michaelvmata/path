@@ -23,6 +23,10 @@ func (b Barrier) Upkeep() int {
 	return b.Level
 }
 
+func (b Barrier) DamageReduction() int {
+	return b.Level * 2
+}
+
 func NewBarrier(level int) *Barrier {
 	return &Barrier{CoolDown: NewCoolDown(60, BarrierName), Level: level}
 }

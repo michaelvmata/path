@@ -42,6 +42,22 @@ func (a Attack) Label() string {
 	return "attack"
 }
 
+type Barrier struct{}
+
+func (b Barrier) Execute(ctx Context) {
+	player := ctx.Player
+	if !player.Skills.Barrier.IsAvailable() {
+		player.Showln("You fail to form a barrier.")
+		return
+	}
+	buff := buffs.NewBarrier(player.Skills.Barrier.Value())
+	player.Apply(buff)
+}
+
+func (b Barrier) Label() string {
+	return "barrier"
+}
+
 type Bash struct{}
 
 func (b Bash) Execute(ctx Context) {
@@ -263,6 +279,11 @@ func (i Invest) Execute(ctx Context) {
 			skills.Parry.Increment()
 			player.Showln("You'll parry with ease.")
 		}
+	case "barrier":
+		if spendEssence(player, skills.Barrier.Base) {
+			skills.Barrier.Increment()
+			player.Showln("Your mastery of barrier improves.")
+		}
 	case "bash":
 		if spendEssence(player, skills.Bash.Base) {
 			skills.Bash.Increment()
@@ -411,6 +432,7 @@ var commands = buildCommands()
 func buildCommands() map[string]Executor {
 	commands := []Executor{
 		Attack{},
+		Barrier{},
 		Bash{},
 		Drop{},
 		Gear{},
