@@ -48,7 +48,7 @@ type Character struct {
 
 	Essence int
 
-	Attacking map[string]*Character
+	Attacking []*Character
 
 	Buffs     []Buff
 	CoolDowns []CoolDown
@@ -166,7 +166,7 @@ func (c *Character) Clone(target Character) {
 
 	c.Gear = item.NewGear()
 	c.Inventory = item.NewContainer(10)
-	c.Attacking = make(map[string]*Character)
+	c.Attacking = make([]*Character, 0)
 }
 
 func NewPlayer(UUID string, handle string) *Character {
@@ -185,7 +185,7 @@ func NewPlayer(UUID string, handle string) *Character {
 		Gear:      item.NewGear(),
 		Inventory: item.NewContainer(10),
 
-		Attacking: make(map[string]*Character),
+		Attacking: make([]*Character, 0),
 	}
 }
 
@@ -210,16 +210,35 @@ func (c Character) HasKeyword(target string) bool {
 }
 
 func (c *Character) StartAttacking(defender *Character) {
-	c.Attacking[defender.UUID] = defender
+	for _, target := range c.Attacking {
+		if target == defender {
+			return
+		}
+	}
+	c.Attacking = append(c.Attacking, defender)
 }
 
 func (c *Character) StopAttacking(defender *Character) {
-	delete(c.Attacking, defender.UUID)
+	index := -1
+	for i, target := range c.Attacking {
+		if target == defender {
+			index = i
+			break
+		}
+	}
+	if index == -1 {
+		return
+	}
+	c.Attacking = append(c.Attacking[:index], c.Attacking[index+1:]...)
 }
 
 func (c Character) IsAttacking(defender *Character) bool {
-	_, ok := c.Attacking[defender.UUID]
-	return ok
+	for _, target := range c.Attacking {
+		if target == defender {
+			return true
+		}
+	}
+	return false
 }
 
 func (c Character) IsFighting() bool {
