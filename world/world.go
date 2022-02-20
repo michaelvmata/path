@@ -197,6 +197,12 @@ func (c Character) ShowPrompt() {
 		c.Health.Current, symbols.HEART,
 		c.Spirit.Current, symbols.TWELVE_STAR,
 		border)
+	if !c.IsFighting() {
+		return
+	}
+	target := c.Attacking[0]
+	health := int((float64(target.Health.Current) / float64(target.Health.Maximum)) * 100)
+	c.Show("%s <blue>%d%s %s", target.Name, health, symbols.CIRCLED_BULLET, border)
 }
 
 func (c Character) HasKeyword(target string) bool {
