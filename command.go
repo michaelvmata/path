@@ -69,7 +69,7 @@ func (b Bash) Execute(ctx Context) {
 
 	}
 	if !attacker.Spirit.IsAvailable(level) {
-		attacker.Showln("You're spirit isn't strong enough.")
+		attacker.Showln("Your spirit isn't strong enough.")
 		return
 	}
 	if attacker.OnCoolDown("bash") {
