@@ -16,4 +16,7 @@ func TestBarrier(t *testing.T) {
 	if b.Upkeep() <= 0 {
 		t.Fatalf("Barrier upkeep not set")
 	}
+	if b.DamageReduction() == 0 {
+		t.Fatalf("Barrier damage reduction is 0")
+	}
 }
