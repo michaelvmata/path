@@ -144,6 +144,7 @@ func Simulate(w *world.World) {
 		Round(w, fighting, attacker)
 	}
 	for _, p := range fighting {
+		p.ShowNewline()
 		p.ShowPrompt()
 	}
 }
