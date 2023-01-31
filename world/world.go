@@ -140,6 +140,21 @@ func (c *Character) ReduceStun() {
 	}
 }
 
+func (c *Character) Aggro() {
+	if c.IsFighting() || c.IsPlayer || !c.IsAggressive {
+		return
+	}
+	for _, candidate := range c.Room.Players {
+		if candidate.IsPlayer {
+			candidate.Showln("%s screams, \"This is SPARTA!\"", c.Name)
+			c.StartAttacking(candidate)
+			candidate.StartAttacking(c)
+			break
+		}
+	}
+
+}
+
 func (c Character) IsStunned() bool {
 	return c.Stunned > 0
 }
@@ -366,6 +381,7 @@ func (c *Character) Update(tick int) {
 		}
 		c.UnapplyExpiredCoolDowns()
 		c.ReduceStun()
+		c.Aggro()
 	}
 }
 
@@ -594,6 +610,9 @@ func (w *World) Update() {
 	w.Ticks++
 	for _, player := range w.Players {
 		player.Update(w.Ticks)
+	}
+	for _, mobile := range w.Mobiles.Instances {
+		mobile.Update(w.Ticks)
 	}
 	if w.IsSpawnTick() {
 		w.SpawnMobiles()
