@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/world"
-	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -28,7 +28,7 @@ type RawItem struct {
 
 func buildItems(w *world.World) {
 	itemFilePath := "data/item.jsonl"
-	data, err := ioutil.ReadFile(itemFilePath)
+	data, err := os.ReadFile(itemFilePath)
 	if err != nil {
 		log.Fatalf("Error opening room %s", itemFilePath)
 	}
@@ -73,7 +73,7 @@ type RawRoom struct {
 
 func buildRooms(w *world.World) {
 	roomFilePath := "data/room.jsonl"
-	data, err := ioutil.ReadFile(roomFilePath)
+	data, err := os.ReadFile(roomFilePath)
 	if err != nil {
 		log.Fatalf("Error opening room %s", roomFilePath)
 	}
@@ -136,7 +136,7 @@ type RawPlayer struct {
 
 func buildPlayers(w *world.World) {
 	playerFilePath := "data/player.jsonl"
-	data, err := ioutil.ReadFile(playerFilePath)
+	data, err := os.ReadFile(playerFilePath)
 	if err != nil {
 		log.Fatalf("Error opening players %s", playerFilePath)
 	}
@@ -243,7 +243,7 @@ func buildPlayers(w *world.World) {
 
 func buildMobiles(w *world.World) {
 	mobileFilePath := "data/mobile.jsonl"
-	data, err := ioutil.ReadFile(mobileFilePath)
+	data, err := os.ReadFile(mobileFilePath)
 	if err != nil {
 		log.Fatalf("Error opening mobile %s", mobileFilePath)
 	}
