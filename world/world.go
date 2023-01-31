@@ -168,6 +168,9 @@ func (c *Character) Clone(target Character) {
 	c.Core.Insight.Base = target.Core.Insight.Base
 	c.Core.Will.Base = target.Core.Will.Base
 
+	c.IsAggressive = target.IsAggressive
+	c.IsSocial = target.IsSocial
+
 	c.Gear = item.NewGear()
 	c.Inventory = item.NewContainer(10)
 	c.Attacking = make([]*Character, 0)
