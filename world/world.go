@@ -528,6 +528,7 @@ func (m *Mobiles) AddPrototype(p Character) {
 func (m *Mobiles) Spawn(UUID string) *Character {
 	prototype := m.Prototypes[UUID]
 	mobile := NewPlayer(UUID, prototype.Name)
+	mobile.IsPlayer = false
 	mobile.Clone(prototype)
 	m.Instances = append(m.Instances, mobile)
 	return mobile
