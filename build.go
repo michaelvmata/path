@@ -107,7 +107,9 @@ type RawPlayer struct {
 	Spirit struct {
 		Current int `json:"Current"`
 	} `json:"Spirit"`
-	Gear struct {
+	IsAggressive bool `json:"IsAggressive"`
+	IsSocial     bool `json:"IsSocial"`
+	Gear         struct {
 		Head     string `json:"Head"`
 		Neck     string `json:"Neck"`
 		Body     string `json:"Body"`
@@ -330,6 +332,11 @@ func buildMobiles(w *world.World) {
 				c.Inventory.AddItem(i)
 			}
 		}
+
+		c.IsPlayer = false
+		c.IsAggressive = rp.IsAggressive
+		c.IsSocial = rp.IsSocial
+
 		c.Update(0)
 		w.Mobiles.AddPrototype(*c)
 	}

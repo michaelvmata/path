@@ -53,6 +53,10 @@ type Character struct {
 	Buffs     []Buff
 	CoolDowns []CoolDown
 
+	IsAggressive bool
+	IsSocial     bool
+	IsPlayer     bool
+
 	Stunned int
 }
 
@@ -186,6 +190,10 @@ func NewPlayer(UUID string, handle string) *Character {
 		Inventory: item.NewContainer(10),
 
 		Attacking: make([]*Character, 0),
+
+		IsAggressive: false,
+		IsSocial:     false,
+		IsPlayer:     true,
 	}
 }
 
