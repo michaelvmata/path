@@ -73,7 +73,7 @@ func (b Bash) Execute(ctx Context) {
 		return
 	}
 	if attacker.OnCoolDown("bash") {
-		attacker.Showln("It's on cool down.")
+		attacker.Showln("You need a moment before you can bash again.")
 		return
 	}
 	attacker.Spirit.Consume(level)
