@@ -59,8 +59,8 @@ func DoEvade(attacker *world.Character, defender *world.Character) {
 	defender.Showln("You evade %s.", attacker.Name)
 }
 
-func DoDamage(world *world.World, attacker *world.Character, defender *world.Character, damage Damage) bool {
-	defender.Health.Current -= damage.Amount
+func DoDamage(world *world.World, attacker *world.Character, defender *world.Character, amount int) bool {
+	defender.Health.Current -= amount
 	dead := defender.IsDead()
 	if dead {
 		events.CharacterDeath.Emit(events.CharacterDeathPayload{
@@ -92,7 +92,7 @@ func DoAttack(world *world.World, attacker *world.Character, defender *world.Cha
 		damage.Amount,
 		damage.Type)
 
-	return DoDamage(world, attacker, defender, damage)
+	return DoDamage(world, attacker, defender, damage.Amount)
 }
 
 func NumberOfAttacks(character *world.Character) int {
