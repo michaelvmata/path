@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/michaelvmata/path/battle"
 	"github.com/michaelvmata/path/buffs"
 	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/symbols"
@@ -90,10 +91,11 @@ func (b Bash) Execute(ctx Context) {
 	}
 	defender := attacker.Room.Players[index]
 	attacker.StartAttacking(defender)
-	attacker.Showln("You bash %s.", defender.Name)
+	attacker.Showln("You bash %s for %d damage.", defender.Name, level)
 	defender.StartAttacking(attacker)
-	defender.Showln("%s bashes you.", attacker.Name)
+	defender.Showln("%s bashes you for %d damage.", attacker.Name, level)
 	defender.Stun(1)
+	battle.DoDamage(ctx.World, attacker, defender, level)
 
 	coolDown := buffs.NewCoolDown(9, "bash")
 	attacker.ApplyCoolDown(&coolDown)
