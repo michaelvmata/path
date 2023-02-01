@@ -59,9 +59,23 @@ func DoEvade(attacker *world.Character, defender *world.Character) {
 	defender.Showln("You evade %s.", attacker.Name)
 }
 
+func DoDamage(world *world.World, attacker *world.Character, defender *world.Character, damage Damage) bool {
+	defender.Health.Current -= damage.Amount
+	dead := defender.IsDead()
+	if dead {
+		events.CharacterDeath.Emit(events.CharacterDeathPayload{
+			Character: defender,
+			Killer:    attacker,
+			World:     world,
+		})
+	}
+	attacker.Update(0)
+	defender.Update(0)
+	return dead
+}
+
 func DoAttack(world *world.World, attacker *world.Character, defender *world.Character) bool {
 	damage := CalculateHitDamage(attacker, defender)
-	defender.Health.Current -= damage.Amount
 	highlight := "white"
 	if damage.Critical {
 		highlight = "orange_3"
@@ -78,17 +92,7 @@ func DoAttack(world *world.World, attacker *world.Character, defender *world.Cha
 		damage.Amount,
 		damage.Type)
 
-	dead := defender.IsDead()
-	if dead {
-		events.CharacterDeath.Emit(events.CharacterDeathPayload{
-			Character: defender,
-			Killer:    attacker,
-			World:     world,
-		})
-	}
-	attacker.Update(0)
-	defender.Update(0)
-	return dead
+	return DoDamage(world, attacker, defender, damage)
 }
 
 func NumberOfAttacks(character *world.Character) int {
