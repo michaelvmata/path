@@ -148,10 +148,16 @@ func (c *Character) Aggro() {
 		if candidate.IsPlayer {
 			c.StartAttacking(candidate)
 			candidate.StartAttacking(c)
+
 			candidate.ShowNewline()
 			candidate.Showln("%s screams, \"This is SPARTA!\"", c.Name)
 			candidate.ShowNewline()
 			candidate.ShowPrompt()
+
+			c.ShowNewline()
+			c.Showln("You scream, \"This is SPARTA!\"")
+			c.ShowNewline()
+			c.ShowPrompt()
 			break
 		}
 	}
