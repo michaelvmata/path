@@ -65,40 +65,52 @@ func (b Bash) Execute(ctx Context) {
 	attacker := ctx.Player
 	level := attacker.Skills.Bash.Value()
 	if level <= 0 {
-		attacker.Showln("You try and fail.")
+		attacker.Showln("You gotta learn how to bash first.")
 		return
-
 	}
 	if !attacker.Spirit.IsAvailable(level) {
-		attacker.Showln("Your spirit isn't strong enough.")
+		attacker.Showln("Your spirit isn't strong enough to bash.")
 		return
 	}
 	if attacker.OnCoolDown("bash") {
 		attacker.Showln("You need a moment before you can bash again.")
 		return
 	}
-	attacker.Spirit.Consume(level)
-	parts := strings.SplitN(ctx.Raw, " ", 2)
-	if len(parts) == 1 {
+	defender := b.FindTarget(attacker, ctx.Raw)
+	if defender == nil {
 		attacker.Showln("Bash who?")
 		return
+	}
+	attacker.Spirit.Consume(level)
+	attacker.StartAttacking(defender)
+
+	amount := b.CalculateDamage(level)
+	attacker.Showln("You bash %s for %d damage.", defender.Name, amount)
+	defender.StartAttacking(attacker)
+	defender.Showln("%s bashes you for %d damage.", attacker.Name, amount)
+	defender.Stun(1)
+
+	battle.DoDamage(ctx.World, attacker, defender, amount)
+
+	coolDown := buffs.NewCoolDown(9, "bash")
+	attacker.ApplyCoolDown(&coolDown)
+}
+
+func (b Bash) FindTarget(attacker *world.Character, command string) *world.Character {
+	parts := strings.SplitN(command, " ", 2)
+	if len(parts) == 1 {
+		return attacker.ImmediateDefender()
 	}
 	handle := parts[1]
 	index := attacker.Room.IndexOfPlayerHandle(handle)
 	if index == -1 {
-		attacker.Showln("You don't see '%s'.", handle)
-		return
+		return nil
 	}
-	defender := attacker.Room.Players[index]
-	attacker.StartAttacking(defender)
-	attacker.Showln("You bash %s for %d damage.", defender.Name, level)
-	defender.StartAttacking(attacker)
-	defender.Showln("%s bashes you for %d damage.", attacker.Name, level)
-	defender.Stun(1)
-	battle.DoDamage(ctx.World, attacker, defender, level)
+	return attacker.Room.Players[index]
+}
 
-	coolDown := buffs.NewCoolDown(9, "bash")
-	attacker.ApplyCoolDown(&coolDown)
+func (b Bash) CalculateDamage(level int) int {
+	return 10 + (level * 2)
 }
 
 func (b Bash) Label() string {
