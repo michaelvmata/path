@@ -224,6 +224,13 @@ func NewPlayer(UUID string, handle string) *Character {
 	}
 }
 
+func (c Character) ImmediateDefender() *Character {
+	if !c.IsFighting() {
+		return nil
+	}
+	return c.Attacking[0]
+}
+
 func (c Character) ShowPrompt() {
 	border := "<grey_62>>> "
 	c.Show("%s%s <red>%d%s <green>%d%s %s",
@@ -235,7 +242,7 @@ func (c Character) ShowPrompt() {
 	if !c.IsFighting() {
 		return
 	}
-	target := c.Attacking[0]
+	target := c.ImmediateDefender()
 	health := int((float64(target.Health.Current) / float64(target.Health.Maximum)) * 100)
 	c.Show("%s <blue>%d%s %s", target.Name, health, symbols.CIRCLED_BULLET, border)
 }
