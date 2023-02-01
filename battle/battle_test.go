@@ -15,7 +15,10 @@ func TestCalculateHitDamage(t *testing.T) {
 	w.CriticalBonus = 0.0
 	w.CriticalRate = 0.0
 
-	attacker.Gear.Equip(w)
+	_, err := attacker.Gear.Equip(w)
+	if err != nil {
+		t.Fatalf("Unable to equip weapon")
+	}
 
 	defender := world.NewPlayer("TestUUID2", "Test Defender")
 
