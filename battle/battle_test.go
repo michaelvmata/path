@@ -46,7 +46,7 @@ func TestNumberOfAttacks(t *testing.T) {
 	}
 }
 
-func TestShouldEvade(t *testing.T) {
+func TestEvade(t *testing.T) {
 	character := world.NewPlayer("Test UUID", "Test Handle")
 	character.Core.Agility.Increment()
 	if ShouldEvade(character) {
@@ -56,5 +56,10 @@ func TestShouldEvade(t *testing.T) {
 	if !ShouldEvade(character) {
 		t.Fatalf("Character with 100 evasion failed to evade")
 	}
+	DoEvade(character, character)
+}
 
+func TestDoDamage(t *testing.T) {
+	character := world.NewPlayer("Test UUID", "Test Handle")
+	DoDamage(nil, character, character, 1)
 }
