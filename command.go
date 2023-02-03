@@ -8,6 +8,7 @@ import (
 	"github.com/michaelvmata/path/symbols"
 	"github.com/michaelvmata/path/world"
 	"math"
+	"sort"
 	"strings"
 )
 
@@ -436,6 +437,27 @@ func (wr Wear) Label() string {
 	return "wear"
 }
 
+type Help struct{}
+
+func (h Help) Execute(ctx Context) {
+	player := ctx.Player
+	aliases := make([]string, 0)
+	for alias, command := range commands {
+		if alias == command.Label() {
+			aliases = append(aliases, alias)
+		}
+	}
+	sort.Strings(aliases)
+	for _, alias := range aliases {
+		player.Showln(alias)
+	}
+	player.ShowNewline()
+}
+
+func (h Help) Label() string {
+	return "help"
+}
+
 type Executor interface {
 	Execute(ctx Context)
 	Label() string
@@ -452,6 +474,7 @@ func buildCommands() map[string]Executor {
 		Gear{},
 		Get{},
 		Haste{},
+		Help{},
 		Inventory{},
 		Invest{},
 		Look{},
