@@ -44,6 +44,9 @@ func TestNumberOfAttacks(t *testing.T) {
 	if NumberOfAttacks(character) != 2 {
 		t.Fatalf("Haste didn't increase number of attacks")
 	}
+	if NumberOfAttacks(character) != 1 {
+		t.Fatalf("Haste didn't expire")
+	}
 }
 
 func TestEvade(t *testing.T) {
