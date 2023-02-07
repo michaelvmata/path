@@ -9,6 +9,7 @@ import (
 	"github.com/michaelvmata/path/skills"
 	"github.com/michaelvmata/path/stats"
 	"github.com/michaelvmata/path/symbols"
+	"log"
 	"strings"
 )
 
@@ -161,7 +162,33 @@ func (c *Character) Aggro() {
 			break
 		}
 	}
+}
 
+func (c *Character) Social() {
+	if c.IsFighting() || c.IsPlayer || !c.IsSocial {
+		return
+	}
+	for _, candidate := range c.Room.Players {
+		if candidate.IsPlayer || !candidate.IsFighting() {
+			continue
+		}
+		target := candidate.ImmediateDefender()
+		if target == nil {
+			log.Fatalf("Mobile %s is fighting without a defender", candidate.Name)
+		}
+		c.StartAttacking(target)
+		target.StartAttacking(c)
+
+		c.ShowNewline()
+		c.Showln("You scream, \"And my AXE!\"")
+		c.ShowNewline()
+		c.ShowPrompt()
+
+		target.ShowNewline()
+		target.Showln("%s bellows, \"And my AXE!\"", c.Name)
+		target.ShowNewline()
+		target.ShowPrompt()
+	}
 }
 
 func (c Character) IsStunned() bool {
@@ -398,6 +425,7 @@ func (c *Character) Update(tick int) {
 		c.UnapplyExpiredCoolDowns()
 		c.ReduceStun()
 		c.Aggro()
+		c.Social()
 	}
 }
 
