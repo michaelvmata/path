@@ -146,21 +146,22 @@ func (c *Character) Aggro() {
 		return
 	}
 	for _, candidate := range c.Room.Players {
-		if candidate.IsPlayer {
-			c.StartAttacking(candidate)
-			candidate.StartAttacking(c)
-
-			candidate.ShowNewline()
-			candidate.Showln("%s screams, \"This is SPARTA!\"", c.Name)
-			candidate.ShowNewline()
-			candidate.ShowPrompt()
-
-			c.ShowNewline()
-			c.Showln("You scream, \"This is SPARTA!\"")
-			c.ShowNewline()
-			c.ShowPrompt()
-			break
+		if !candidate.IsPlayer {
+			continue
 		}
+		c.StartAttacking(candidate)
+		candidate.StartAttacking(c)
+
+		candidate.ShowNewline()
+		candidate.Showln("%s screams, \"This is SPARTA!\"", c.Name)
+		candidate.ShowNewline()
+		candidate.ShowPrompt()
+
+		c.ShowNewline()
+		c.Showln("You scream, \"This is SPARTA!\"")
+		c.ShowNewline()
+		c.ShowPrompt()
+		break
 	}
 }
 
