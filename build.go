@@ -64,8 +64,14 @@ type RawRoom struct {
 	UUID        string `json:"uuid"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	Size        int    `json:"size"`
-	Mobiles     []struct {
+	Exits       struct {
+		East  string `json:"east"`
+		North string `json:"north"`
+		South string `json:"south"`
+		West  string `json:"west"`
+	} `json:"exits"`
+	Size    int `json:"size"`
+	Mobiles []struct {
 		UUID  string `json:"UUID"`
 		Count int    `json:"count"`
 	} `json:"mobiles"`
@@ -89,6 +95,10 @@ func buildRooms(w *world.World) {
 		for _, mc := range rr.Mobiles {
 			w.RoomMobiles[room.UUID] = append(w.RoomMobiles[room.UUID], world.NewRoomMobile(mc.UUID, mc.Count))
 		}
+		room.Exits.East = rr.Exits.East
+		room.Exits.North = rr.Exits.North
+		room.Exits.South = rr.Exits.South
+		room.Exits.West = rr.Exits.West
 	}
 }
 

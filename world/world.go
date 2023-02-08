@@ -468,6 +468,13 @@ func NewRoomMobile(mobileUUID string, count int) RoomMobile {
 	}
 }
 
+type Exits struct {
+	East  string
+	North string
+	South string
+	West  string
+}
+
 type Room struct {
 	UUID        string
 	name        string
@@ -475,6 +482,7 @@ type Room struct {
 	Players     []*Character
 	Items       item.Container
 	Size        int
+	Exits       Exits
 }
 
 func NewRoom(uuid string, name string, description string, size int) *Room {
@@ -485,6 +493,7 @@ func NewRoom(uuid string, name string, description string, size int) *Room {
 		Size:        size,
 		Players:     make([]*Character, 0, size),
 		Items:       item.NewContainer(100),
+		Exits:       Exits{},
 	}
 	return &room
 }
@@ -495,6 +504,8 @@ func (r *Room) Describe(firstPerson *Character) string {
 	parts = append(parts, "")
 	parts = append(parts, r.description)
 	parts = append(parts, "")
+	parts = append(parts, fmt.Sprintf("[%s]", r.DescribeExits()))
+	parts = append(parts, "")
 	for _, i := range r.Items.Items {
 		parts = append(parts, i.Name())
 	}
@@ -504,6 +515,26 @@ func (r *Room) Describe(firstPerson *Character) string {
 		}
 	}
 	return strings.Join(parts, "\n")
+}
+
+func (r Room) DescribeExits() string {
+	parts := make([]string, 0)
+	if r.Exits.East != "" {
+		parts = append(parts, "east")
+	}
+	if r.Exits.North != "" {
+		parts = append(parts, "north")
+	}
+	if r.Exits.South != "" {
+		parts = append(parts, "south")
+	}
+	if r.Exits.West != "" {
+		parts = append(parts, "west")
+	}
+	if len(parts) == 0 {
+		parts = append(parts, "None")
+	}
+	return strings.Join(parts, ", ")
 }
 
 func (r *Room) Accept(i item.Item) error {
