@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/world"
+	"gopkg.in/yaml.v3"
 	"log"
 	"os"
 	"strings"
@@ -24,6 +25,29 @@ type RawItem struct {
 		Value int    `json:"Value"`
 	} `json:"Modifiers"`
 	Keywords []string `json:"Keywords"`
+}
+
+type RawArea struct {
+	Items []struct {
+		UUID      string `yaml:"UUID"`
+		Name      string `yaml:"Name"`
+		Type      string `yaml:"Type"`
+		Slot      string `yaml:"Slot"`
+		Modifiers []struct {
+			Type  string `yaml:"Type"`
+			Value int    `yaml:"Value"`
+		} `yaml:"Modifiers"`
+		Keywords []string `yaml:"Keywords"`
+	} `yaml:"Items"`
+}
+
+func buildArea(data []byte) RawArea {
+	ri2 := RawArea{}
+	err := yaml.Unmarshal(data, &ri2)
+	if err != nil {
+		log.Fatalf("error: %v", err)
+	}
+	return ri2
 }
 
 func buildItems(w *world.World) {

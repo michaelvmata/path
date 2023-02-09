@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -26,5 +28,20 @@ func TestBuild(t *testing.T) {
 		if player.Name == "" {
 			t.Fatalf("Player name empty")
 		}
+	}
+}
+
+func TestArea(t *testing.T) {
+	absPath, err := filepath.Abs("data/area.yaml")
+	if err != nil {
+		t.Fatalf("Test path error")
+	}
+	data, err := os.ReadFile(absPath)
+	if err != nil {
+		t.Fatalf("Error reading YAML items file")
+	}
+	area := buildArea(data)
+	if len(area.Items) == 0 {
+		t.Fatalf("Failed to parse items")
 	}
 }
