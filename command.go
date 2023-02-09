@@ -406,6 +406,98 @@ func (n Noop) Label() string {
 	return ""
 }
 
+type East struct{}
+
+func (e East) Execute(ctx Context) {
+	player := ctx.Player
+	roomUUID := player.Room.Exits.East
+	if roomUUID == "" {
+		player.Showln("You can't go east")
+		return
+	}
+	room, ok := ctx.World.Rooms[roomUUID]
+	if !ok {
+		player.Showln("You can't go east")
+		return
+	}
+	player.Room = room
+	player.Showln("You go east")
+	Look{}.Execute(ctx)
+}
+
+func (e East) Label() string {
+	return "east"
+}
+
+type North struct{}
+
+func (n North) Execute(ctx Context) {
+	player := ctx.Player
+	roomUUID := player.Room.Exits.North
+	if roomUUID == "" {
+		player.Showln("You can't go north")
+		return
+	}
+	room, ok := ctx.World.Rooms[roomUUID]
+	if !ok {
+		player.Showln("You can't go north")
+		return
+	}
+	player.Room = room
+	player.Showln("You go north")
+	Look{}.Execute(ctx)
+}
+
+func (n North) Label() string {
+	return "north"
+}
+
+type South struct{}
+
+func (s South) Execute(ctx Context) {
+	player := ctx.Player
+	roomUUID := player.Room.Exits.South
+	if roomUUID == "" {
+		player.Showln("You can't go south")
+		return
+	}
+	room, ok := ctx.World.Rooms[roomUUID]
+	if !ok {
+		player.Showln("You can't go south")
+		return
+	}
+	player.Room = room
+	player.Showln("You go south")
+	Look{}.Execute(ctx)
+}
+
+func (s South) Label() string {
+	return "south"
+}
+
+type West struct{}
+
+func (w West) Execute(ctx Context) {
+	player := ctx.Player
+	roomUUID := player.Room.Exits.West
+	if roomUUID == "" {
+		player.Showln("You can't go west")
+		return
+	}
+	room, ok := ctx.World.Rooms[roomUUID]
+	if !ok {
+		player.Showln("You can't go west")
+		return
+	}
+	player.Room = room
+	player.Showln("You go west")
+	Look{}.Execute(ctx)
+}
+
+func (w West) Label() string {
+	return "west"
+}
+
 type Wear struct{}
 
 func (wr Wear) Execute(ctx Context) {
@@ -471,6 +563,7 @@ func buildCommands() map[string]Executor {
 		Barrier{},
 		Bash{},
 		Drop{},
+		East{},
 		Gear{},
 		Get{},
 		Haste{},
@@ -479,10 +572,13 @@ func buildCommands() map[string]Executor {
 		Invest{},
 		Look{},
 		Noop{},
+		North{},
 		Remove{},
 		Score{},
+		South{},
 		Typo{},
 		Wear{},
+		West{},
 	}
 	aliases := make(map[string]Executor)
 	for _, command := range commands {
