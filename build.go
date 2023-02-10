@@ -27,27 +27,69 @@ type RawItem struct {
 	Keywords []string `json:"Keywords"`
 }
 
+type YAMLItem struct {
+	UUID          string  `yaml:"UUID"`
+	Name          string  `yaml:"Name"`
+	Type          string  `yaml:"Type"`
+	Slot          string  `yaml:"Slot"`
+	DamageType    string  `yaml:"DamageType"`
+	MinimumDamage int     `yaml:"MinimumDamage"`
+	MaximumDamage int     `yaml:"MaximumDamage"`
+	CriticalRate  float64 `yaml:"CriticalRate"`
+	CriticalBonus float64 `yaml:"CriticalBonus"`
+	Modifiers     []struct {
+		Type  string `yaml:"Type"`
+		Value int    `yaml:"Value"`
+	} `yaml:"Modifiers"`
+	Keywords []string `yaml:"Keywords"`
+}
+
 type RawArea struct {
-	Items []struct {
-		UUID      string `yaml:"UUID"`
-		Name      string `yaml:"Name"`
-		Type      string `yaml:"Type"`
-		Slot      string `yaml:"Slot"`
-		Modifiers []struct {
-			Type  string `yaml:"Type"`
-			Value int    `yaml:"Value"`
-		} `yaml:"Modifiers"`
-		Keywords []string `yaml:"Keywords"`
-	} `yaml:"Items"`
+	Items []YAMLItem `yaml:"Items"`
 }
 
 func buildArea(data []byte) RawArea {
-	ri2 := RawArea{}
-	err := yaml.Unmarshal(data, &ri2)
+	area := RawArea{}
+	err := yaml.Unmarshal(data, &area)
 	if err != nil {
 		log.Fatalf("error: %v", err)
 	}
-	return ri2
+	for _, item := range area.Items {
+		validateItem(item)
+	}
+	return area
+}
+
+func validateItem(item YAMLItem) {
+	if item.UUID == "" {
+		log.Fatalf("Item has no UUID %v", item)
+	}
+	if item.Name == "" {
+		log.Fatalf("Item has no Name %v", item)
+	}
+	if item.Type == "" {
+		log.Fatalf("Item has no Type %v", item)
+	}
+	if item.Type != "Weapon" && item.Slot == "" {
+		log.Fatalf("Item has no Slot %v", item)
+	}
+	for _, modifier := range item.Modifiers {
+		if modifier.Type == "" {
+			log.Fatalf("Item modifier has no Type %v", item)
+		}
+		if modifier.Value == 0 {
+			log.Fatalf("Item value has no Value %v", item)
+		}
+	}
+	if len(item.Keywords) == 0 {
+
+		log.Fatalf("Item has no keywords %v", item)
+	}
+	for _, keyword := range item.Keywords {
+		if keyword == "" {
+			log.Fatalf("Item keyword is empty %v", item)
+		}
+	}
 }
 
 func buildItems(w *world.World) {
