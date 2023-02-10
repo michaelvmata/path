@@ -7,6 +7,7 @@ import (
 	"gopkg.in/yaml.v3"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -93,23 +94,21 @@ func validateItem(item YAMLItem) {
 }
 
 func buildItems(w *world.World) {
-	itemFilePath := "data/item.jsonl"
-	data, err := os.ReadFile(itemFilePath)
+	absPath, err := filepath.Abs("data/area.yaml")
 	if err != nil {
-		log.Fatalf("Error opening room %s", itemFilePath)
+		log.Fatalf("Area path error")
 	}
-	d := json.NewDecoder(strings.NewReader(string(data)))
-	for d.More() {
-		r := RawItem{}
-		err := d.Decode(&r)
-		if err != nil {
-			log.Fatalf("Error parsing %s", data)
-		}
+	data, err := os.ReadFile(absPath)
+	if err != nil {
+		log.Fatalf("Error reading Area YAML file")
+	}
+	area := buildArea(data)
+	for _, r := range area.Items {
 		var i item.Item
 		if r.Type == "Armor" {
 			i = item.NewArmor(r.UUID, r.Name, r.Slot, r.Keywords)
 		} else if r.Type == "Weapon" {
-			w := item.NewWeapon(r.UUID, r.Name, r.Keywords, r.WeaponType)
+			w := item.NewWeapon(r.UUID, r.Name, r.Keywords, r.DamageType)
 			if r.MaximumDamage <= r.MinimumDamage || r.MinimumDamage <= 0 {
 				log.Fatalln("Invalid Maximum and Minimum Damage", r)
 			}
