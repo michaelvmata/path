@@ -11,23 +11,6 @@ import (
 	"strings"
 )
 
-type RawItem struct {
-	UUID          string  `json:"uuid"`
-	Name          string  `json:"name"`
-	Type          string  `json:"Type"`
-	WeaponType    string  `json:"WeaponType"`
-	MinimumDamage int     `json:"MinimumDamage"`
-	MaximumDamage int     `json:"MaximumDamage"`
-	CriticalRate  float64 `json:"CriticalRate"`
-	CriticalBonus float64 `json:"CriticalBonus"`
-	Slot          string  `json:"Slot"`
-	Modifiers     []struct {
-		Type  string `json:"Type"`
-		Value int    `json:"Value"`
-	} `json:"Modifiers"`
-	Keywords []string `json:"Keywords"`
-}
-
 type YAMLItem struct {
 	UUID          string  `yaml:"UUID"`
 	Name          string  `yaml:"Name"`
@@ -45,12 +28,12 @@ type YAMLItem struct {
 	Keywords []string `yaml:"Keywords"`
 }
 
-type RawArea struct {
+type YAMLArea struct {
 	Items []YAMLItem `yaml:"Items"`
 }
 
-func buildArea(data []byte) RawArea {
-	area := RawArea{}
+func buildArea(data []byte) YAMLArea {
+	area := YAMLArea{}
 	err := yaml.Unmarshal(data, &area)
 	if err != nil {
 		log.Fatalf("error: %v", err)
