@@ -128,8 +128,8 @@ Items:
     Name: Spear
     Type: Weapon
     DamageType: Pierce
-    MinimumDamge: 25
-    MaximumDamge: 35
+    MinimumDamage: 25
+    MaximumDamage: 35
     CriticalRate: 0.5
     Modifiers:
       - Type: Power
@@ -142,8 +142,8 @@ Items:
     Name: Sword
     Type: Weapon
     DamageType: Slash
-    MinimumDamge: 28
-    MaximumDamge: 32
+    MinimumDamage: 28
+    MaximumDamage: 32
     CriticalRate: 0.4
     Modifiers:
       - Type: Agility
@@ -156,8 +156,8 @@ Items:
     Name: Hammer
     Type: Weapon
     DamageType: Crush
-    MinimumDamge: 20
-    MaximumDamge: 40
+    MinimumDamage: 20
+    MaximumDamage: 40
     CriticalRate: 0.1
     CriticalBonus: 1.0
     Modifiers:
