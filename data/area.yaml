@@ -167,3 +167,24 @@ Items:
         Value: 1
     Keywords:
       - hammer
+Rooms:
+  - UUID: b8712a40130e41dabb7e17adb2d1aef7
+    Name: <white>The Void
+    Description: An unending expanse.
+    Exits:
+      East: 0d578dc460b64cddad374dfef39bbe4c
+      North: 0d578dc460b64cddad374dfef39bbe4c
+      South: 0d578dc460b64cddad374dfef39bbe4c
+      West: 0d578dc460b64cddad374dfef39bbe4c
+    Size: 10
+    Mobiles:
+      - UUID: d7495be339fc47c58b97fc3ffc353020
+        Count: 1
+      - UUID: ab22e9c8c9f14ba68f19f4df25e60934
+        Count: 1
+      - UUID: 19d8a936893b4af0bf21168ce4eed4cc
+        Count: 1
+  - UUID: 0d578dc460b64cddad374dfef39bbe4c
+    Name: The End
+    Description: All things must end.
+    Size: 1

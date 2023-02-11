@@ -28,8 +28,26 @@ type YAMLItem struct {
 	Keywords []string `yaml:"Keywords"`
 }
 
+type YAMLRoom struct {
+	UUID        string `yaml:"UUID"`
+	Name        string `yaml:"Name"`
+	Description string `yaml:"Description"`
+	Size        int    `yaml:"Size"`
+	Exits       struct {
+		East  string
+		North string
+		West  string
+		South string
+	} `yaml:"Exits"`
+	Mobiles []struct {
+		UUID  string `yaml:"UUID"`
+		Count int    `yaml:"Count"`
+	} `yaml:"Mobiles"`
+}
+
 type YAMLArea struct {
 	Items []YAMLItem `yaml:"Items"`
+	Rooms []YAMLRoom `yaml:"Rooms"`
 }
 
 func buildArea(data []byte) YAMLArea {
@@ -40,6 +58,9 @@ func buildArea(data []byte) YAMLArea {
 	}
 	for _, item := range area.Items {
 		validateItem(item)
+	}
+	for _, room := range area.Rooms {
+		validateRoom(room)
 	}
 	return area
 }
@@ -76,8 +97,31 @@ func validateItem(item YAMLItem) {
 	}
 }
 
-func buildItems(w *world.World) {
-	absPath, err := filepath.Abs("data/area.yaml")
+func validateRoom(room YAMLRoom) {
+	if room.UUID == "" {
+		log.Fatalf("Room has no UUID %v", room)
+	}
+	if room.Name == "" {
+		log.Fatalf("Room has no Name %v", room)
+	}
+	if room.Description == "" {
+		log.Fatalf("Room has no Description %v", room)
+	}
+	if room.Size == 0 {
+		log.Fatalf("Room size is 0 %v", room)
+	}
+	for _, mobile := range room.Mobiles {
+		if mobile.UUID == "" {
+			log.Fatalf("Room mobile has no UUID %v", room)
+		}
+		if mobile.Count == 0 {
+			log.Fatalf("Room mobile has count 0 %v", room)
+		}
+	}
+}
+
+func buildAreaFromPath(path string) YAMLArea {
+	absPath, err := filepath.Abs(path)
 	if err != nil {
 		log.Fatalf("Area path error")
 	}
@@ -85,7 +129,10 @@ func buildItems(w *world.World) {
 	if err != nil {
 		log.Fatalf("Error reading Area YAML file")
 	}
-	area := buildArea(data)
+	return buildArea(data)
+}
+
+func buildItems(w *world.World, area YAMLArea) {
 	for _, r := range area.Items {
 		var i item.Item
 		if r.Type == "Armor" {
@@ -108,36 +155,8 @@ func buildItems(w *world.World) {
 	}
 }
 
-type RawRoom struct {
-	UUID        string `json:"uuid"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Exits       struct {
-		East  string `json:"east"`
-		North string `json:"north"`
-		South string `json:"south"`
-		West  string `json:"west"`
-	} `json:"exits"`
-	Size    int `json:"size"`
-	Mobiles []struct {
-		UUID  string `json:"UUID"`
-		Count int    `json:"count"`
-	} `json:"mobiles"`
-}
-
-func buildRooms(w *world.World) {
-	roomFilePath := "data/room.jsonl"
-	data, err := os.ReadFile(roomFilePath)
-	if err != nil {
-		log.Fatalf("Error opening room %s", roomFilePath)
-	}
-	d := json.NewDecoder(strings.NewReader(string(data)))
-	for d.More() {
-		rr := RawRoom{}
-		err := d.Decode(&rr)
-		if err != nil {
-			log.Fatalf("Error parsing %s", data)
-		}
+func buildRooms(w *world.World, area YAMLArea) {
+	for _, rr := range area.Rooms {
 		room := world.NewRoom(rr.UUID, rr.Name, rr.Description, rr.Size)
 		w.Rooms[room.UUID] = room
 		for _, mc := range rr.Mobiles {
@@ -402,9 +421,10 @@ func buildMobiles(w *world.World) {
 
 func build() *world.World {
 	world := world.NewWorld()
-	buildItems(world)
+	area := buildAreaFromPath("data/area.yaml")
+	buildItems(world, area)
 	buildMobiles(world)
-	buildRooms(world)
+	buildRooms(world, area)
 	buildPlayers(world)
 	return world
 }
