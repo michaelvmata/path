@@ -28,6 +28,33 @@ type YAMLItem struct {
 	Keywords []string `yaml:"Keywords"`
 }
 
+type YAMLMobile struct {
+	UUID         string `yaml:"UUID"`
+	Name         string `yaml:"Name"`
+	Essence      int    `yaml:"Essence"`
+	Power        int    `yaml:"Power"`
+	Agility      int    `yaml:"Agility"`
+	Will         int    `yaml:"Will"`
+	Insight      int    `yaml:"Insight"`
+	IsAggressive bool   `yaml:"IsAggressive"`
+	IsSocial     bool   `yaml:"IsSocial"`
+	Gear         struct {
+		Head     string `yaml:"Head"`
+		Neck     string `yaml:"Neck"`
+		Body     string `yaml:"Body"`
+		Arms     string `yaml:"Arms"`
+		Hands    string `yaml:"Hands"`
+		Waist    string `yaml:"Waist"`
+		Legs     string `yaml:"Legs"`
+		Feet     string `yaml:"Feet"`
+		Wrist    string `yaml:"Wrist"`
+		Fingers  string `yaml:"Fingers"`
+		OffHand  string `yaml:"OffHand"`
+		MainHand string `yaml:"MainHand"`
+	} `yaml:"Gear"`
+	Inventory []string `yaml:"Inventory"`
+}
+
 type YAMLRoom struct {
 	UUID        string `yaml:"UUID"`
 	Name        string `yaml:"Name"`
@@ -46,8 +73,9 @@ type YAMLRoom struct {
 }
 
 type YAMLArea struct {
-	Items []YAMLItem `yaml:"Items"`
-	Rooms []YAMLRoom `yaml:"Rooms"`
+	Items   []YAMLItem   `yaml:"Items"`
+	Mobiles []YAMLMobile `yaml:"Mobiles"`
+	Rooms   []YAMLRoom   `yaml:"Rooms"`
 }
 
 func buildArea(data []byte) YAMLArea {
@@ -94,6 +122,18 @@ func validateItem(item YAMLItem) {
 		if keyword == "" {
 			log.Fatalf("Item keyword is empty %v", item)
 		}
+	}
+}
+
+func validateMobile(mobile YAMLMobile) {
+	if mobile.UUID == "" {
+		log.Fatalf("Mobile has no UUID %v", mobile)
+	}
+	if mobile.Name == "" {
+		log.Fatalf("Mobile has no name %v", mobile)
+	}
+	if mobile.Gear.MainHand == "" {
+		log.Fatalf("Mobile gear main hand has no UUID %v", mobile)
 	}
 }
 
@@ -320,19 +360,8 @@ func buildPlayers(w *world.World) {
 	}
 }
 
-func buildMobiles(w *world.World) {
-	mobileFilePath := "data/mobile.jsonl"
-	data, err := os.ReadFile(mobileFilePath)
-	if err != nil {
-		log.Fatalf("Error opening mobile %s", mobileFilePath)
-	}
-	d := json.NewDecoder(strings.NewReader(string(data)))
-	for d.More() {
-		rp := RawPlayer{}
-		err := d.Decode(&rp)
-		if err != nil {
-			log.Fatalf("Error parsing %s", data)
-		}
+func buildMobiles(w *world.World, area YAMLArea) {
+	for _, rp := range area.Mobiles {
 		c := world.NewPlayer(rp.UUID, rp.Name)
 
 		c.Essence = rp.Essence
@@ -340,9 +369,6 @@ func buildMobiles(w *world.World) {
 		c.Core.Agility.Base = rp.Agility
 		c.Core.Insight.Base = rp.Insight
 		c.Core.Will.Base = rp.Will
-
-		c.Health.Current = rp.Health.Current
-		c.Spirit.Current = rp.Spirit.Current
 
 		if rp.Gear.Head != "" {
 			if i, ok := w.Items[rp.Gear.Head]; ok {
@@ -414,6 +440,7 @@ func buildMobiles(w *world.World) {
 		c.IsAggressive = rp.IsAggressive
 		c.IsSocial = rp.IsSocial
 
+		c.Restore()
 		c.Update(0)
 		w.Mobiles.AddPrototype(*c)
 	}
@@ -423,7 +450,7 @@ func build() *world.World {
 	world := world.NewWorld()
 	area := buildAreaFromPath("data/area.yaml")
 	buildItems(world, area)
-	buildMobiles(world)
+	buildMobiles(world, area)
 	buildRooms(world, area)
 	buildPlayers(world)
 	return world
