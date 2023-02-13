@@ -1,14 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/world"
 	"gopkg.in/yaml.v3"
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 type YAMLItem struct {
@@ -38,6 +36,9 @@ type YAMLMobile struct {
 	Insight      int    `yaml:"Insight"`
 	IsAggressive bool   `yaml:"IsAggressive"`
 	IsSocial     bool   `yaml:"IsSocial"`
+	Health       int    `yaml:"Health"`
+	Spirit       int    `yaml:"Spirit"`
+	RoomUUID     string `yaml:"RoomUUID"`
 	Gear         struct {
 		Head     string `yaml:"Head"`
 		Neck     string `yaml:"Neck"`
@@ -53,6 +54,16 @@ type YAMLMobile struct {
 		MainHand string `yaml:"MainHand"`
 	} `yaml:"Gear"`
 	Inventory []string `yaml:"Inventory"`
+	Skills    struct {
+		Barrier int `yaml:"Barrier"`
+		Bash    int `yaml:"Bash"`
+		Dagger  int `yaml:"Dagger"`
+		Evasion int `yaml:"Evasion"`
+		Haste   int `yaml:"Haste"`
+		Parry   int `yaml:"Parry"`
+		Spear   int `yaml:"Spear"`
+		Sword   int `yaml:"Sword"`
+	} `yaml:"Skills"`
 }
 
 type YAMLRoom struct {
@@ -78,6 +89,10 @@ type YAMLArea struct {
 	Rooms   []YAMLRoom   `yaml:"Rooms"`
 }
 
+type YAMLPlayer struct {
+	Players []YAMLMobile `yaml:"Players"`
+}
+
 func buildArea(data []byte) YAMLArea {
 	area := YAMLArea{}
 	err := yaml.Unmarshal(data, &area)
@@ -89,6 +104,9 @@ func buildArea(data []byte) YAMLArea {
 	}
 	for _, room := range area.Rooms {
 		validateRoom(room)
+	}
+	for _, mobile := range area.Mobiles {
+		validateMobile(mobile)
 	}
 	return area
 }
@@ -209,63 +227,15 @@ func buildRooms(w *world.World, area YAMLArea) {
 	}
 }
 
-type RawPlayer struct {
-	UUID     string `json:"UUID"`
-	Name     string `json:"Name"`
-	RoomUUID string `json:"RoomUUID"`
-	Essence  int    `json:"Essence"`
-	Power    int    `json:"Power"`
-	Agility  int    `json:"Agility"`
-	Insight  int    `json:"Insight"`
-	Will     int    `json:"Will"`
-	Health   struct {
-		Current int `json:"Current"`
-	} `json:"Health"`
-	Spirit struct {
-		Current int `json:"Current"`
-	} `json:"Spirit"`
-	IsAggressive bool `json:"IsAggressive"`
-	IsSocial     bool `json:"IsSocial"`
-	Gear         struct {
-		Head     string `json:"Head"`
-		Neck     string `json:"Neck"`
-		Body     string `json:"Body"`
-		Arms     string `json:"Arms"`
-		Hands    string `json:"Hands"`
-		Waist    string `json:"Waist"`
-		Legs     string `json:"Legs"`
-		Feet     string `json:"Feet"`
-		Wrist    string `json:"Wrist"`
-		Fingers  string `json:"Fingers"`
-		OffHand  string `json:"OffHand"`
-		MainHand string `json:"MainHand"`
-	} `json:"Gear"`
-	Inventory []string `json:"Inventory"`
-	Skills    struct {
-		Barrier int `json:"Barrier"`
-		Bash    int `json:"Bash"`
-		Dagger  int `json:"Dagger"`
-		Evasion int `json:"Evasion"`
-		Haste   int `json:"Haste"`
-		Parry   int `json:"Parry"`
-		Spear   int `json:"Spear"`
-		Sword   int `json:"Sword"`
-	} `json:"Skills"`
-}
-
 func buildPlayers(w *world.World) {
-	playerFilePath := "data/player.jsonl"
-	data, err := os.ReadFile(playerFilePath)
+	data := buildPlayerFromPath("data/player.yaml")
+	players := YAMLPlayer{}
+	err := yaml.Unmarshal(data, &players)
 	if err != nil {
-		log.Fatalf("Error opening players %s", playerFilePath)
+		log.Fatalf("error: %v", err)
 	}
-	d := json.NewDecoder(strings.NewReader(string(data)))
-	for d.More() {
-		rp := RawPlayer{}
-		err := d.Decode(&rp)
-		if err != nil {
-			log.Fatalf("Error parsing %s", data)
-		}
+	for _, rp := range players.Players {
+		validateMobile(rp)
 		c := world.NewPlayer(rp.UUID, rp.Name)
 
 		c.Essence = rp.Essence
@@ -274,8 +244,8 @@ func buildPlayers(w *world.World) {
 		c.Core.Insight.Base = rp.Insight
 		c.Core.Will.Base = rp.Will
 
-		c.Health.Current = rp.Health.Current
-		c.Spirit.Current = rp.Spirit.Current
+		c.Health.Current = rp.Health
+		c.Spirit.Current = rp.Spirit
 
 		if rp.Gear.Head != "" {
 			if i, ok := w.Items[rp.Gear.Head]; ok {
@@ -444,6 +414,18 @@ func buildMobiles(w *world.World, area YAMLArea) {
 		c.Update(0)
 		w.Mobiles.AddPrototype(*c)
 	}
+}
+
+func buildPlayerFromPath(path string) []byte {
+	absPath, err := filepath.Abs(path)
+	if err != nil {
+		log.Fatalf("Player path error")
+	}
+	data, err := os.ReadFile(absPath)
+	if err != nil {
+		log.Fatalf("Error reading player YAML file")
+	}
+	return data
 }
 
 func build() *world.World {
