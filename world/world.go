@@ -475,6 +475,22 @@ type Exits struct {
 	West  string
 }
 
+func (e Exits) FirstExit() string {
+	if e.East != "" {
+		return e.East
+	}
+	if e.North != "" {
+		return e.North
+	}
+	if e.South != "" {
+		return e.South
+	}
+	if e.West != "" {
+		return e.West
+	}
+	return ""
+}
+
 type Room struct {
 	UUID        string
 	name        string

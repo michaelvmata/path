@@ -7,6 +7,7 @@ import (
 	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/symbols"
 	"github.com/michaelvmata/path/world"
+	"log"
 	"math"
 	"sort"
 	"strings"
@@ -143,6 +144,35 @@ func (d Drop) Execute(ctx Context) {
 
 func (d Drop) Label() string {
 	return "drop"
+}
+
+type Flee struct{}
+
+func (f Flee) Execute(ctx Context) {
+	player := ctx.Player
+	roomUUID := player.Room.Exits.FirstExit()
+	room, ok := ctx.World.Rooms[roomUUID]
+	if !ok || room.IsFull() {
+		player.Showln("There is no where for you to flee.")
+		return
+	}
+	if err := player.Room.Exit(player); err != nil {
+		log.Fatalf("Player %s not in room %s", player.UUID, room.UUID)
+	}
+	if err := room.Enter(player); err != nil {
+		log.Fatalf("Room %s is full.", room.UUID)
+	}
+	player.Room = room
+	player.Showln("You flee!")
+	for _, opponent := range player.Attacking {
+		player.StopAttacking(opponent)
+		opponent.StopAttacking(player)
+		opponent.Showln("%s flees from you.", player.Name)
+	}
+}
+
+func (f Flee) Label() string {
+	return "flee"
 }
 
 type Gear struct{}
@@ -564,6 +594,7 @@ func buildCommands() map[string]Executor {
 		Bash{},
 		Drop{},
 		East{},
+		Flee{},
 		Gear{},
 		Get{},
 		Haste{},
