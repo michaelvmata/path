@@ -72,10 +72,10 @@ type YAMLRoom struct {
 	Description string `yaml:"Description"`
 	Size        int    `yaml:"Size"`
 	Exits       struct {
-		East  string
-		North string
-		West  string
-		South string
+		East  string `yaml:"East"`
+		North string `yaml:"North"`
+		West  string `yaml:"West"`
+		South string `yaml:"South"`
 	} `yaml:"Exits"`
 	Mobiles []struct {
 		UUID  string `yaml:"UUID"`
