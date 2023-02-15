@@ -252,6 +252,28 @@ func (h Haste) Label() string {
 	return "haste"
 }
 
+type Inspect struct{}
+
+func (i Inspect) Execute(ctx Context) {
+	player := ctx.Player
+	parts := strings.SplitN(ctx.Raw, " ", 2)
+	if len(parts) == 1 {
+		player.Showln("Inspect what?")
+		return
+	}
+	index := player.Inventory.IndexOfItem(parts[1])
+	if index == -1 {
+		player.Showln("You don't have a '%s'", parts[1])
+		return
+	}
+	item := player.Inventory.GetItemAtIndex(index)
+	player.Showln(item.Description())
+}
+
+func (i Inspect) Label() string {
+	return "inspect"
+}
+
 type Inventory struct{}
 
 func (i Inventory) Execute(ctx Context) {
@@ -599,6 +621,7 @@ func buildCommands() map[string]Executor {
 		Get{},
 		Haste{},
 		Help{},
+		Inspect{},
 		Inventory{},
 		Invest{},
 		Look{},

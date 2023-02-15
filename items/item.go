@@ -2,7 +2,9 @@ package item
 
 import (
 	"errors"
+	"fmt"
 	"github.com/michaelvmata/path/modifiers"
+	"strings"
 )
 
 type item struct {
@@ -41,12 +43,20 @@ func (i item) Modifiers() []modifiers.Modifier {
 	return i.modifiers
 }
 
+func (i item) Description() string {
+	parts := make([]string, 0)
+	parts = append(parts, fmt.Sprintf("Name: %s", i.Name()))
+	parts = append(parts, fmt.Sprintf("Keywords: %s", strings.Join(i.keywords, ", ")))
+	return strings.Join(parts, "\n")
+}
+
 type Item interface {
 	UUID() string
 	Name() string
 	HasKeyword(string) bool
 	Modifiers() []modifiers.Modifier
 	AddModifier(string, int)
+	Description() string
 }
 
 const (
@@ -126,6 +136,10 @@ func (c *Container) RemItemAtIndex(index int) Item {
 	item := c.Items[index]
 	c.Items = append(c.Items[:index], c.Items[index+1:]...)
 	return item
+}
+
+func (c Container) GetItemAtIndex(index int) Item {
+	return c.Items[index]
 }
 
 const (
