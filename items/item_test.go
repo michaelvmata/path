@@ -2,6 +2,7 @@ package item
 
 import (
 	"github.com/michaelvmata/path/modifiers"
+	"strings"
 	"testing"
 )
 
@@ -17,6 +18,10 @@ func TestItem(t *testing.T) {
 	if !item.HasKeyword("helmet") {
 		t.Fatalf("Armor doesn't have keyword")
 	}
+	if !strings.Contains(item.Description(), "Dagger") {
+		t.Fatalf("Armor description missing Dagger modifier: %s", item.Description())
+	}
+
 }
 
 func TestContainer(t *testing.T) {

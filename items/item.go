@@ -47,6 +47,9 @@ func (i item) Description() string {
 	parts := make([]string, 0)
 	parts = append(parts, fmt.Sprintf("Name: %s", i.Name()))
 	parts = append(parts, fmt.Sprintf("Keywords: %s", strings.Join(i.keywords, ", ")))
+	for _, modifier := range i.Modifiers() {
+		parts = append(parts, fmt.Sprintf("%s: %d", modifier.Type, modifier.Value))
+	}
 	return strings.Join(parts, "\n")
 }
 
