@@ -100,6 +100,9 @@ func TestRoom(t *testing.T) {
 	}
 
 	c := NewPlayer("Test UUID", "Tester")
+	if r.GetPlayer(c.Name) != nil {
+		t.Fatalf("Character unexpectedly present by handle")
+	}
 	if r.IsFull() {
 		t.Fatalf("Room is unexpectedly full")
 	}
@@ -108,6 +111,9 @@ func TestRoom(t *testing.T) {
 	}
 	if r.IndexOfPlayer(c) == -1 {
 		t.Fatalf("Character not found in room")
+	}
+	if r.GetPlayer(c.Name) != c {
+		t.Fatalf("Character not found by handle")
 	}
 
 	c2 := NewPlayer("Test UUID", "Tester 2")

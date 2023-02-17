@@ -604,6 +604,14 @@ func (r Room) IndexOfPlayerHandle(handle string) int {
 	return -1
 }
 
+func (r Room) GetPlayer(handle string) *Character {
+	index := r.IndexOfPlayerHandle(handle)
+	if index == -1 {
+		return nil
+	}
+	return r.Players[index]
+}
+
 func (r *Room) IndexOfPlayer(target *Character) int {
 	for i, p := range r.Players {
 		if p == target {

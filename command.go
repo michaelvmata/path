@@ -29,12 +29,11 @@ func (a Attack) Execute(ctx Context) {
 		return
 	}
 	handle := parts[1]
-	index := attacker.Room.IndexOfPlayerHandle(handle)
-	if index == -1 {
+	defender := attacker.Room.GetPlayer(handle)
+	if defender == nil {
 		attacker.Showln("You don't see '%s'.", handle)
 		return
 	}
-	defender := attacker.Room.Players[index]
 	attacker.StartAttacking(defender)
 	attacker.Showln("You attack %s", defender.Name)
 	defender.StartAttacking(attacker)
@@ -104,11 +103,7 @@ func (b Bash) FindTarget(attacker *world.Character, command string) *world.Chara
 		return attacker.ImmediateDefender()
 	}
 	handle := parts[1]
-	index := attacker.Room.IndexOfPlayerHandle(handle)
-	if index == -1 {
-		return nil
-	}
-	return attacker.Room.Players[index]
+	return attacker.Room.GetPlayer(handle)
 }
 
 func (b Bash) CalculateDamage(level int) int {
