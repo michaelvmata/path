@@ -65,16 +65,7 @@ type Bash struct{}
 func (b Bash) Execute(ctx Context) {
 	attacker := ctx.Player
 	level := attacker.Skills.Bash.Value()
-	if level <= 0 {
-		attacker.Showln("You gotta learn how to bash first.")
-		return
-	}
-	if !attacker.Spirit.IsAvailable(level) {
-		attacker.Showln("Your spirit isn't strong enough to bash.")
-		return
-	}
-	if attacker.OnCoolDown("bash") {
-		attacker.Showln("You need a moment before you can bash again.")
+	if !CanUseSkill(attacker, b.Label(), level, level) {
 		return
 	}
 	defender := b.FindTarget(attacker, ctx.Raw)
@@ -123,21 +114,28 @@ func FindTarget(attacker *world.Character, command string) *world.Character {
 	return attacker.Room.GetPlayer(handle)
 }
 
+func CanUseSkill(attacker *world.Character, skill string, level int, cost int) bool {
+	if level == 0 {
+		attacker.Showln("You gotta learn how to %s first.", skill)
+		return false
+	}
+	if !attacker.Spirit.IsAvailable(cost) {
+		attacker.Showln("Your spirit isn't strong enough to %s.", skill)
+		return false
+	}
+	if attacker.OnCoolDown(skill) {
+		attacker.Showln("You need a moment before you can %s again.", skill)
+		return false
+	}
+	return true
+}
+
 type Circle struct{}
 
 func (c Circle) Execute(ctx Context) {
 	attacker := ctx.Player
 	level := attacker.Skills.Circle.Value()
-	if level <= 0 {
-		attacker.Showln("You gotta learn how to circle first.")
-		return
-	}
-	if !attacker.Spirit.IsAvailable(level) {
-		attacker.Showln("Your spirit isn't strong enough to circle.")
-		return
-	}
-	if attacker.OnCoolDown(c.Label()) {
-		attacker.Showln("You need a moment before you can circle again.")
+	if !CanUseSkill(attacker, c.Label(), level, level) {
 		return
 	}
 	defender := FindTarget(attacker, ctx.Raw)
