@@ -17,6 +17,7 @@ type Skills struct {
 
 	Barrier stats.Stat
 	Bash    stats.Stat
+	Circle  stats.Stat
 	Haste   stats.Stat
 }
 
@@ -29,6 +30,7 @@ func (s Skills) Describe() string {
 		fmt.Sprintf("%s Parry: %d", symbols.TRIANGULAR_BULLET, s.Parry.Value()),
 		fmt.Sprintf("%s Barrier: %d", symbols.TRIANGULAR_BULLET, s.Barrier.Value()),
 		fmt.Sprintf("%s Bash: %d", symbols.TRIANGULAR_BULLET, s.Bash.Value()),
+		fmt.Sprintf("%s Circle: %d", symbols.TRIANGULAR_BULLET, s.Circle.Value()),
 		fmt.Sprintf("%s Haste: %d", symbols.TRIANGULAR_BULLET, s.Haste.Value()),
 	}
 	return strings.Join(parts, "\n")
@@ -43,7 +45,8 @@ func NewSkills() Skills {
 		Evasion: stats.NewStat(0, 0),
 		Parry:   stats.NewStat(0, 0),
 
-		Bash:  stats.NewStat(0, 0),
-		Haste: stats.NewStat(0, 0),
+		Bash:   stats.NewStat(0, 0),
+		Circle: stats.NewStat(0, 0),
+		Haste:  stats.NewStat(0, 0),
 	}
 }

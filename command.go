@@ -114,6 +114,64 @@ func (b Bash) Label() string {
 	return "bash"
 }
 
+func FindTarget(attacker *world.Character, command string) *world.Character {
+	parts := strings.SplitN(command, " ", 2)
+	if len(parts) == 1 {
+		return attacker.ImmediateDefender()
+	}
+	handle := parts[1]
+	return attacker.Room.GetPlayer(handle)
+}
+
+type Circle struct{}
+
+func (c Circle) Execute(ctx Context) {
+	attacker := ctx.Player
+	level := attacker.Skills.Circle.Value()
+	if level <= 0 {
+		attacker.Showln("You gotta learn how to circle first.")
+		return
+	}
+	if !attacker.Spirit.IsAvailable(level) {
+		attacker.Showln("Your spirit isn't strong enough to circle.")
+		return
+	}
+	if attacker.OnCoolDown(c.Label()) {
+		attacker.Showln("You need a moment before you can circle again.")
+		return
+	}
+	defender := FindTarget(attacker, ctx.Raw)
+	if defender == nil {
+		attacker.Showln("Circle who?")
+		return
+	}
+	attacker.Spirit.Consume(level)
+	attacker.StartAttacking(defender)
+	defender.StartAttacking(attacker)
+
+	hitDamage := battle.CalculateHitDamage(attacker, defender)
+	amount := c.CalculateDamage(level, hitDamage.Amount)
+	attacker.Showln("You circle %s for %d damage.", defender.Name, amount)
+	defender.StartAttacking(attacker)
+
+	defender.Showln("%s circles you for %d damage.", attacker.Name, amount)
+	defender.Stun(1)
+
+	battle.DoDamage(ctx.World, attacker, defender, amount)
+
+	coolDown := buffs.NewCoolDown(12, c.Label())
+	attacker.ApplyCoolDown(&coolDown)
+}
+
+func (c Circle) CalculateDamage(level int, hitDamage int) int {
+	multiplier := 3.0 + (level / 10.0)
+	return multiplier * hitDamage
+}
+
+func (c Circle) Label() string {
+	return "circle"
+}
+
 type Drop struct{}
 
 func (d Drop) Execute(ctx Context) {
@@ -609,6 +667,7 @@ func buildCommands() map[string]Executor {
 		Attack{},
 		Barrier{},
 		Bash{},
+		Circle{},
 		Drop{},
 		East{},
 		Flee{},
