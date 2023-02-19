@@ -122,7 +122,7 @@ func (c *Character) UnapplyExpiredCoolDowns() {
 	c.CoolDowns = coolDowns
 }
 
-func (c Character) OnCoolDown(name string) bool {
+func (c *Character) OnCoolDown(name string) bool {
 	for _, cd := range c.CoolDowns {
 		if cd.Name() == name {
 			return true
@@ -192,11 +192,11 @@ func (c *Character) Social() {
 	}
 }
 
-func (c Character) IsStunned() bool {
+func (c *Character) IsStunned() bool {
 	return c.Stunned > 0
 }
 
-func (c Character) Weapon() *item.Weapon {
+func (c *Character) Weapon() *item.Weapon {
 	if c.Gear.MainHand != nil {
 		return c.Gear.MainHand
 	}
@@ -252,14 +252,14 @@ func NewPlayer(UUID string, handle string) *Character {
 	}
 }
 
-func (c Character) ImmediateDefender() *Character {
+func (c *Character) ImmediateDefender() *Character {
 	if !c.IsFighting() {
 		return nil
 	}
 	return c.Attacking[0]
 }
 
-func (c Character) ShowPrompt() {
+func (c *Character) ShowPrompt() {
 	border := "<grey_62>>> "
 	c.Show("%s%s <red>%d%s <green>%d%s %s",
 		border,
@@ -275,7 +275,7 @@ func (c Character) ShowPrompt() {
 	c.Show("%s <blue>%d%s %s", target.Name, health, symbols.CIRCLED_BULLET, border)
 }
 
-func (c Character) HasKeyword(target string) bool {
+func (c *Character) HasKeyword(target string) bool {
 	target = strings.ToLower(target)
 	for _, keyword := range c.keywords {
 		if keyword == target {
@@ -308,7 +308,7 @@ func (c *Character) StopAttacking(defender *Character) {
 	c.Attacking = append(c.Attacking[:index], c.Attacking[index+1:]...)
 }
 
-func (c Character) IsAttacking(defender *Character) bool {
+func (c *Character) IsAttacking(defender *Character) bool {
 	for _, target := range c.Attacking {
 		if target == defender {
 			return true
@@ -317,7 +317,7 @@ func (c Character) IsAttacking(defender *Character) bool {
 	return false
 }
 
-func (c Character) IsFighting() bool {
+func (c *Character) IsFighting() bool {
 	return len(c.Attacking) > 0
 }
 
@@ -430,26 +430,26 @@ func (c *Character) Update(tick int) {
 	}
 }
 
-func (c Character) ShowNewline() {
+func (c *Character) ShowNewline() {
 	if c.Session != nil {
 		c.Session.Outgoing <- "\n"
 	}
 }
 
-func (c Character) Showln(message string, args ...interface{}) {
+func (c *Character) Showln(message string, args ...interface{}) {
 	if c.Session != nil {
 		c.Session.Outgoing <- fmt.Sprintf(message, args...)
 		c.Session.Outgoing <- "\n"
 	}
 }
 
-func (c Character) Show(message string, args ...interface{}) {
+func (c *Character) Show(message string, args ...interface{}) {
 	if c.Session != nil {
 		c.Session.Outgoing <- fmt.Sprintf(message, args...)
 	}
 }
 
-func (c Character) Describe() string {
+func (c *Character) Describe() string {
 	if len(c.Attacking) > 0 {
 		return fmt.Sprintf("%s is fighting.", c.Name)
 	}
@@ -533,7 +533,7 @@ func (r *Room) Describe(firstPerson *Character) string {
 	return strings.Join(parts, "\n")
 }
 
-func (r Room) DescribeExits() string {
+func (r *Room) DescribeExits() string {
 	parts := make([]string, 0)
 	if r.Exits.East != "" {
 		parts = append(parts, "east")
@@ -595,7 +595,7 @@ func (r *Room) Exit(c *Character) error {
 	return nil
 }
 
-func (r Room) IndexOfPlayerHandle(handle string) int {
+func (r *Room) IndexOfPlayerHandle(handle string) int {
 	for i, p := range r.Players {
 		if p.HasKeyword(handle) {
 			return i
@@ -604,7 +604,7 @@ func (r Room) IndexOfPlayerHandle(handle string) int {
 	return -1
 }
 
-func (r Room) GetPlayer(handle string) *Character {
+func (r *Room) GetPlayer(handle string) *Character {
 	index := r.IndexOfPlayerHandle(handle)
 	if index == -1 {
 		return nil
@@ -621,7 +621,7 @@ func (r *Room) IndexOfPlayer(target *Character) int {
 	return -1
 }
 
-func (r Room) MobileCount(mobileUUID string) int {
+func (r *Room) MobileCount(mobileUUID string) int {
 	// Count number of mobiles with UUID in room
 	count := 0
 	for _, player := range r.Players {
@@ -665,7 +665,7 @@ func (m *Mobiles) Unspawn(c *Character) error {
 	return errors.New("not a mobile")
 }
 
-func (m Mobiles) IsInstance(c *Character) bool {
+func (m *Mobiles) IsInstance(c *Character) bool {
 	for _, instance := range m.Instances {
 		if instance == c {
 			return true
@@ -702,7 +702,7 @@ func NewWorld() *World {
 	return &w
 }
 
-func (w World) IsMobile(c *Character) bool {
+func (w *World) IsMobile(c *Character) bool {
 	return w.Mobiles.IsInstance(c)
 }
 
@@ -719,11 +719,11 @@ func (w *World) Update() {
 	}
 }
 
-func (w World) IsSpawnTick() bool {
+func (w *World) IsSpawnTick() bool {
 	return w.Ticks%w.SpawnTicks == 0
 }
 
-func (w World) IsBattleTick() bool {
+func (w *World) IsBattleTick() bool {
 	return w.Ticks%w.BattleTicks == 0
 }
 
