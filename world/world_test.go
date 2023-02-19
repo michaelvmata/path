@@ -150,6 +150,20 @@ func TestRoom(t *testing.T) {
 		t.Fatalf("Character able to exit room twice")
 	}
 
+	r.Enter(c)
+	r.Enter(c2)
+	r.Enter(c3)
+	message := Message{
+		FirstPerson:         c,
+		SecondPerson:        c2,
+		FirstPersonMessage:  "1st person test",
+		SecondPersonMessage: "2nd person test",
+		ThirdPersonMessage:  "3rd person test",
+	}
+	if err := r.ShowMessage(message); err != nil {
+		t.Fatalf("Unexpected error showing message %v", err)
+	}
+
 	i := item.NewArmor("test UUID", "test item", item.Head, []string{"test"})
 	err := r.Accept(i)
 	if err != nil {

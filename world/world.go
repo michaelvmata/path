@@ -514,6 +514,27 @@ func NewRoom(uuid string, name string, description string, size int) *Room {
 	return &room
 }
 
+func (r *Room) ShowMessage(message Message) error {
+	if r.IndexOfPlayer(message.FirstPerson) == -1 && message.FirstPersonMessage != "" {
+		return errors.New("first person not in room")
+	}
+	message.FirstPerson.Showln(message.FirstPersonMessage)
+	if r.IndexOfPlayer(message.SecondPerson) == -1 && message.SecondPersonMessage != "" {
+		return errors.New("second person not in room")
+	}
+	message.SecondPerson.Showln(message.SecondPersonMessage)
+	if message.ThirdPersonMessage == "" {
+		return nil
+	}
+	for _, player := range r.Players {
+		if player == message.FirstPerson || player == message.SecondPerson {
+			continue
+		}
+		player.Showln(message.ThirdPersonMessage)
+	}
+	return nil
+}
+
 func (r *Room) Describe(firstPerson *Character) string {
 	parts := make([]string, 0)
 	parts = append(parts, r.name)
@@ -737,10 +758,21 @@ func (w *World) SpawnMobiles() {
 			count := room.MobileCount(rm.MobileUUID)
 			for diff := rm.Count - count; diff > 0; diff-- {
 				mobile := w.Mobiles.Spawn(rm.MobileUUID)
-				room.Enter(mobile)
+				err := room.Enter(mobile)
+				if err != nil {
+					log.Fatalf("Cannot spawn enter mobile %s in room %s", mobile.UUID, room.UUID)
+				}
 				mobile.Room = room
 				mobile.Restore()
 			}
 		}
 	}
+}
+
+type Message struct {
+	FirstPerson         *Character
+	SecondPerson        *Character
+	FirstPersonMessage  string
+	SecondPersonMessage string
+	ThirdPersonMessage  string
 }
