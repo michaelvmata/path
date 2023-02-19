@@ -134,13 +134,14 @@ type Circle struct{}
 
 func (c Circle) Execute(ctx Context) {
 	attacker := ctx.Player
-	level := attacker.Skills.Circle.Value()
-	if !CanUseSkill(attacker, c.Label(), level, level) {
-		return
-	}
 	defender := FindTarget(attacker, ctx.Raw)
 	if defender == nil {
 		attacker.Showln("Circle who?")
+		return
+	}
+
+	level := attacker.Skills.Circle.Value()
+	if !CanUseSkill(attacker, c.Label(), level, level) {
 		return
 	}
 	attacker.Spirit.Consume(level)
@@ -149,16 +150,21 @@ func (c Circle) Execute(ctx Context) {
 
 	hitDamage := battle.CalculateHitDamage(attacker, defender)
 	amount := c.CalculateDamage(level, hitDamage.Amount)
-	attacker.Showln("You circle %s for %d damage.", defender.Name, amount)
-	defender.StartAttacking(attacker)
-
-	defender.Showln("%s circles you for %d damage.", attacker.Name, amount)
-	defender.Stun(1)
-
 	battle.DoDamage(ctx.World, attacker, defender, amount)
-
+	defender.Stun(1)
 	coolDown := buffs.NewCoolDown(12, c.Label())
 	attacker.ApplyCoolDown(&coolDown)
+
+	message := world.Message{
+		FirstPersonMessage:  fmt.Sprintf("You circle %s for %d damage.", defender.Name, amount),
+		FirstPerson:         attacker,
+		SecondPersonMessage: fmt.Sprintf("%s circles you for %d damage.", attacker.Name, amount),
+		SecondPerson:        defender,
+		ThirdPersonMessage:  fmt.Sprintf("%s circles %s for %d damage.", attacker.Name, defender.Name, amount),
+	}
+	if err := attacker.Room.ShowMessage(message); err != nil {
+		log.Fatalf("Problem showing cirle message: %v", err)
+	}
 }
 
 func (c Circle) CalculateDamage(level int, hitDamage int) int {
