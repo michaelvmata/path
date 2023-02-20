@@ -152,15 +152,12 @@ func (c *Character) Aggro() {
 		c.StartAttacking(candidate)
 		candidate.StartAttacking(c)
 
-		candidate.ShowNewline()
-		candidate.Showln("%s screams, \"This is SPARTA!\"", c.Name)
-		candidate.ShowNewline()
-		candidate.ShowPrompt()
-
-		c.ShowNewline()
-		c.Showln("You scream, \"This is SPARTA!\"")
-		c.ShowNewline()
-		c.ShowPrompt()
+		message := Message{
+			FirstPerson:        c,
+			FirstPersonMessage: "You scream, \"This is SPARTA!\"",
+			ThirdPersonMessage: fmt.Sprintf("%s screams, \"This is SPARTA!\"", c.Name),
+		}
+		c.Room.ShowMessage(message)
 		break
 	}
 }
