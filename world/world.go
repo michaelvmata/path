@@ -518,14 +518,18 @@ func NewRoom(uuid string, name string, description string, size int) *Room {
 }
 
 func (r *Room) ShowMessage(message Message) error {
-	if r.IndexOfPlayer(message.FirstPerson) == -1 && message.FirstPersonMessage != "" {
-		return errors.New("first person not in room")
+	if message.FirstPerson != nil && message.FirstPersonMessage != "" {
+		if r.IndexOfPlayer(message.FirstPerson) == -1 {
+			return errors.New("first person not in room")
+		}
+		message.FirstPerson.Showln(message.FirstPersonMessage)
 	}
-	message.FirstPerson.Showln(message.FirstPersonMessage)
-	if r.IndexOfPlayer(message.SecondPerson) == -1 && message.SecondPersonMessage != "" {
-		return errors.New("second person not in room")
+	if message.SecondPerson != nil && message.SecondPersonMessage != "" {
+		if r.IndexOfPlayer(message.SecondPerson) == -1 {
+			return errors.New("second person not in room")
+		}
+		message.SecondPerson.Showln(message.SecondPersonMessage)
 	}
-	message.SecondPerson.Showln(message.SecondPersonMessage)
 	if message.ThirdPersonMessage == "" {
 		return nil
 	}

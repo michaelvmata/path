@@ -80,6 +80,44 @@ func TestPlayerBuff(t *testing.T) {
 	}
 }
 
+func TestRoom_ShowMessage(t *testing.T) {
+	uuid := "b8712a40130e41dabb7e17adb2d1aef7"
+	name := "The Void"
+	description := "An unending abyss."
+	size := 2
+	r := NewRoom(uuid, name, description, size)
+	c := NewPlayer("Test UUID", "Tester")
+	c2 := NewPlayer("Test UUID 2", "Tester2")
+	c3 := NewPlayer("Test UUID 3", "Tester3")
+
+	message := Message{
+		FirstPerson:        c,
+		FirstPersonMessage: "Room message test",
+	}
+	if err := r.ShowMessage(message); err == nil {
+		t.Fatalf("Expected error not thrown")
+	}
+	r.Enter(c)
+	if err := r.ShowMessage(message); err != nil {
+		t.Fatalf("Unexpected error thrown")
+	}
+
+	message.SecondPerson = c2
+	message.SecondPersonMessage = "Room message test 2"
+	if err := r.ShowMessage(message); err == nil {
+		t.Fatalf("Expected error not thrown")
+	}
+	r.Enter(c2)
+	if err := r.ShowMessage(message); err != nil {
+		t.Fatalf("Unexpected error thrown")
+	}
+
+	message.ThirdPersonMessage = "Room message test 3"
+	r.Enter(c3)
+	if err := r.ShowMessage(message); err != nil {
+		t.Fatalf("Unexpected error thrown")
+	}
+}
 func TestRoom(t *testing.T) {
 	uuid := "b8712a40130e41dabb7e17adb2d1aef7"
 	name := "The Void"
@@ -148,20 +186,6 @@ func TestRoom(t *testing.T) {
 	}
 	if err := r.Exit(c); err == nil {
 		t.Fatalf("Character able to exit room twice")
-	}
-
-	r.Enter(c)
-	r.Enter(c2)
-	r.Enter(c3)
-	message := Message{
-		FirstPerson:         c,
-		SecondPerson:        c2,
-		FirstPersonMessage:  "1st person test",
-		SecondPersonMessage: "2nd person test",
-		ThirdPersonMessage:  "3rd person test",
-	}
-	if err := r.ShowMessage(message); err != nil {
-		t.Fatalf("Unexpected error showing message %v", err)
 	}
 
 	i := item.NewArmor("test UUID", "test item", item.Head, []string{"test"})
