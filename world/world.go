@@ -180,15 +180,12 @@ func (c *Character) Social() {
 		c.StartAttacking(target)
 		target.StartAttacking(c)
 
-		c.ShowNewline()
-		c.Showln("You scream, \"And my AXE!\"")
-		c.ShowNewline()
-		c.ShowPrompt()
-
-		target.ShowNewline()
-		target.Showln("%s bellows, \"And my AXE!\"", c.Name)
-		target.ShowNewline()
-		target.ShowPrompt()
+		message := Message{
+			FirstPerson:        c,
+			FirstPersonMessage: "You scream, \"And my AXE!\"",
+			ThirdPersonMessage: fmt.Sprintf("%s bellows, \"And my AXE!\"", c.Name),
+		}
+		c.Room.ShowMessage(message)
 
 		// bail now that character is fighting
 		break
