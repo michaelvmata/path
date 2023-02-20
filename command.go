@@ -34,10 +34,18 @@ func (a Attack) Execute(ctx Context) {
 		attacker.Showln("You don't see '%s'.", handle)
 		return
 	}
+
 	attacker.StartAttacking(defender)
-	attacker.Showln("You attack %s", defender.Name)
 	defender.StartAttacking(attacker)
-	defender.Showln("%s attacks you.", attacker.Name)
+
+	message := world.Message{
+		FirstPerson:         attacker,
+		FirstPersonMessage:  fmt.Sprintf("You attack %s", defender.Name),
+		SecondPerson:        defender,
+		SecondPersonMessage: fmt.Sprintf("%s attacks you.", attacker.Name),
+		ThirdPersonMessage:  fmt.Sprintf("%s attacks %s.", attacker.Name, defender.Name),
+	}
+	attacker.Room.ShowMessage(message)
 }
 
 func (a Attack) Label() string {
