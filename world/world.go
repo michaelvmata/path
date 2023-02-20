@@ -189,6 +189,9 @@ func (c *Character) Social() {
 		target.Showln("%s bellows, \"And my AXE!\"", c.Name)
 		target.ShowNewline()
 		target.ShowPrompt()
+
+		// bail now that character is fighting
+		break
 	}
 }
 
