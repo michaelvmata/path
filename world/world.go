@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/michaelvmata/path/items"
+	"github.com/michaelvmata/path/memory"
 	"github.com/michaelvmata/path/modifiers"
 	"github.com/michaelvmata/path/session"
 	"github.com/michaelvmata/path/skills"
@@ -53,6 +54,7 @@ type Character struct {
 
 	Buffs     []Buff
 	CoolDowns []CoolDown
+	Memory    *memory.Memory
 
 	IsAggressive bool
 	IsSocial     bool
@@ -243,6 +245,7 @@ func NewPlayer(UUID string, handle string) *Character {
 
 		Attacking: make([]*Character, 0),
 
+		Memory:       memory.NewMemory(),
 		IsAggressive: false,
 		IsSocial:     false,
 		IsPlayer:     true,
@@ -424,6 +427,8 @@ func (c *Character) Update(tick int) {
 		c.ReduceStun()
 		c.Aggro()
 		c.Social()
+
+		c.Memory.Update(tick)
 	}
 }
 

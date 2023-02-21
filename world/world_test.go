@@ -64,6 +64,7 @@ func (t *TestBuff) Upkeep() int            { return 0 }
 
 func TestPlayerBuff(t *testing.T) {
 	player := NewPlayer("Test UUID", "Test Handle")
+
 	buff := TestBuff{Expired: false}
 	player.Apply(&buff)
 	if len(player.Buffs) != 1 {
@@ -77,6 +78,19 @@ func TestPlayerBuff(t *testing.T) {
 	player.Update(1)
 	if len(player.Buffs) != 0 {
 		t.Fatalf("Expired buff still applied")
+	}
+}
+
+func TestPlayerMemory(t *testing.T) {
+	player := NewPlayer("Test UUID", "Test Handle")
+	skill := "test skill"
+	player.Memory.AddGameEvent(skill, 1)
+	if player.Memory.Occurrences(skill) != 1 {
+		t.Fatalf("Skill unexpectedly missing")
+	}
+	player.Update(1)
+	if player.Memory.Occurrences(skill) != 0 {
+		t.Fatalf("Skill unexpectedly present")
 	}
 }
 
@@ -118,6 +132,7 @@ func TestRoom_ShowMessage(t *testing.T) {
 		t.Fatalf("Unexpected error thrown")
 	}
 }
+
 func TestRoom(t *testing.T) {
 	uuid := "b8712a40130e41dabb7e17adb2d1aef7"
 	name := "The Void"
