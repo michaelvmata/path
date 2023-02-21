@@ -167,8 +167,6 @@ func (c Circle) Execute(ctx Context) {
 	defender.Memory.AddGameEvent(c.Label(), 18)
 	hitDamage := battle.CalculateHitDamage(attacker, defender)
 	amount := c.CalculateDamage(level, hitDamage.Amount)
-	battle.DoDamage(ctx.World, attacker, defender, amount)
-	defender.Stun(1)
 
 	message := world.Message{
 		FirstPersonMessage:  fmt.Sprintf("You circle %s for %d damage.", defender.Name, amount),
@@ -180,6 +178,8 @@ func (c Circle) Execute(ctx Context) {
 	if err := attacker.Room.ShowMessage(message); err != nil {
 		log.Fatalf("Problem showing cirle message: %v", err)
 	}
+	battle.DoDamage(ctx.World, attacker, defender, amount)
+	defender.Stun(1)
 }
 
 func (c Circle) CalculateDamage(level int, hitDamage int) int {
