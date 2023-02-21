@@ -152,16 +152,23 @@ func (c Circle) Execute(ctx Context) {
 	if !CanUseSkill(attacker, c.Label(), level, level) {
 		return
 	}
+
 	attacker.Spirit.Consume(level)
 	attacker.StartAttacking(defender)
 	defender.StartAttacking(attacker)
+	coolDown := buffs.NewCoolDown(12, c.Label())
+	attacker.ApplyCoolDown(&coolDown)
 
+	if c.TargetExpectsCircle(defender) {
+		c.HandleExpectedCircle(attacker, defender)
+		return
+	}
+
+	defender.Memory.AddGameEvent(c.Label(), 18)
 	hitDamage := battle.CalculateHitDamage(attacker, defender)
 	amount := c.CalculateDamage(level, hitDamage.Amount)
 	battle.DoDamage(ctx.World, attacker, defender, amount)
 	defender.Stun(1)
-	coolDown := buffs.NewCoolDown(12, c.Label())
-	attacker.ApplyCoolDown(&coolDown)
 
 	message := world.Message{
 		FirstPersonMessage:  fmt.Sprintf("You circle %s for %d damage.", defender.Name, amount),
@@ -178,6 +185,23 @@ func (c Circle) Execute(ctx Context) {
 func (c Circle) CalculateDamage(level int, hitDamage int) int {
 	multiplier := 3.0 + (level / 10.0)
 	return multiplier * hitDamage
+}
+
+func (c Circle) TargetExpectsCircle(target *world.Character) bool {
+	return target.Memory.Occurrences(c.Label()) != 0
+}
+
+func (c Circle) HandleExpectedCircle(attacker *world.Character, defender *world.Character) {
+	message := world.Message{
+		FirstPersonMessage:  fmt.Sprintf("You try to circle %s.  Clearly expecting it, %s dodges easily.", defender.Name, defender.Name),
+		FirstPerson:         attacker,
+		SecondPersonMessage: fmt.Sprintf("%s tries to circle you.  Expecting it, you dodge easily.", attacker.Name),
+		SecondPerson:        defender,
+		ThirdPersonMessage:  fmt.Sprintf("%s tries to circle %s.  Clearly expecting it, %s dodges easily.", attacker.Name, defender.Name, defender.Name),
+	}
+	if err := attacker.Room.ShowMessage(message); err != nil {
+		log.Fatalf("Problem showing expected circle message: %v", err)
+	}
 }
 
 func (c Circle) Label() string {
