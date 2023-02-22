@@ -113,6 +113,50 @@ func (b Bash) Label() string {
 	return "bash"
 }
 
+type Blitz struct{}
+
+func (b Blitz) Execute(ctx Context) {
+	attacker := ctx.Player
+	level := attacker.Skills.Blitz.Value()
+	if !CanUseSkill(attacker, b.Label(), level, level) {
+		return
+	}
+
+	defender := FindTarget(attacker, ctx.Raw)
+	if defender == nil {
+		attacker.Showln("Blitz who?")
+		return
+	}
+
+	InitBattleSkill(attacker, defender, level, b.Label(), level)
+	b.DoBlitz(ctx.World, attacker, defender, level)
+}
+
+func (b Blitz) DoBlitz(World *world.World, attacker *world.Character, defender *world.Character, level int) {
+	defender.Memory.AddGameEvent(b.Label(), 18)
+	for i := 0; i <= level; i++ {
+		hitDamage := battle.CalculateHitDamage(attacker, defender)
+		amount := int(float64(10+level) / float64(100) * float64(hitDamage.Amount))
+
+		message := world.Message{
+			FirstPersonMessage:  fmt.Sprintf("You blitz %s for %d damage.", defender.Name, amount),
+			FirstPerson:         attacker,
+			SecondPersonMessage: fmt.Sprintf("%s blitzes you for %d damage.", attacker.Name, amount),
+			SecondPerson:        defender,
+			ThirdPersonMessage:  fmt.Sprintf("%s blitzes %s for %d damage.", attacker.Name, defender.Name, amount),
+		}
+		if err := attacker.Room.ShowMessage(message); err != nil {
+			log.Fatalf("Problem showing blitz message: %v", err)
+		}
+		battle.DoDamage(World, attacker, defender, amount)
+	}
+	defender.Stun(1)
+}
+
+func (b Blitz) Label() string {
+	return "blitz"
+}
+
 func FindTarget(attacker *world.Character, command string) *world.Character {
 	parts := strings.SplitN(command, " ", 2)
 	if len(parts) == 1 {
@@ -136,6 +180,14 @@ func CanUseSkill(attacker *world.Character, skill string, level int, cost int) b
 		return false
 	}
 	return true
+}
+
+func InitBattleSkill(attacker *world.Character, defender *world.Character, spirit int, skill string, coolDownDuration int) {
+	attacker.Spirit.Consume(spirit)
+	attacker.StartAttacking(defender)
+	defender.StartAttacking(attacker)
+	coolDown := buffs.NewCoolDown(coolDownDuration, skill)
+	attacker.ApplyCoolDown(&coolDown)
 }
 
 type Circle struct{}
@@ -703,6 +755,7 @@ func buildCommands() map[string]Executor {
 		Attack{},
 		Barrier{},
 		Bash{},
+		Blitz{},
 		Circle{},
 		Drop{},
 		East{},
