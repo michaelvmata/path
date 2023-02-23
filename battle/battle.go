@@ -69,8 +69,6 @@ func DoDamage(world *world.World, attacker *world.Character, defender *world.Cha
 			World:     world,
 		})
 	}
-	attacker.Update(0)
-	defender.Update(0)
 	return dead
 }
 
