@@ -1,9 +1,14 @@
 package buffs
 
-import "testing"
+import (
+	"github.com/michaelvmata/path/world"
+	"testing"
+)
 
 func TestBarrier(t *testing.T) {
-	b := NewBarrier(1)
+	character := world.NewPlayer("Test UUID", "Test Handle")
+	character.Skills.Barrier.Increment()
+	b := NewBarrier(character)
 	if b.ApplyMessage() == "" {
 		t.Fatalf("Barrier apply not set")
 	}

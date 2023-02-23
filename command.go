@@ -60,7 +60,7 @@ func (b Barrier) Execute(ctx Context) {
 		player.Showln("You fail to form a barrier.")
 		return
 	}
-	buff := buffs.NewBarrier(player.Skills.Barrier.Value())
+	buff := buffs.NewBarrier(player)
 	player.Apply(buff)
 }
 
@@ -385,7 +385,7 @@ func (h Haste) Execute(ctx Context) {
 		player.Showln("You fail to move with haste.")
 		return
 	}
-	buff := buffs.NewHaste(1)
+	buff := buffs.NewHaste(player)
 	player.Apply(buff)
 }
 

@@ -1,9 +1,14 @@
 package buffs
 
-import "testing"
+import (
+	"github.com/michaelvmata/path/world"
+	"testing"
+)
 
 func TestHaste(t *testing.T) {
-	h := NewHaste(1)
+	character := world.NewPlayer("Test UUID", "Test Handle")
+	character.Skills.Haste.Increment()
+	h := NewHaste(character)
 	if h.NumberOfAttacks() <= 0 {
 		t.Fatalf("Invalid number of attacks")
 	}

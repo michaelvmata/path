@@ -1,5 +1,7 @@
 package buffs
 
+import "github.com/michaelvmata/path/world"
+
 var HasteName = "haste"
 
 type Haste struct {
@@ -27,6 +29,11 @@ func (h Haste) NumberOfAttacks() int {
 	return h.Level
 }
 
-func NewHaste(level int) *Haste {
+func (h Haste) Update(tick int) {
+
+}
+
+func NewHaste(character *world.Character) *Haste {
+	level := character.Skills.Haste.Value()
 	return &Haste{CoolDown: NewCoolDown(60, HasteName), Level: level}
 }

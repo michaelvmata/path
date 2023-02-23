@@ -1,10 +1,13 @@
 package buffs
 
+import "github.com/michaelvmata/path/world"
+
 var BarrierName = "barrier"
 
 type Barrier struct {
 	CoolDown
-	Level int
+	Level     int
+	Character *world.Character
 }
 
 func (b Barrier) ApplyMessage() string {
@@ -27,6 +30,11 @@ func (b Barrier) DamageReduction() int {
 	return b.Level * 2
 }
 
-func NewBarrier(level int) *Barrier {
-	return &Barrier{CoolDown: NewCoolDown(60, BarrierName), Level: level}
+func (b Barrier) Update(tick int) {
+
+}
+
+func NewBarrier(character *world.Character) *Barrier {
+	level := character.Skills.Barrier.Value()
+	return &Barrier{CoolDown: NewCoolDown(60, BarrierName), Level: level, Character: character}
 }
