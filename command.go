@@ -497,6 +497,16 @@ func (i Invest) Execute(ctx Context) {
 			skills.Bash.Increment()
 			player.Showln("Your mastery of bash improves.")
 		}
+	case "blitz":
+		if spendEssence(player, skills.Blitz.Base) {
+			skills.Blitz.Increment()
+			player.Showln("Your mastery of blitz improves.")
+		}
+	case "circle":
+		if spendEssence(player, skills.Circle.Base) {
+			skills.Circle.Increment()
+			player.Showln("Your mastery of circle improves.")
+		}
 	case "haste":
 		if spendEssence(player, skills.Haste.Base) {
 			skills.Haste.Increment()
