@@ -57,6 +57,7 @@ type YAMLMobile struct {
 	Skills    struct {
 		Barrier int `yaml:"Barrier"`
 		Bash    int `yaml:"Bash"`
+		Bleed   int `yaml:"Bleed"`
 		Blitz   int `yaml:"Blitz"`
 		Circle  int `yaml:"Circle"`
 		Dagger  int `yaml:"Dagger"`
@@ -316,6 +317,7 @@ func buildPlayers(w *world.World) {
 		}
 		c.Skills.Bash.Base = rp.Skills.Bash
 		c.Skills.Barrier.Base = rp.Skills.Barrier
+		c.Skills.Bleed.Base = rp.Skills.Bleed
 		c.Skills.Blitz.Base = rp.Skills.Blitz
 		c.Skills.Circle.Base = rp.Skills.Circle
 		c.Skills.Dagger.Base = rp.Skills.Dagger

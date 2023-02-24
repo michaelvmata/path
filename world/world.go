@@ -90,6 +90,7 @@ func (c *Character) UnapplyExpiredBuffs() {
 			buffs = append(buffs, b)
 		} else {
 			messages = append(messages, b.UnapplyMessage())
+			log.Printf("Expiring %s from %s", b.Name(), c.Name)
 		}
 	}
 	c.Buffs = buffs

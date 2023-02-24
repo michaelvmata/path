@@ -113,6 +113,34 @@ func (b Bash) Label() string {
 	return "bash"
 }
 
+type Bleed struct{}
+
+func (b Bleed) Execute(ctx Context) {
+	attacker := ctx.Player
+	level := attacker.Skills.Blitz.Value()
+	if !CanUseSkill(attacker, b.Label(), level, level) {
+		return
+	}
+
+	defender := FindTarget(attacker, ctx.Raw)
+	if defender == nil {
+		attacker.Showln("Bleed who?")
+		return
+	}
+
+	InitBattleSkill(attacker, defender, level, b.Label(), level)
+	b.DoBleed(ctx.World, attacker, defender, level)
+}
+
+func (b Bleed) DoBleed(World *world.World, attacker *world.Character, defender *world.Character, level int) {
+	buff := buffs.NewBleed(defender, attacker)
+	defender.Apply(buff)
+}
+
+func (b Bleed) Label() string {
+	return "bleed"
+}
+
 type Blitz struct{}
 
 func (b Blitz) Execute(ctx Context) {
@@ -497,6 +525,11 @@ func (i Invest) Execute(ctx Context) {
 			skills.Bash.Increment()
 			player.Showln("Your mastery of bash improves.")
 		}
+	case "bleed":
+		if spendEssence(player, skills.Bleed.Base) {
+			skills.Bleed.Increment()
+			player.Showln("Your mastery of bleed improves.")
+		}
 	case "blitz":
 		if spendEssence(player, skills.Blitz.Base) {
 			skills.Blitz.Increment()
@@ -765,6 +798,7 @@ func buildCommands() map[string]Executor {
 		Attack{},
 		Barrier{},
 		Bash{},
+		Bleed{},
 		Blitz{},
 		Circle{},
 		Drop{},
