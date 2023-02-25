@@ -64,5 +64,5 @@ func TestEvade(t *testing.T) {
 
 func TestDoDamage(t *testing.T) {
 	character := world.NewPlayer("Test UUID", "Test Handle")
-	DoDamage(nil, character, character, 1)
+	DoDamage(character, character, 1)
 }

@@ -90,7 +90,7 @@ func (b Bash) Execute(ctx Context) {
 	defender.Showln("%s bashes you for %d damage.", attacker.Name, amount)
 	defender.Stun(1)
 
-	battle.DoDamage(ctx.World, attacker, defender, amount)
+	battle.DoDamage(attacker, defender, amount)
 
 	coolDown := buffs.NewCoolDown(9, "bash")
 	attacker.ApplyCoolDown(&coolDown)
@@ -157,10 +157,10 @@ func (b Blitz) Execute(ctx Context) {
 	}
 
 	InitBattleSkill(attacker, defender, level, b.Label(), level)
-	b.DoBlitz(ctx.World, attacker, defender, level)
+	b.DoBlitz(attacker, defender, level)
 }
 
-func (b Blitz) DoBlitz(World *world.World, attacker *world.Character, defender *world.Character, level int) {
+func (b Blitz) DoBlitz(attacker *world.Character, defender *world.Character, level int) {
 	defender.Memory.AddGameEvent(b.Label(), 18)
 	for i := 0; i <= level; i++ {
 		hitDamage := battle.CalculateHitDamage(attacker, defender)
@@ -176,7 +176,7 @@ func (b Blitz) DoBlitz(World *world.World, attacker *world.Character, defender *
 		if err := attacker.Room.ShowMessage(message); err != nil {
 			log.Fatalf("Problem showing blitz message: %v", err)
 		}
-		battle.DoDamage(World, attacker, defender, amount)
+		battle.DoDamage(attacker, defender, amount)
 	}
 	defender.Stun(1)
 }
@@ -258,7 +258,7 @@ func (c Circle) Execute(ctx Context) {
 	if err := attacker.Room.ShowMessage(message); err != nil {
 		log.Fatalf("Problem showing cirle message: %v", err)
 	}
-	battle.DoDamage(ctx.World, attacker, defender, amount)
+	battle.DoDamage(attacker, defender, amount)
 	defender.Stun(1)
 }
 

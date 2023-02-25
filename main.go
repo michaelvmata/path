@@ -23,6 +23,7 @@ func main() {
 		Player: player,
 	}
 	world.SpawnMobiles()
+	events.CharacterDeath.Init(world)
 	events.CharacterDeath.Register(actions.RespawnCharacter{})
 	events.CharacterDeath.Register(actions.EssenceOnDeath{})
 

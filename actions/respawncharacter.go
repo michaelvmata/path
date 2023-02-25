@@ -8,7 +8,7 @@ import (
 
 type RespawnCharacter struct{}
 
-func (rp RespawnCharacter) Handle(payload events.CharacterDeathPayload) {
+func (rp RespawnCharacter) Handle(World *world.World, payload events.CharacterDeathPayload) {
 	char := payload.Character
 	char.Showln("You were defeated by %s.", payload.Killer.Name)
 	for _, c := range char.Room.Players {
@@ -18,8 +18,8 @@ func (rp RespawnCharacter) Handle(payload events.CharacterDeathPayload) {
 			c.Showln("%s defeated %s", payload.Killer.Name, char.Name)
 		}
 	}
-	if payload.World.IsMobile(char) {
-		payload.World.Mobiles.Unspawn(char)
+	if World.IsMobile(char) {
+		World.Mobiles.Unspawn(char)
 		if err := char.Room.Exit(char); err != nil {
 			log.Fatalf("Character died without exiting room %v", payload)
 		}

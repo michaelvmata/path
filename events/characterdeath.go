@@ -7,18 +7,22 @@ import (
 type CharacterDeathPayload struct {
 	Character *world.Character
 	Killer    *world.Character
-	World     *world.World
 }
 
 type listenerSignature interface {
-	Handle(CharacterDeathPayload)
+	Handle(*world.World, CharacterDeathPayload)
 }
 
 type characterDeath struct {
 	listeners []listenerSignature
+	world     *world.World
 }
 
 var CharacterDeath characterDeath
+
+func (cd *characterDeath) Init(World *world.World) {
+	cd.world = World
+}
 
 func (cd *characterDeath) Register(listener listenerSignature) {
 	cd.listeners = append(cd.listeners, listener)
@@ -26,6 +30,6 @@ func (cd *characterDeath) Register(listener listenerSignature) {
 
 func (cd *characterDeath) Emit(payload CharacterDeathPayload) {
 	for _, listener := range cd.listeners {
-		listener.Handle(payload)
+		listener.Handle(cd.world, payload)
 	}
 }
