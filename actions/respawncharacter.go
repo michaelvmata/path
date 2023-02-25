@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"fmt"
 	"github.com/michaelvmata/path/events"
 	"github.com/michaelvmata/path/world"
 	"log"
@@ -10,14 +11,20 @@ type RespawnCharacter struct{}
 
 func (rp RespawnCharacter) Handle(World *world.World, payload events.CharacterDeathPayload) {
 	char := payload.Character
-	char.Showln("You were defeated by %s.", payload.Killer.Name)
-	for _, c := range char.Room.Players {
-		if c == payload.Killer {
-			c.Showln("Victory!  %s falls at your hand.", char.Name)
-		} else if c != char {
-			c.Showln("%s defeated %s", payload.Killer.Name, char.Name)
-		}
+	message := world.Message{
+		FirstPerson:  payload.Killer,
+		SecondPerson: payload.Character,
 	}
+
+	if message.FirstPerson != nil {
+		message.FirstPersonMessage = fmt.Sprintf("Victory!  %s falls at your hand.", char.Name)
+		message.SecondPersonMessage = fmt.Sprintf("You were defeated by %s.", payload.Killer.Name)
+	} else {
+		message.SecondPersonMessage = "You succumb to your wounds."
+	}
+	message.ThirdPersonMessage = fmt.Sprintf("%s defeated %s", payload.Killer.Name, char.Name)
+	message.SecondPerson.Room.ShowMessage(message)
+
 	if World.IsMobile(char) {
 		World.Mobiles.Unspawn(char)
 		if err := char.Room.Exit(char); err != nil {
@@ -26,7 +33,12 @@ func (rp RespawnCharacter) Handle(World *world.World, payload events.CharacterDe
 		char.Room = nil
 	} else {
 		char.Restore()
-		char.Showln("In a flash, you're made whole again.")
+		message = world.Message{
+			FirstPerson:        char,
+			FirstPersonMessage: "In a flash, you're made whole again.",
+			ThirdPersonMessage: fmt.Sprintf("In a flash, %s is made whole again.", char.Name),
+		}
+		char.Room.ShowMessage(message)
 	}
 
 	opponents := make([]*world.Character, 0)
