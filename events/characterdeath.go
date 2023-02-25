@@ -24,7 +24,7 @@ func (cd *characterDeath) Register(listener listenerSignature) {
 	cd.listeners = append(cd.listeners, listener)
 }
 
-func (cd characterDeath) Emit(payload CharacterDeathPayload) {
+func (cd *characterDeath) Emit(payload CharacterDeathPayload) {
 	for _, listener := range cd.listeners {
 		listener.Handle(payload)
 	}
