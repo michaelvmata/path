@@ -19,10 +19,12 @@ func (rp RespawnCharacter) Handle(World *world.World, payload events.CharacterDe
 	if message.FirstPerson != nil {
 		message.FirstPersonMessage = fmt.Sprintf("Victory!  %s falls at your hand.", char.Name)
 		message.SecondPersonMessage = fmt.Sprintf("You were defeated by %s.", payload.Killer.Name)
+		message.ThirdPersonMessage = fmt.Sprintf("%s defeated %s", payload.Killer.Name, char.Name)
 	} else {
 		message.SecondPersonMessage = "You succumb to your wounds."
+		message.ThirdPersonMessage = fmt.Sprintf("%s succumbs to their wounds.", char.Name)
 	}
-	message.ThirdPersonMessage = fmt.Sprintf("%s defeated %s", payload.Killer.Name, char.Name)
+
 	message.SecondPerson.Room.ShowMessage(message)
 
 	if World.IsMobile(char) {
