@@ -1,4 +1,4 @@
-package battle
+package simulate
 
 import (
 	"github.com/michaelvmata/path/buffs"
@@ -137,6 +137,11 @@ func Round(w *world.World, fighting map[string]*world.Character, attacker *world
 }
 
 func Simulate(w *world.World) {
+	Battle(w)
+	Buffs(w)
+}
+
+func Battle(w *world.World) {
 	fighting := make(map[string]*world.Character)
 	for _, attacker := range w.Players {
 		Round(w, fighting, attacker)

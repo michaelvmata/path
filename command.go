@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/michaelvmata/path/battle"
 	"github.com/michaelvmata/path/buffs"
 	"github.com/michaelvmata/path/items"
+	"github.com/michaelvmata/path/simulate"
 	"github.com/michaelvmata/path/symbols"
 	"github.com/michaelvmata/path/world"
 	"log"
@@ -90,7 +90,7 @@ func (b Bash) Execute(ctx Context) {
 	defender.Showln("%s bashes you for %d damage.", attacker.Name, amount)
 	defender.Stun(1)
 
-	battle.DoDamage(attacker, defender, amount)
+	simulate.DoDamage(attacker, defender, amount)
 
 	coolDown := buffs.NewCoolDown(9, "bash")
 	attacker.ApplyCoolDown(&coolDown)
@@ -163,7 +163,7 @@ func (b Blitz) Execute(ctx Context) {
 func (b Blitz) DoBlitz(attacker *world.Character, defender *world.Character, level int) {
 	defender.Memory.AddGameEvent(b.Label(), 18)
 	for i := 0; i <= level; i++ {
-		hitDamage := battle.CalculateHitDamage(attacker, defender)
+		hitDamage := simulate.CalculateHitDamage(attacker, defender)
 		amount := int(float64(10+level) / float64(100) * float64(hitDamage.Amount))
 
 		message := world.Message{
@@ -176,7 +176,7 @@ func (b Blitz) DoBlitz(attacker *world.Character, defender *world.Character, lev
 		if err := attacker.Room.ShowMessage(message); err != nil {
 			log.Fatalf("Problem showing blitz message: %v", err)
 		}
-		battle.DoDamage(attacker, defender, amount)
+		simulate.DoDamage(attacker, defender, amount)
 	}
 	defender.Stun(1)
 }
@@ -245,7 +245,7 @@ func (c Circle) Execute(ctx Context) {
 	}
 
 	defender.Memory.AddGameEvent(c.Label(), 18)
-	hitDamage := battle.CalculateHitDamage(attacker, defender)
+	hitDamage := simulate.CalculateHitDamage(attacker, defender)
 	amount := c.CalculateDamage(level, hitDamage.Amount)
 
 	message := world.Message{
@@ -258,7 +258,7 @@ func (c Circle) Execute(ctx Context) {
 	if err := attacker.Room.ShowMessage(message); err != nil {
 		log.Fatalf("Problem showing cirle message: %v", err)
 	}
-	battle.DoDamage(attacker, defender, amount)
+	simulate.DoDamage(attacker, defender, amount)
 	defender.Stun(1)
 }
 

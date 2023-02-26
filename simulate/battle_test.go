@@ -1,4 +1,4 @@
-package battle
+package simulate
 
 import (
 	"github.com/michaelvmata/path/buffs"

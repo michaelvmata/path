@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/michaelvmata/path/actions"
-	"github.com/michaelvmata/path/battle"
 	"github.com/michaelvmata/path/events"
 	"github.com/michaelvmata/path/session"
+	"github.com/michaelvmata/path/simulate"
 	"time"
 )
 
@@ -44,7 +44,7 @@ MainLoop:
 		case <-ticker.C:
 			world.Update()
 			if world.IsBattleTick() {
-				battle.Simulate(world)
+				simulate.Simulate(world)
 			}
 		}
 
