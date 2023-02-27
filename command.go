@@ -129,6 +129,14 @@ func (b Bleed) Execute(ctx Context) {
 	}
 
 	InitBattleSkill(attacker, defender, level, b.Label(), level)
+	message := world.Message{
+		FirstPerson:         attacker,
+		SecondPerson:        defender,
+		FirstPersonMessage:  fmt.Sprintf("You strike %s precisely, inflicting a grievous wound.", defender.Name),
+		SecondPersonMessage: fmt.Sprintf("%s strikes you precisely, inflicting a grievous wound.", attacker.Name),
+		ThirdPersonMessage:  fmt.Sprintf("%s stirkes %s precisely, inflicting a grievous wound.", attacker.Name, defender.Name),
+	}
+	attacker.Room.ShowMessage(message)
 	b.DoBleed(ctx.World, attacker, defender, level)
 }
 
