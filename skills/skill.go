@@ -15,12 +15,13 @@ type Skills struct {
 	Evasion stats.Stat
 	Parry   stats.Stat
 
-	Barrier stats.Stat
-	Bash    stats.Stat
-	Bleed   stats.Stat
-	Blitz   stats.Stat
-	Circle  stats.Stat
-	Haste   stats.Stat
+	Barrier  stats.Stat
+	Backstab stats.Stat
+	Bash     stats.Stat
+	Bleed    stats.Stat
+	Blitz    stats.Stat
+	Circle   stats.Stat
+	Haste    stats.Stat
 }
 
 func (s Skills) Describe() string {
@@ -30,6 +31,7 @@ func (s Skills) Describe() string {
 		fmt.Sprintf("%s Spear: %d", symbols.TRIANGULAR_BULLET, s.Spear.Value()),
 		fmt.Sprintf("%s Evasion: %d", symbols.TRIANGULAR_BULLET, s.Evasion.Value()),
 		fmt.Sprintf("%s Parry: %d", symbols.TRIANGULAR_BULLET, s.Parry.Value()),
+		fmt.Sprintf("%s Backstab: %d", symbols.TRIANGULAR_BULLET, s.Backstab.Value()),
 		fmt.Sprintf("%s Barrier: %d", symbols.TRIANGULAR_BULLET, s.Barrier.Value()),
 		fmt.Sprintf("%s Bash: %d", symbols.TRIANGULAR_BULLET, s.Bash.Value()),
 		fmt.Sprintf("%s Bleed: %d", symbols.TRIANGULAR_BULLET, s.Bleed.Value()),
@@ -49,10 +51,11 @@ func NewSkills() Skills {
 		Evasion: stats.NewStat(0, 0),
 		Parry:   stats.NewStat(0, 0),
 
-		Bash:   stats.NewStat(0, 0),
-		Bleed:  stats.NewStat(0, 0),
-		Blitz:  stats.NewStat(0, 0),
-		Circle: stats.NewStat(0, 0),
-		Haste:  stats.NewStat(0, 0),
+		Backstab: stats.NewStat(0, 0),
+		Bash:     stats.NewStat(0, 0),
+		Bleed:    stats.NewStat(0, 0),
+		Blitz:    stats.NewStat(0, 0),
+		Circle:   stats.NewStat(0, 0),
+		Haste:    stats.NewStat(0, 0),
 	}
 }

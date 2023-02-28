@@ -52,6 +52,55 @@ func (a Attack) Label() string {
 	return "attack"
 }
 
+type Backstab struct{}
+
+func (b Backstab) Execute(ctx Context) {
+	attacker := ctx.Player
+	level := attacker.Skills.Backstab.Value()
+	if !CanUseSkill(attacker, b.Label(), level, level) {
+		return
+	}
+
+	if attacker.IsFighting() {
+		attacker.Showln("You can't backstab while in combat.")
+		return
+	}
+
+	defender := FindTarget(attacker, ctx.Raw)
+	if defender == nil {
+		attacker.Showln("Backstab who?")
+		return
+	}
+
+	cost := level
+	coolDown := level
+	InitBattleSkill(attacker, defender, cost, b.Label(), coolDown)
+
+	b.DoBackstab(attacker, defender, level)
+}
+
+func (b Backstab) DoBackstab(attacker *world.Character, defender *world.Character, level int) {
+	defender.Memory.AddGameEvent(b.Label(), 18)
+	hitDamage := simulate.CalculateHitDamage(attacker, defender)
+	amount := hitDamage.Amount * 10
+
+	message := world.Message{
+		FirstPersonMessage:  fmt.Sprintf("You backstab %s for %d damage.", defender.Name, amount),
+		FirstPerson:         attacker,
+		SecondPersonMessage: fmt.Sprintf("%s backstabs you for %d damage.", attacker.Name, amount),
+		SecondPerson:        defender,
+		ThirdPersonMessage:  fmt.Sprintf("%s backstabs %s for %d damage.", attacker.Name, defender.Name, amount),
+	}
+	if err := attacker.Room.ShowMessage(message); err != nil {
+		log.Fatalf("Problem showing backstab message: %v", err)
+	}
+	simulate.DoDamage(attacker, defender, amount)
+}
+
+func (b Backstab) Label() string {
+	return "backstab"
+}
+
 type Barrier struct{}
 
 func (b Barrier) Execute(ctx Context) {
@@ -804,6 +853,7 @@ var commands = buildCommands()
 func buildCommands() map[string]Executor {
 	commands := []Executor{
 		Attack{},
+		Backstab{},
 		Barrier{},
 		Bash{},
 		Bleed{},
