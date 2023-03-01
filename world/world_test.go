@@ -85,7 +85,7 @@ func TestPlayerBuff(t *testing.T) {
 	player.Apply(buff)
 	buff2 := &TestBuff{Expired: false, name: "TestBuff2"}
 	player.Apply(buff2)
-	player.UnapplyBuff(buff.Name())
+	player.Unapply(buff.Name())
 	if len(player.Buffs) != 1 {
 		t.Fatalf("Unapplied buff still applied")
 	}

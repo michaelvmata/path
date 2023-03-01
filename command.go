@@ -110,7 +110,11 @@ func (b Barrier) Execute(ctx Context) {
 		return
 	}
 	buff := buffs.NewBarrier(player)
-	player.Apply(buff)
+	if player.HasBuff(buff.Name()) {
+		player.Unapply(buff.Name())
+	} else {
+		player.Apply(buff)
+	}
 }
 
 func (b Barrier) Label() string {
@@ -470,8 +474,14 @@ func (h Haste) Execute(ctx Context) {
 		player.Showln("You fail to move with haste.")
 		return
 	}
+
 	buff := buffs.NewHaste(player)
-	player.Apply(buff)
+
+	if player.HasBuff(buff.Name()) {
+		player.Unapply(buff.Name())
+	} else {
+		player.Apply(buff)
+	}
 }
 
 func (h Haste) Label() string {
