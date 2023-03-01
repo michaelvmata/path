@@ -113,6 +113,19 @@ func (c *Character) ApplyCoolDown(coolDown CoolDown) {
 	c.CoolDowns = append(c.CoolDowns, coolDown)
 }
 
+func (c *Character) UnapplyBuff(buffName string) {
+	remaining := make([]Buff, 0)
+	for _, buff := range c.Buffs {
+		if buff.Name() != buffName {
+			remaining = append(remaining, buff)
+		}
+	}
+	if len(remaining) == len(c.Buffs) {
+		log.Fatalf("Tried to unapply buff that wasn't applied %s", buffName)
+	}
+	c.Buffs = remaining
+}
+
 func (c *Character) UnapplyExpiredCoolDowns() {
 	coolDowns := make([]CoolDown, 0)
 	for _, cd := range c.CoolDowns {

@@ -51,22 +51,23 @@ func TestPlayer(t *testing.T) {
 
 type TestBuff struct {
 	Expired bool
+	name    string
 }
 
 func (t *TestBuff) Update(tick int)        {}
 func (t *TestBuff) IsExpired() bool        { return t.Expired }
 func (t *TestBuff) Expire()                { t.Expired = true }
-func (t *TestBuff) Name() string           { return "TestBuff" }
-func (t *TestBuff) ApplyMessage() string   { return "TestBuff" }
-func (t *TestBuff) UnapplyMessage() string { return "TestBuff" }
-func (t *TestBuff) AlreadyApplied() string { return "TestBuff" }
+func (t *TestBuff) Name() string           { return t.name }
+func (t *TestBuff) ApplyMessage() string   { return t.name }
+func (t *TestBuff) UnapplyMessage() string { return t.name }
+func (t *TestBuff) AlreadyApplied() string { return t.name }
 func (t *TestBuff) Upkeep() int            { return 0 }
 
 func TestPlayerBuff(t *testing.T) {
 	player := NewPlayer("Test UUID", "Test Handle")
 
-	buff := TestBuff{Expired: false}
-	player.Apply(&buff)
+	buff := &TestBuff{Expired: false}
+	player.Apply(buff)
 	if len(player.Buffs) != 1 {
 		t.Fatalf("Unable to apply buff %v", buff)
 	}
@@ -78,6 +79,15 @@ func TestPlayerBuff(t *testing.T) {
 	player.Update(1)
 	if len(player.Buffs) != 0 {
 		t.Fatalf("Expired buff still applied")
+	}
+
+	buff.Expired = false
+	player.Apply(buff)
+	buff2 := &TestBuff{Expired: false, name: "TestBuff2"}
+	player.Apply(buff2)
+	player.UnapplyBuff(buff.Name())
+	if len(player.Buffs) != 1 {
+		t.Fatalf("Unapplied buff still applied")
 	}
 }
 
