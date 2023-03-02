@@ -14,15 +14,15 @@ type item struct {
 	modifiers []modifiers.Modifier
 }
 
-func (i item) UUID() string {
+func (i *item) UUID() string {
 	return i.uuid
 }
 
-func (i item) Name() string {
+func (i *item) Name() string {
 	return i.name
 }
 
-func (i item) HasKeyword(keyword string) bool {
+func (i *item) HasKeyword(keyword string) bool {
 	for _, candidate := range i.keywords {
 		if candidate == keyword {
 			return true
@@ -39,11 +39,11 @@ func (i *item) AddModifier(modifierType string, value int) {
 	i.modifiers = append(i.modifiers, modifier)
 }
 
-func (i item) Modifiers() []modifiers.Modifier {
+func (i *item) Modifiers() []modifiers.Modifier {
 	return i.modifiers
 }
 
-func (i item) Description() string {
+func (i *item) Description() string {
 	parts := make([]string, 0)
 	parts = append(parts, fmt.Sprintf("Name: %s", i.Name()))
 	parts = append(parts, fmt.Sprintf("Keywords: %s", strings.Join(i.keywords, ", ")))
@@ -126,7 +126,7 @@ func (c *Container) AddItem(item Item) error {
 	return nil
 }
 
-func (c Container) IndexOfItem(keyword string) int {
+func (c *Container) IndexOfItem(keyword string) int {
 	for i, item := range c.Items {
 		if item.HasKeyword(keyword) {
 			return i
@@ -141,7 +141,7 @@ func (c *Container) RemItemAtIndex(index int) Item {
 	return item
 }
 
-func (c Container) GetItemAtIndex(index int) Item {
+func (c *Container) GetItemAtIndex(index int) Item {
 	return c.Items[index]
 }
 
