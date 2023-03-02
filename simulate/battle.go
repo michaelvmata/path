@@ -17,7 +17,7 @@ type Damage struct {
 func CalculateHitDamage(attacker *world.Character, defender *world.Character) Damage {
 	weapon := attacker.Weapon()
 	damage := Damage{
-		Type:     strings.ToLower(weapon.WeaponType),
+		Type:     strings.ToLower(weapon.DamageType),
 		Amount:   rand.Intn(weapon.MaximumDamage-weapon.MinimumDamage) + weapon.MinimumDamage,
 		Critical: false,
 	}

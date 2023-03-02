@@ -9,7 +9,7 @@ import (
 
 func TestCalculateHitDamage(t *testing.T) {
 	attacker := world.NewPlayer("Test Attacker", "Test Handle")
-	w := item.NewWeapon("TestUUID", "Test Weapon", []string{"test"}, item.Crush)
+	w := item.NewWeapon("TestUUID", "Test Weapon", []string{"test"}, item.Crush, []string{item.Impact})
 	w.MaximumDamage = 10
 	w.MinimumDamage = 5
 	w.CriticalBonus = 0.0

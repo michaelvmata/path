@@ -68,16 +68,24 @@ const (
 	Slash  = "slash"
 )
 
+const (
+	Blade     = "blade"
+	Impact    = "impact"
+	TwoHanded = "two handed"
+	Ranged    = "ranged"
+)
+
 type Weapon struct {
 	item
-	WeaponType    string
+	DamageType    string
+	Attributes    []string
 	MaximumDamage int
 	MinimumDamage int
 	CriticalBonus float64
 	CriticalRate  float64
 }
 
-func NewWeapon(UUID string, name string, keywords []string, weaponType string) *Weapon {
+func NewWeapon(UUID string, name string, keywords []string, damageType string, attributes []string) *Weapon {
 	return &Weapon{
 		item: item{
 			uuid:      UUID,
@@ -85,7 +93,8 @@ func NewWeapon(UUID string, name string, keywords []string, weaponType string) *
 			keywords:  keywords,
 			modifiers: make([]modifiers.Modifier, 0),
 		},
-		WeaponType: weaponType,
+		DamageType: damageType,
+		Attributes: attributes,
 	}
 }
 

@@ -10,15 +10,16 @@ import (
 )
 
 type YAMLItem struct {
-	UUID          string  `yaml:"UUID"`
-	Name          string  `yaml:"Name"`
-	Type          string  `yaml:"Type"`
-	Slot          string  `yaml:"Slot"`
-	DamageType    string  `yaml:"DamageType"`
-	MinimumDamage int     `yaml:"MinimumDamage"`
-	MaximumDamage int     `yaml:"MaximumDamage"`
-	CriticalRate  float64 `yaml:"CriticalRate"`
-	CriticalBonus float64 `yaml:"CriticalBonus"`
+	UUID          string   `yaml:"UUID"`
+	Name          string   `yaml:"Name"`
+	Type          string   `yaml:"Type"`
+	Slot          string   `yaml:"Slot"`
+	DamageType    string   `yaml:"DamageType"`
+	Attributes    []string `yaml:"Attributes""`
+	MinimumDamage int      `yaml:"MinimumDamage"`
+	MaximumDamage int      `yaml:"MaximumDamage"`
+	CriticalRate  float64  `yaml:"CriticalRate"`
+	CriticalBonus float64  `yaml:"CriticalBonus"`
 	Modifiers     []struct {
 		Type  string `yaml:"Type"`
 		Value int    `yaml:"Value"`
@@ -200,7 +201,7 @@ func buildItems(w *world.World, area YAMLArea) {
 		if r.Type == "Armor" {
 			i = item.NewArmor(r.UUID, r.Name, r.Slot, r.Keywords)
 		} else if r.Type == "Weapon" {
-			w := item.NewWeapon(r.UUID, r.Name, r.Keywords, r.DamageType)
+			w := item.NewWeapon(r.UUID, r.Name, r.Keywords, r.DamageType, r.Attributes)
 			if r.MaximumDamage <= r.MinimumDamage || r.MinimumDamage <= 0 {
 				log.Fatalln("Invalid Maximum and Minimum Damage", r)
 			}

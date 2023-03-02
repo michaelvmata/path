@@ -224,7 +224,7 @@ func (c *Character) Weapon() *item.Weapon {
 	if c.Gear.MainHand != nil {
 		return c.Gear.MainHand
 	}
-	hand := item.NewWeapon("Barehand", "Barehand", []string{}, item.Crush)
+	hand := item.NewWeapon("Barehand", "Barehand", []string{}, item.Crush, []string{item.Impact})
 	hand.MinimumDamage = 1
 	hand.MaximumDamage = 5
 	hand.CriticalBonus = 1
