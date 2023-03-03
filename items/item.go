@@ -85,6 +85,31 @@ type Weapon struct {
 	CriticalRate  float64
 }
 
+func (w *Weapon) IsBlade() bool {
+	return w.HasAttribute(Blade)
+}
+
+func (w *Weapon) IsImpact() bool {
+	return w.HasAttribute(Impact)
+}
+
+func (w *Weapon) IsTwoHanded() bool {
+	return w.HasKeyword(TwoHanded)
+}
+
+func (w *Weapon) IsRange() bool {
+	return w.HasKeyword(Ranged)
+}
+
+func (w *Weapon) HasAttribute(target string) bool {
+	for _, attribute := range w.Attributes {
+		if attribute == target {
+			return true
+		}
+	}
+	return false
+}
+
 func NewWeapon(UUID string, name string, keywords []string, damageType string, attributes []string) *Weapon {
 	return &Weapon{
 		item: item{

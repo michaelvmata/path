@@ -66,6 +66,11 @@ func (b Backstab) Execute(ctx Context) {
 		return
 	}
 
+	if !b.IsWieldingBlade(attacker) {
+		attacker.Showln("You can't backstab without a blade.")
+		return
+	}
+
 	defender := FindTarget(attacker, ctx.Raw)
 	if defender == nil {
 		attacker.Showln("Backstab who?")
@@ -77,6 +82,10 @@ func (b Backstab) Execute(ctx Context) {
 	InitBattleSkill(attacker, defender, cost, b.Label(), coolDown)
 
 	b.DoBackstab(attacker, defender, level)
+}
+
+func (b Backstab) IsWieldingBlade(attacker *world.Character) bool {
+	return !item.IsNil(attacker.Gear.MainHand) && attacker.Gear.MainHand.IsBlade()
 }
 
 func (b Backstab) DoBackstab(attacker *world.Character, defender *world.Character, level int) {
