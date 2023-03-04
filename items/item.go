@@ -94,11 +94,11 @@ func (w *Weapon) IsImpact() bool {
 }
 
 func (w *Weapon) IsTwoHanded() bool {
-	return w.HasKeyword(TwoHanded)
+	return w.HasAttribute(TwoHanded)
 }
 
 func (w *Weapon) IsRange() bool {
-	return w.HasKeyword(Ranged)
+	return w.HasAttribute(Ranged)
 }
 
 func (w *Weapon) HasAttribute(target string) bool {

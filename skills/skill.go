@@ -22,6 +22,7 @@ type Skills struct {
 	Blitz    stats.Stat
 	Circle   stats.Stat
 	Haste    stats.Stat
+	Sweep    stats.Stat
 }
 
 func (s Skills) Describe() string {
@@ -38,6 +39,7 @@ func (s Skills) Describe() string {
 		fmt.Sprintf("%s Blitz: %d", symbols.TRIANGULAR_BULLET, s.Blitz.Value()),
 		fmt.Sprintf("%s Circle: %d", symbols.TRIANGULAR_BULLET, s.Circle.Value()),
 		fmt.Sprintf("%s Haste: %d", symbols.TRIANGULAR_BULLET, s.Haste.Value()),
+		fmt.Sprintf("%s Sweep: %d", symbols.TRIANGULAR_BULLET, s.Sweep.Value()),
 	}
 	return strings.Join(parts, "\n")
 }

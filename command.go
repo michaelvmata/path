@@ -19,6 +19,10 @@ type Context struct {
 	Raw    string
 }
 
+func IsWieldingRange(character *world.Character) bool {
+	return !item.IsNil(character.Gear.MainHand) && character.Gear.MainHand.IsRange()
+}
+
 type Attack struct{}
 
 func (a Attack) Execute(ctx Context) {
@@ -698,6 +702,57 @@ func (s StunLocked) Label() string {
 	return ""
 }
 
+type Sweep struct{}
+
+func (s Sweep) Execute(ctx Context) {
+	attacker := ctx.Player
+	level := attacker.Skills.Sweep.Value()
+	cost := level
+	if !CanUseSkill(attacker, s.Label(), level, cost) {
+		return
+	}
+
+	if !IsWieldingRange(attacker) {
+		attacker.Showln("You can't sweep without a ranged weapon.")
+		return
+	}
+
+	defender := FindTarget(attacker, ctx.Raw)
+	if defender == nil {
+		attacker.Showln("Sweep who?")
+		return
+	}
+
+	coolDown := level
+	InitBattleSkill(attacker, defender, cost, s.Label(), coolDown)
+
+	s.DoSweep(attacker, level)
+}
+
+func (s Sweep) DoSweep(attacker *world.Character, level int) {
+	for _, defender := range attacker.Attacking {
+		defender.Memory.AddGameEvent(s.Label(), 10)
+		hitDamage := simulate.CalculateHitDamage(attacker, defender)
+		amount := hitDamage.Amount
+
+		message := world.Message{
+			FirstPersonMessage:  fmt.Sprintf("You sweep %s for %d damage.", defender.Name, amount),
+			FirstPerson:         attacker,
+			SecondPersonMessage: fmt.Sprintf("%s sweeps you for %d damage.", attacker.Name, amount),
+			SecondPerson:        defender,
+			ThirdPersonMessage:  fmt.Sprintf("%s sweeps %s for %d damage.", attacker.Name, defender.Name, amount),
+		}
+		if err := attacker.Room.ShowMessage(message); err != nil {
+			log.Fatalf("Problem showing sweep message: %v", err)
+		}
+		simulate.DoDamage(attacker, defender, amount)
+	}
+}
+
+func (s Sweep) Label() string {
+	return "sweep"
+}
+
 type Typo struct{}
 
 func (t Typo) Execute(ctx Context) {
@@ -894,6 +949,7 @@ func buildCommands() map[string]Executor {
 		Remove{},
 		Score{},
 		South{},
+		Sweep{},
 		Typo{},
 		Wear{},
 		West{},

@@ -67,6 +67,7 @@ type YAMLMobile struct {
 		Haste    int `yaml:"Haste"`
 		Parry    int `yaml:"Parry"`
 		Spear    int `yaml:"Spear"`
+		Sweep    int `yaml:"Sweep"`
 		Sword    int `yaml:"Sword"`
 	} `yaml:"Skills"`
 }
@@ -328,6 +329,7 @@ func buildPlayers(w *world.World) {
 		c.Skills.Haste.Base = rp.Skills.Haste
 		c.Skills.Parry.Base = rp.Skills.Parry
 		c.Skills.Spear.Base = rp.Skills.Spear
+		c.Skills.Sweep.Base = rp.Skills.Sweep
 		c.Skills.Sword.Base = rp.Skills.Sword
 		c.Update(0)
 		w.Players[c.Name] = c
