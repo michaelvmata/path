@@ -23,6 +23,43 @@ func IsWieldingRange(character *world.Character) bool {
 	return !item.IsNil(character.Gear.MainHand) && character.Gear.MainHand.IsRange()
 }
 
+func IsWieldingBlade(attacker *world.Character) bool {
+	return !item.IsNil(attacker.Gear.MainHand) && attacker.Gear.MainHand.IsBlade()
+}
+
+func FindTarget(attacker *world.Character, command string) *world.Character {
+	parts := strings.SplitN(command, " ", 2)
+	if len(parts) == 1 {
+		return attacker.ImmediateDefender()
+	}
+	handle := parts[1]
+	return attacker.Room.GetPlayer(handle)
+}
+
+func CanUseSkill(attacker *world.Character, skill string, level int, cost int) bool {
+	if level == 0 {
+		attacker.Showln("You gotta learn how to %s first.", skill)
+		return false
+	}
+	if !attacker.Spirit.IsAvailable(cost) {
+		attacker.Showln("Your spirit isn't strong enough to %s.", skill)
+		return false
+	}
+	if attacker.OnCoolDown(skill) {
+		attacker.Showln("You need a moment before you can %s again.", skill)
+		return false
+	}
+	return true
+}
+
+func InitBattleSkill(attacker *world.Character, defender *world.Character, spirit int, skill string, coolDownDuration int) {
+	attacker.Spirit.Consume(spirit)
+	attacker.StartAttacking(defender)
+	defender.StartAttacking(attacker)
+	coolDown := buffs.NewCoolDown(coolDownDuration, skill)
+	attacker.ApplyCoolDown(&coolDown)
+}
+
 type Attack struct{}
 
 func (a Attack) Execute(ctx Context) {
@@ -70,7 +107,7 @@ func (b Backstab) Execute(ctx Context) {
 		return
 	}
 
-	if !b.IsWieldingBlade(attacker) {
+	if !IsWieldingBlade(attacker) {
 		attacker.Showln("You can't backstab without a blade.")
 		return
 	}
@@ -86,10 +123,6 @@ func (b Backstab) Execute(ctx Context) {
 	InitBattleSkill(attacker, defender, cost, b.Label(), coolDown)
 
 	b.DoBackstab(attacker, defender, level)
-}
-
-func (b Backstab) IsWieldingBlade(attacker *world.Character) bool {
-	return !item.IsNil(attacker.Gear.MainHand) && attacker.Gear.MainHand.IsBlade()
 }
 
 func (b Backstab) DoBackstab(attacker *world.Character, defender *world.Character, level int) {
@@ -142,7 +175,7 @@ func (b Bash) Execute(ctx Context) {
 	if !CanUseSkill(attacker, b.Label(), level, level) {
 		return
 	}
-	defender := b.FindTarget(attacker, ctx.Raw)
+	defender := FindTarget(attacker, ctx.Raw)
 	if defender == nil {
 		attacker.Showln("Bash who?")
 		return
@@ -160,15 +193,6 @@ func (b Bash) Execute(ctx Context) {
 
 	coolDown := buffs.NewCoolDown(9, "bash")
 	attacker.ApplyCoolDown(&coolDown)
-}
-
-func (b Bash) FindTarget(attacker *world.Character, command string) *world.Character {
-	parts := strings.SplitN(command, " ", 2)
-	if len(parts) == 1 {
-		return attacker.ImmediateDefender()
-	}
-	handle := parts[1]
-	return attacker.Room.GetPlayer(handle)
 }
 
 func (b Bash) CalculateDamage(level int) int {
@@ -257,39 +281,6 @@ func (b Blitz) DoBlitz(attacker *world.Character, defender *world.Character, lev
 
 func (b Blitz) Label() string {
 	return "blitz"
-}
-
-func FindTarget(attacker *world.Character, command string) *world.Character {
-	parts := strings.SplitN(command, " ", 2)
-	if len(parts) == 1 {
-		return attacker.ImmediateDefender()
-	}
-	handle := parts[1]
-	return attacker.Room.GetPlayer(handle)
-}
-
-func CanUseSkill(attacker *world.Character, skill string, level int, cost int) bool {
-	if level == 0 {
-		attacker.Showln("You gotta learn how to %s first.", skill)
-		return false
-	}
-	if !attacker.Spirit.IsAvailable(cost) {
-		attacker.Showln("Your spirit isn't strong enough to %s.", skill)
-		return false
-	}
-	if attacker.OnCoolDown(skill) {
-		attacker.Showln("You need a moment before you can %s again.", skill)
-		return false
-	}
-	return true
-}
-
-func InitBattleSkill(attacker *world.Character, defender *world.Character, spirit int, skill string, coolDownDuration int) {
-	attacker.Spirit.Consume(spirit)
-	attacker.StartAttacking(defender)
-	defender.StartAttacking(attacker)
-	coolDown := buffs.NewCoolDown(coolDownDuration, skill)
-	attacker.ApplyCoolDown(&coolDown)
 }
 
 type Circle struct{}
