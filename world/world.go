@@ -23,6 +23,7 @@ type Buff interface {
 	UnapplyMessage() string
 	AlreadyApplied() string
 	Upkeep() int
+	Remaining() int
 }
 
 type CoolDown interface {
@@ -467,6 +468,12 @@ func (c *Character) Showln(message string, args ...interface{}) {
 	if c.Session != nil {
 		c.Session.Outgoing <- fmt.Sprintf(message, args...)
 		c.Session.Outgoing <- "\n"
+	}
+}
+
+func (c *Character) ShowDivider() {
+	if c.Session != nil {
+		c.Session.Outgoing <- "------------------------------------------------------------"
 	}
 }
 

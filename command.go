@@ -93,6 +93,27 @@ func (a Attack) Label() string {
 	return "attack"
 }
 
+type Affect struct{}
+
+func (a Affect) Execute(ctx Context) {
+	player := ctx.Player
+	if len(player.Buffs) == 0 {
+		player.Showln("You are not affected by any technique.")
+		return
+	}
+
+	player.Showln("Techniques")
+	player.ShowDivider()
+	player.ShowNewline()
+	for _, buff := range player.Buffs {
+		player.Showln(fmt.Sprintf("Name: %s\tDuration: %d", buff.Name(), buff.Remaining()))
+	}
+}
+
+func (a Affect) Label() string {
+	return "affect"
+}
+
 type Backstab struct{}
 
 func (b Backstab) Execute(ctx Context) {
@@ -918,6 +939,7 @@ var commands = buildCommands()
 func buildCommands() map[string]Executor {
 	commands := []Executor{
 		Attack{},
+		Affect{},
 		Backstab{},
 		Barrier{},
 		Bash{},
