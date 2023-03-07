@@ -22,15 +22,11 @@ func (h Haste) AlreadyApplied() string {
 }
 
 func (h Haste) Upkeep() int {
-	return h.Level
+	return h.Level + 1
 }
 
 func (h Haste) NumberOfAttacks() int {
 	return h.Level
-}
-
-func (h Haste) Update(tick int) {
-
 }
 
 func NewHaste(character *world.Character) *Haste {

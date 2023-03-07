@@ -24,6 +24,7 @@ type Buff interface {
 	AlreadyApplied() string
 	Upkeep() int
 	Remaining() int
+	SetRemaining(int)
 }
 
 type CoolDown interface {

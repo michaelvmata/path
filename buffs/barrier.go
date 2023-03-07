@@ -23,15 +23,11 @@ func (b Barrier) AlreadyApplied() string {
 }
 
 func (b Barrier) Upkeep() int {
-	return b.Level
+	return b.Level + 1
 }
 
 func (b Barrier) DamageReduction() int {
 	return b.Level * 2
-}
-
-func (b Barrier) Update(tick int) {
-
 }
 
 func NewBarrier(character *world.Character) *Barrier {

@@ -62,6 +62,8 @@ func (t *TestBuff) ApplyMessage() string   { return t.name }
 func (t *TestBuff) UnapplyMessage() string { return t.name }
 func (t *TestBuff) AlreadyApplied() string { return t.name }
 func (t *TestBuff) Upkeep() int            { return 0 }
+func (t *TestBuff) Remaining() int         { return 0 }
+func (t *TestBuff) SetRemaining(int)       {}
 
 func TestPlayerBuff(t *testing.T) {
 	player := NewPlayer("Test UUID", "Test Handle")
