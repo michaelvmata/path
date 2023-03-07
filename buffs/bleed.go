@@ -26,11 +26,7 @@ func (b *Bleed) AlreadyApplied() string {
 }
 
 func (b *Bleed) Upkeep() int {
-	return b.Level
-}
-
-func (b *Bleed) DamageReduction() int {
-	return b.Level * 2
+	return b.Level + 1
 }
 
 func NewBleed(character *world.Character, applier *world.Character) *Bleed {

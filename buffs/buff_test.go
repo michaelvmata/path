@@ -9,6 +9,7 @@ func TestAllBuffs(t *testing.T) {
 	character := world.NewPlayer("Test UUID", "Test Handle")
 	buffs := []world.Buff{
 		NewBarrier(character),
+		NewBleed(character, character),
 		NewHaste(character),
 	}
 	for _, buff := range buffs {
