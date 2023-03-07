@@ -25,10 +25,6 @@ func (cd *CoolDown) Remaining() int {
 	return cd.Lifetime
 }
 
-func (cd *CoolDown) SetRemaining(lifetime int) {
-	cd.Lifetime = lifetime
-}
-
 func NewCoolDown(lifetime int, name string) CoolDown {
 	return CoolDown{
 		Lifetime: lifetime,
