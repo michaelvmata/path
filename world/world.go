@@ -378,12 +378,6 @@ func (c *Character) ApplyModifiers(mods []modifiers.Modifier) {
 			c.Core.Insight.Modify(mod.Value)
 		case modifiers.Will:
 			c.Core.Will.Modify(mod.Value)
-		case modifiers.Dagger:
-			c.Skills.Dagger.Modify(mod.Value)
-		case modifiers.Sword:
-			c.Skills.Sword.Modify(mod.Value)
-		case modifiers.Spear:
-			c.Skills.Spear.Modify(mod.Value)
 		}
 	}
 }

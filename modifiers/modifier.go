@@ -5,10 +5,6 @@ const (
 	Agility = "Agility"
 	Insight = "Insight"
 	Will    = "Will"
-
-	Dagger = "Dagger"
-	Sword  = "Sword"
-	Spear  = "Spear"
 )
 
 type Modifier struct {

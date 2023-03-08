@@ -108,7 +108,7 @@ Items:
     Modifiers:
       - Type: Will
         Value: 1
-      - Type: Inisight
+      - Type: Insight
         Value: 1
     Keywords:
       - titanium

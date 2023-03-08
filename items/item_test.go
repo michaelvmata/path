@@ -11,15 +11,15 @@ func TestItem(t *testing.T) {
 	if len(item.Modifiers()) != 0 {
 		t.Fatalf("Default item has non empty modifiers")
 	}
-	item.AddModifier(modifiers.Dagger, 1)
+	item.AddModifier(modifiers.Power, 1)
 	if len(item.Modifiers()) != 1 {
 		t.Fatalf("Armor does not have modifier")
 	}
 	if !item.HasKeyword("helmet") {
 		t.Fatalf("Armor doesn't have keyword")
 	}
-	if !strings.Contains(item.Description(), "Dagger") {
-		t.Fatalf("Armor description missing Dagger modifier: %s", item.Description())
+	if !strings.Contains(item.Description(), "Power") {
+		t.Fatalf("Armor description missing modifier: %s", item.Description())
 	}
 
 }

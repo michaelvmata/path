@@ -62,13 +62,10 @@ type YAMLMobile struct {
 		Bleed    int `yaml:"Bleed"`
 		Blitz    int `yaml:"Blitz"`
 		Circle   int `yaml:"Circle"`
-		Dagger   int `yaml:"Dagger"`
 		Evasion  int `yaml:"Evasion"`
 		Haste    int `yaml:"Haste"`
 		Parry    int `yaml:"Parry"`
-		Spear    int `yaml:"Spear"`
 		Sweep    int `yaml:"Sweep"`
-		Sword    int `yaml:"Sword"`
 	} `yaml:"Skills"`
 }
 
@@ -324,13 +321,10 @@ func buildPlayers(w *world.World) {
 		c.Skills.Bleed.Base = rp.Skills.Bleed
 		c.Skills.Blitz.Base = rp.Skills.Blitz
 		c.Skills.Circle.Base = rp.Skills.Circle
-		c.Skills.Dagger.Base = rp.Skills.Dagger
 		c.Skills.Evasion.Base = rp.Skills.Evasion
 		c.Skills.Haste.Base = rp.Skills.Haste
 		c.Skills.Parry.Base = rp.Skills.Parry
-		c.Skills.Spear.Base = rp.Skills.Spear
 		c.Skills.Sweep.Base = rp.Skills.Sweep
-		c.Skills.Sword.Base = rp.Skills.Sword
 		c.Update(0)
 		w.Players[c.Name] = c
 		if room, ok := w.Rooms[rp.RoomUUID]; ok {
