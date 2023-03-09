@@ -31,6 +31,11 @@ func TestBuild(t *testing.T) {
 	}
 }
 
+func TestSavePlayers(t *testing.T) {
+	world := build()
+	savePlayers(world.Players)
+}
+
 func TestArea(t *testing.T) {
 	absPath, err := filepath.Abs("data/area.yaml")
 	if err != nil {

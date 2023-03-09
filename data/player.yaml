@@ -1,38 +1,40 @@
 Players:
-  - UUID: 76dbad41cb8144848f266ad9fe6d0b19
-    Name: gaigen
-    RoomUUID: b8712a40130e41dabb7e17adb2d1aef7
-    Essence: 100
-    Power: 1
-    Agility: 2
-    Insight: 5
-    Will: 6
-    Health: 500
-    Spirit: 1300
-    Gear:
-      Head: f7b83201941a422f95100ac174be587f
-      Neck:
-      Body: 03dec39346fd44ed919212956d3dd163
-      Arms: 6e4dee66b0384b62949f7d8d868ce2ae
-      Hands:
-      Waist: 5039972fa2084f9daabbc5baf01407c4
-      Legs: f5924ab64bdd4c609618b58eac4689ca
-      Feet: 2b6b35b167a14c4ab3a9c24a95926ba9
-      Wrist: 9b2a03d91bc6441c9c229733a45d574a
-      Fingers: beb709cef0124bbc95923e1bdc017e16
-      OffHand: f10bb2345276469ebaabe057eb36e4ee
-      MainHand: 682ed1f513c0459fb16673b2ac0922ba
-    Inventory:
-      - e37c82bead784d83817ef781d1b3c6d8
-      - 2a33d8056ea4450889118bc4ed0cb854
-    Skills:
-      Backstab: 1
-      Barrier: 1
-      Bash: 1
-      Bleed: 1
-      Blitz: 1
-      Circle: 1
-      Evasion: 1
-      Haste: 1
-      Parry: 1
-      Sweep: 1
+    - UUID: 76dbad41cb8144848f266ad9fe6d0b19
+      Name: gaigen
+      Essence: 110
+      Power: 1
+      Agility: 2
+      Will: 6
+      Insight: 5
+      IsAggressive: false
+      IsSocial: false
+      Health: 454
+      Spirit: 1200
+      RoomUUID: b8712a40130e41dabb7e17adb2d1aef7
+      Gear:
+        Head: f7b83201941a422f95100ac174be587f
+        Neck: ""
+        Body: 03dec39346fd44ed919212956d3dd163
+        Arms: 6e4dee66b0384b62949f7d8d868ce2ae
+        Hands: ""
+        Waist: 5039972fa2084f9daabbc5baf01407c4
+        Legs: f5924ab64bdd4c609618b58eac4689ca
+        Feet: 2b6b35b167a14c4ab3a9c24a95926ba9
+        Wrist: 9b2a03d91bc6441c9c229733a45d574a
+        Fingers: beb709cef0124bbc95923e1bdc017e16
+        OffHand: f10bb2345276469ebaabe057eb36e4ee
+        MainHand: 682ed1f513c0459fb16673b2ac0922ba
+      Inventory:
+        - e37c82bead784d83817ef781d1b3c6d8
+        - 2a33d8056ea4450889118bc4ed0cb854
+      Skills:
+        Barrier: 1
+        Bash: 1
+        Backstab: 1
+        Bleed: 1
+        Blitz: 1
+        Circle: 1
+        Evasion: 1
+        Haste: 1
+        Parry: 1
+        Sweep: 1

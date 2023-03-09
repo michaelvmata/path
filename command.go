@@ -682,6 +682,16 @@ func (r Remove) Label() string {
 	return "remove"
 }
 
+type Save struct{}
+
+func (s Save) Execute(ctx Context) {
+	savePlayers(ctx.World.Players)
+}
+
+func (s Save) Label() string {
+	return "save"
+}
+
 type Score struct{}
 
 func (sc Score) Execute(ctx Context) {
@@ -960,6 +970,7 @@ func buildCommands() map[string]Executor {
 		Noop{},
 		North{},
 		Remove{},
+		Save{},
 		Score{},
 		South{},
 		Sweep{},

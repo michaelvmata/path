@@ -230,6 +230,94 @@ func buildRooms(w *world.World, area YAMLArea) {
 	}
 }
 
+func savePlayers(players map[string]*world.Character) {
+	yamlPlayer := YAMLPlayer{
+		Players: make([]YAMLMobile, 0),
+	}
+	for _, player := range players {
+		p := YAMLMobile{Inventory: make([]string, 0)}
+		p.Name = player.Name
+		p.UUID = player.UUID
+		p.Essence = player.Essence
+		p.RoomUUID = player.Room.UUID
+
+		p.Power = player.Core.Power.Base
+		p.Agility = player.Core.Agility.Base
+		p.Insight = player.Core.Insight.Base
+		p.Will = player.Core.Will.Base
+
+		p.Health = player.Health.Current
+		p.Spirit = player.Spirit.Current
+
+		if player.Gear.Head != nil {
+			p.Gear.Head = player.Gear.Head.UUID()
+		}
+		if player.Gear.Neck != nil {
+			p.Gear.Neck = player.Gear.Neck.UUID()
+		}
+		if player.Gear.Body != nil {
+			p.Gear.Body = player.Gear.Body.UUID()
+		}
+		if player.Gear.Arms != nil {
+			p.Gear.Arms = player.Gear.Arms.UUID()
+		}
+		if player.Gear.Hands != nil {
+			p.Gear.Hands = player.Gear.Hands.UUID()
+		}
+		if player.Gear.Waist != nil {
+			p.Gear.Waist = player.Gear.Waist.UUID()
+		}
+		if player.Gear.Legs != nil {
+			p.Gear.Legs = player.Gear.Legs.UUID()
+		}
+		if player.Gear.Feet != nil {
+			p.Gear.Feet = player.Gear.Feet.UUID()
+		}
+		if player.Gear.Wrist != nil {
+			p.Gear.Wrist = player.Gear.Wrist.UUID()
+		}
+		if player.Gear.Fingers != nil {
+			p.Gear.Fingers = player.Gear.Fingers.UUID()
+		}
+		if player.Gear.MainHand != nil {
+			p.Gear.MainHand = player.Gear.MainHand.UUID()
+		}
+		if player.Gear.OffHand != nil {
+			p.Gear.OffHand = player.Gear.OffHand.UUID()
+		}
+
+		for _, i := range player.Inventory.Items {
+			p.Inventory = append(p.Inventory, i.UUID())
+		}
+		p.Skills.Barrier = player.Skills.Barrier.Base
+		p.Skills.Bash = player.Skills.Bash.Base
+		p.Skills.Backstab = player.Skills.Backstab.Base
+		p.Skills.Bleed = player.Skills.Bleed.Base
+		p.Skills.Blitz = player.Skills.Blitz.Base
+		p.Skills.Circle = player.Skills.Circle.Base
+		p.Skills.Evasion = player.Skills.Evasion.Base
+		p.Skills.Haste = player.Skills.Haste.Base
+		p.Skills.Parry = player.Skills.Parry.Base
+		p.Skills.Sweep = player.Skills.Sweep.Base
+		yamlPlayer.Players = append(yamlPlayer.Players, p)
+
+	}
+	data, err := yaml.Marshal(&yamlPlayer)
+	if err != nil {
+		log.Fatalf("Unable to marshal players yaml")
+	}
+	yamlFile, err := os.OpenFile("data/player.yaml", os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		log.Fatalf("Unable to open players file")
+	}
+	len, err := yamlFile.Write(data)
+	if err != nil {
+		log.Fatalf("Unable to write players file")
+	}
+	log.Printf("Wrote %d bytes to players file.", len)
+	yamlFile.Close()
+}
+
 func buildPlayers(w *world.World) {
 	data := buildPlayerFromPath("data/player.yaml")
 	players := YAMLPlayer{}
