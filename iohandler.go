@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/michaelvmata/path/session"
-	"github.com/michaelvmata/path/world"
 	"os"
 	"strings"
 )
@@ -20,7 +19,7 @@ func handleInput(incoming chan string) {
 	}
 }
 
-func handleOutput(session *session.Session, done chan bool, player *world.Character) {
+func handleOutput(session *session.Session, done chan bool) {
 	for {
 		select {
 		case text := <-session.Outgoing:

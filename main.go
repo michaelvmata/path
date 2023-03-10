@@ -17,7 +17,7 @@ func main() {
 	player.Session = s
 	done := make(chan bool)
 	go handleInput(s.Incoming)
-	go handleOutput(s, done, player)
+	go handleOutput(s, done)
 	ctx := Context{
 		World:  world,
 		Player: player,
