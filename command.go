@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"github.com/michaelvmata/path/buffs"
 	"github.com/michaelvmata/path/items"
@@ -1000,4 +1001,12 @@ func determineCommand(raw string, ctx Context) Executor {
 	}
 
 	return command
+}
+
+func determinePlayer(name string, w *world.World) (*world.Character, error) {
+	player, found := w.Players[name]
+	if !found {
+		return nil, errors.New("player not found")
+	}
+	return player, nil
 }

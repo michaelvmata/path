@@ -5,29 +5,26 @@ import (
 	"github.com/michaelvmata/path/events"
 	"github.com/michaelvmata/path/session"
 	"github.com/michaelvmata/path/simulate"
+	"github.com/michaelvmata/path/title"
 	"time"
 )
 
 func main() {
 	ticker := time.NewTicker(time.Second)
 	s := session.New()
-	s.PlayerName = "gaigen"
-	world := build()
-	player := world.Players[s.PlayerName]
-	player.Session = s
 	done := make(chan bool)
 	go handleInput(s.Incoming)
 	go handleOutput(s, done)
+	w := build()
 	ctx := Context{
-		World:  world,
-		Player: player,
+		World: w,
 	}
-	world.SpawnMobiles()
-	events.CharacterDeath.Init(world)
+	w.SpawnMobiles()
+	events.CharacterDeath.Init(w)
 	events.CharacterDeath.Register(actions.RespawnCharacter{})
 	events.CharacterDeath.Register(actions.EssenceOnDeath{})
 
-	player.ShowPrompt()
+	title.ListCharacters(s, w.Players)
 MainLoop:
 	for {
 		select {
@@ -36,18 +33,27 @@ MainLoop:
 				done <- true
 				break MainLoop
 			}
-			command := determineCommand(text, ctx)
-			player.Update(0)
-			ctx.Raw = text
-			command.Execute(ctx)
-			player.ShowPrompt()
+			if ctx.Player == nil {
+				player, err := determinePlayer(text, w)
+				if err == nil {
+					ctx.Player = player
+					ctx.Player.Session = s
+					s.PlayerName = text
+					ctx.Player.ShowPrompt()
+				}
+			} else {
+				command := determineCommand(text, ctx)
+				ctx.Raw = text
+				command.Execute(ctx)
+				ctx.Player.ShowPrompt()
+			}
+
 		case <-ticker.C:
-			world.Update()
-			if world.IsBattleTick() {
-				simulate.Simulate(world)
+			w.Update()
+			if w.IsBattleTick() {
+				simulate.Simulate(w)
 			}
 		}
-
 	}
 	ticker.Stop()
 }
