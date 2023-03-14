@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/michaelvmata/path/buffs"
+	"github.com/michaelvmata/path/help"
 	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/simulate"
 	"github.com/michaelvmata/path/symbols"
@@ -17,6 +18,7 @@ import (
 type Context struct {
 	World  *world.World
 	Player *world.Character
+	Help   map[string]help.YAMLHelp
 	Raw    string
 }
 
@@ -922,6 +924,26 @@ func (wr Wear) Label() string {
 type Help struct{}
 
 func (h Help) Execute(ctx Context) {
+	parts := strings.SplitN(ctx.Raw, " ", 2)
+	if len(parts) == 1 {
+		h.ShowAllCommands(ctx)
+	} else {
+		h.ShowCommand(ctx, parts[1])
+	}
+}
+
+func (h Help) ShowCommand(ctx Context, command string) {
+	help, found := ctx.Help[command]
+	if !found {
+		ctx.Player.Showln("No help for '%s'", command)
+		return
+	}
+	ctx.Player.ShowNewline()
+	ctx.Player.Showln(help.Describe())
+	ctx.Player.ShowNewline()
+}
+
+func (h Help) ShowAllCommands(ctx Context) {
 	player := ctx.Player
 	aliases := make([]string, 0)
 	for alias, command := range commands {

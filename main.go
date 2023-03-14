@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/michaelvmata/path/actions"
 	"github.com/michaelvmata/path/events"
+	"github.com/michaelvmata/path/help"
 	"github.com/michaelvmata/path/session"
 	"github.com/michaelvmata/path/simulate"
 	"github.com/michaelvmata/path/title"
@@ -18,6 +19,7 @@ func main() {
 	w := build()
 	ctx := Context{
 		World: w,
+		Help:  help.Build("data/help/circle.yaml"),
 	}
 	w.SpawnMobiles()
 	events.CharacterDeath.Init(w)

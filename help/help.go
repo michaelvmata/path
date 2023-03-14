@@ -1,10 +1,12 @@
 package help
 
 import (
+	"fmt"
 	"gopkg.in/yaml.v3"
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type Content struct {
@@ -14,6 +16,14 @@ type YAMLHelp struct {
 	UUID     string   `yaml:"UUID"`
 	Keywords []string `yaml:"Keywords""`
 	Content  string   `yaml:"Content"`
+}
+
+func (y *YAMLHelp) Describe() string {
+	parts := make([]string, 0)
+	parts = append(parts, fmt.Sprintf("Keywords: %s", strings.Join(y.Keywords, ", ")))
+	parts = append(parts, "")
+	parts = append(parts, y.Content)
+	return strings.Join(parts, "\n")
 }
 
 func buildFromPath(path string) YAMLHelp {
@@ -42,8 +52,8 @@ func buildFromPath(path string) YAMLHelp {
 	return yamlHelp
 }
 
-func Build() map[string]YAMLHelp {
-	temp := buildFromPath("../data/help/circle.yaml")
+func Build(path string) map[string]YAMLHelp {
+	temp := buildFromPath(path)
 	index := make(map[string]YAMLHelp)
 	for _, keyword := range temp.Keywords {
 		index[keyword] = temp
