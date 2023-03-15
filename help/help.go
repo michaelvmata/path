@@ -66,7 +66,10 @@ func Build(root string) map[string]YAMLHelp {
 		}
 		temp := buildFromPath(root + "/" + f.Name())
 		for _, keyword := range temp.Keywords {
-			index[keyword] = temp
+			for i := range keyword {
+				alias := keyword[:i+1]
+				index[alias] = temp
+			}
 		}
 	}
 	return index
