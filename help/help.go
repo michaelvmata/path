@@ -52,11 +52,22 @@ func buildFromPath(path string) YAMLHelp {
 	return yamlHelp
 }
 
-func Build(path string) map[string]YAMLHelp {
-	temp := buildFromPath(path)
+func Build(root string) map[string]YAMLHelp {
 	index := make(map[string]YAMLHelp)
-	for _, keyword := range temp.Keywords {
-		index[keyword] = temp
+
+	nodes, err := os.ReadDir(root)
+	if err != nil {
+		log.Fatalf("Error reading help directory")
+	}
+
+	for _, f := range nodes {
+		if f.IsDir() {
+			continue
+		}
+		temp := buildFromPath(root + "/" + f.Name())
+		for _, keyword := range temp.Keywords {
+			index[keyword] = temp
+		}
 	}
 	return index
 }

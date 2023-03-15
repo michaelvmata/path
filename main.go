@@ -19,7 +19,7 @@ func main() {
 	w := build()
 	ctx := Context{
 		World: w,
-		Help:  help.Build("data/help/circle.yaml"),
+		Help:  help.Build("data/help"),
 	}
 	w.SpawnMobiles()
 	events.CharacterDeath.Init(w)
