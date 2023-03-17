@@ -527,9 +527,10 @@ type Room struct {
 	Items       item.Container
 	Size        int
 	Exits       Exits
+	Area        *Area
 }
 
-func NewRoom(uuid string, name string, description string, size int) *Room {
+func NewRoom(uuid string, name string, description string, size int, area *Area) *Room {
 	room := Room{
 		UUID:        uuid,
 		name:        name,
@@ -538,6 +539,7 @@ func NewRoom(uuid string, name string, description string, size int) *Room {
 		Players:     make([]*Character, 0, size),
 		Items:       item.NewContainer(100),
 		Exits:       Exits{},
+		Area:        area,
 	}
 	return &room
 }
@@ -685,6 +687,20 @@ func (r *Room) MobileCount(mobileUUID string) int {
 	return count
 }
 
+type Area struct {
+	UUID  string
+	Name  string
+	Rooms map[string]*Room
+}
+
+func NewArea(UUID string, name string) *Area {
+	return &Area{
+		UUID:  UUID,
+		Name:  name,
+		Rooms: make(map[string]*Room),
+	}
+}
+
 type Mobiles struct {
 	Prototypes map[string]Character
 	Instances  []*Character
@@ -733,6 +749,7 @@ type World struct {
 	Rooms       map[string]*Room
 	RoomMobiles map[string][]RoomMobile
 	Items       map[string]item.Item
+	Areas       map[string]*Area
 
 	Ticks       int
 	SpawnTicks  int
@@ -749,6 +766,7 @@ func NewWorld() *World {
 		Rooms:       make(map[string]*Room),
 		RoomMobiles: make(map[string][]RoomMobile, 0),
 		Items:       make(map[string]item.Item),
+		Areas:       make(map[string]*Area, 0),
 		SpawnTicks:  60,
 		BattleTicks: 3,
 	}

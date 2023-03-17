@@ -8,14 +8,14 @@ import (
 
 func TestDetermineCommand(t *testing.T) {
 	input := Noop{}.Label()
-	world := build()
+	world := build("data/areas")
 	ctx := Context{World: world, Player: world.Players["gaigen"], Raw: input}
 	c := determineCommand(input, ctx)
 	c.Execute(ctx)
 }
 
 func TestBashCommand(t *testing.T) {
-	world := build()
+	world := build("data/areas")
 	world.SpawnMobiles()
 
 	// Missing target

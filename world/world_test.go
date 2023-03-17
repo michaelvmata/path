@@ -25,7 +25,7 @@ func TestPlayer(t *testing.T) {
 	name := "The Void"
 	description := "An unending abyss."
 	size := 1
-	r := NewRoom(uuid, name, description, size)
+	r := NewRoom(uuid, name, description, size, nil)
 	c.Move(r)
 	if c.Room != r {
 		t.Fatalf("Character room(%v) expected(%v)", c.Room, r)
@@ -111,7 +111,7 @@ func TestRoom_ShowMessage(t *testing.T) {
 	name := "The Void"
 	description := "An unending abyss."
 	size := 2
-	r := NewRoom(uuid, name, description, size)
+	r := NewRoom(uuid, name, description, size, nil)
 	c := NewPlayer("Test UUID", "Tester")
 	c2 := NewPlayer("Test UUID 2", "Tester2")
 	c3 := NewPlayer("Test UUID 3", "Tester3")
@@ -150,7 +150,7 @@ func TestRoom(t *testing.T) {
 	name := "The Void"
 	description := "An unending abyss."
 	size := 2
-	r := NewRoom(uuid, name, description, size)
+	r := NewRoom(uuid, name, description, size, nil)
 	if r.UUID != uuid {
 		t.Fatalf("Rooom UUID(%s) expected(%s)", r.UUID, uuid)
 	}

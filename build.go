@@ -87,6 +87,8 @@ type YAMLRoom struct {
 }
 
 type YAMLArea struct {
+	UUID    string       `yaml:"UUID"`
+	Name    string       `yaml:"Name"`
 	Items   []YAMLItem   `yaml:"Items"`
 	Mobiles []YAMLMobile `yaml:"Mobiles"`
 	Rooms   []YAMLRoom   `yaml:"Rooms"`
@@ -101,6 +103,12 @@ func buildArea(data []byte) YAMLArea {
 	err := yaml.Unmarshal(data, &area)
 	if err != nil {
 		log.Fatalf("error: %v", err)
+	}
+	if area.Name == "" {
+		log.Fatalf("Area has no Name")
+	}
+	if area.UUID == "" {
+		log.Fatalf("Area has no UUID")
 	}
 	for _, item := range area.Items {
 		validateItem(item)
@@ -193,6 +201,25 @@ func buildAreaFromPath(path string) YAMLArea {
 	return buildArea(data)
 }
 
+func buildAreas(w *world.World, root string) {
+	nodes, err := os.ReadDir(root)
+	if err != nil {
+		log.Fatalf("Error reading areas directory")
+	}
+
+	for _, f := range nodes {
+		if f.IsDir() {
+			continue
+		}
+		yamlArea := buildAreaFromPath(root + "/" + f.Name())
+		area := world.NewArea(yamlArea.UUID, yamlArea.Name)
+		w.Areas[area.UUID] = area
+		buildItems(w, yamlArea)
+		buildMobiles(w, yamlArea)
+		buildRooms(w, yamlArea)
+	}
+}
+
 func buildItems(w *world.World, area YAMLArea) {
 	for _, r := range area.Items {
 		var i item.Item
@@ -216,9 +243,14 @@ func buildItems(w *world.World, area YAMLArea) {
 	}
 }
 
-func buildRooms(w *world.World, area YAMLArea) {
-	for _, rr := range area.Rooms {
-		room := world.NewRoom(rr.UUID, rr.Name, rr.Description, rr.Size)
+func buildRooms(w *world.World, yamlArea YAMLArea) {
+	area, found := w.Areas[yamlArea.UUID]
+	if !found {
+		log.Fatalf("Area index not setup")
+	}
+	for _, rr := range yamlArea.Rooms {
+		room := world.NewRoom(rr.UUID, rr.Name, rr.Description, rr.Size, area)
+		area.Rooms[room.UUID] = room
 		w.Rooms[room.UUID] = room
 		for _, mc := range rr.Mobiles {
 			w.RoomMobiles[room.UUID] = append(w.RoomMobiles[room.UUID], world.NewRoomMobile(mc.UUID, mc.Count))
@@ -521,12 +553,9 @@ func buildPlayerFromPath(path string) []byte {
 	return data
 }
 
-func build() *world.World {
+func build(root string) *world.World {
 	world := world.NewWorld()
-	area := buildAreaFromPath("data/area.yaml")
-	buildItems(world, area)
-	buildMobiles(world, area)
-	buildRooms(world, area)
+	buildAreas(world, root)
 	buildPlayers(world)
 	return world
 }

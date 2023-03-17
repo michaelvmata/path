@@ -16,7 +16,7 @@ func main() {
 	done := make(chan bool)
 	go handleInput(s.Incoming)
 	go handleOutput(s, done)
-	w := build()
+	w := build("data/areas")
 	ctx := Context{
 		World: w,
 		Help:  help.Build("data/help"),

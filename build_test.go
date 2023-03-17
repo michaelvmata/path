@@ -7,7 +7,7 @@ import (
 )
 
 func TestBuild(t *testing.T) {
-	world := build()
+	world := build("data/areas")
 	expectedRooms := 2
 	if len(world.Rooms) != expectedRooms {
 		t.Fatalf("Rooms count(%d) expected (%d)", len(world.Rooms), expectedRooms)
@@ -32,12 +32,12 @@ func TestBuild(t *testing.T) {
 }
 
 func TestSavePlayers(t *testing.T) {
-	world := build()
+	world := build("data/areas")
 	savePlayers(world.Players)
 }
 
 func TestArea(t *testing.T) {
-	absPath, err := filepath.Abs("data/area.yaml")
+	absPath, err := filepath.Abs("data/areas/default.yaml")
 	if err != nil {
 		t.Fatalf("Test path error")
 	}
