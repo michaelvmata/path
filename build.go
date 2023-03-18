@@ -132,7 +132,7 @@ func validateItem(item YAMLItem) {
 	if item.Type == "" {
 		log.Fatalf("Item has no Type %v", item)
 	}
-	if item.Type != "Weapon" && item.Slot == "" {
+	if item.Type == "Armor" && item.Slot == "" {
 		log.Fatalf("Item has no Slot %v", item)
 	}
 	for _, modifier := range item.Modifiers {
@@ -235,6 +235,8 @@ func buildItems(w *world.World, area YAMLArea) {
 			w.CriticalBonus = r.CriticalBonus
 			w.CriticalRate = r.CriticalRate
 			i = w
+		} else {
+			continue
 		}
 		for _, rm := range r.Modifiers {
 			i.AddModifier(rm.Type, rm.Value)
