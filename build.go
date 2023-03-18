@@ -236,7 +236,7 @@ func buildItems(w *world.World, area YAMLArea) {
 			w.CriticalRate = r.CriticalRate
 			i = w
 		} else {
-			continue
+			i = item.NewItem(r.UUID, r.Name, r.Keywords)
 		}
 		for _, rm := range r.Modifiers {
 			i.AddModifier(rm.Type, rm.Value)

@@ -75,6 +75,21 @@ const (
 	Ranged    = "ranged"
 )
 
+type Other struct {
+	item
+}
+
+func NewItem(UUID string, name string, keywords []string) *Other {
+	return &Other{
+		item: item{
+			uuid:      UUID,
+			name:      name,
+			keywords:  keywords,
+			modifiers: make([]modifiers.Modifier, 0),
+		},
+	}
+}
+
 type Weapon struct {
 	item
 	DamageType    string
