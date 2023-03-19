@@ -214,7 +214,7 @@ Mobiles:
       MainHand: 682ed1f513c0459fb16673b2ac0922ba
 Rooms:
   - UUID: b8712a40130e41dabb7e17adb2d1aef7
-    Name: <white>The Void
+    Name: The Void
     Description: An unending expanse.
     Exits:
       East: 0d578dc460b64cddad374dfef39bbe4c

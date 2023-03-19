@@ -571,19 +571,25 @@ func (r *Room) ShowMessage(message Message) error {
 
 func (r *Room) Describe(firstPerson *Character) string {
 	parts := make([]string, 0)
-	parts = append(parts, r.name)
-	parts = append(parts, "")
+	parts = append(parts, fmt.Sprintf("<white>%s", r.name))
+	parts = append(parts, "<reset>")
 	parts = append(parts, r.description)
-	parts = append(parts, "")
+	parts = append(parts, "<reset>")
 	parts = append(parts, fmt.Sprintf("[%s]", r.DescribeExits()))
-	parts = append(parts, "")
+	parts = append(parts, "<reset>")
 	for _, i := range r.Items.Items {
 		parts = append(parts, i.Name())
+	}
+	if len(r.Items.Items) > 0 {
+		parts = append(parts, "<reset>")
 	}
 	for _, p := range r.Players {
 		if firstPerson != p {
 			parts = append(parts, p.Describe())
 		}
+	}
+	if len(r.Players) > 0 {
+		parts = append(parts, "<reset>")
 	}
 	return strings.Join(parts, "\n")
 }
