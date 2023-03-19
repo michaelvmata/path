@@ -377,6 +377,26 @@ func (c Circle) Label() string {
 	return "circle"
 }
 
+type Die struct{}
+
+func (d Die) Execute(ctx Context) {
+	player := ctx.Player
+	amount := player.Health.Current
+	simulate.DoDamage(player, player, amount)
+	message := world.Message{
+		FirstPersonMessage: fmt.Sprintf("Focusing inward, you do %d damage to yourself.", amount),
+		FirstPerson:        player,
+		ThirdPersonMessage: fmt.Sprintf("Focusing inward, %s self inflicts %d damage.", player.Name, amount),
+	}
+	if err := player.Room.ShowMessage(message); err != nil {
+		log.Fatalf("Problem showing die message: %v", err)
+	}
+}
+
+func (d Die) Label() string {
+	return "die"
+}
+
 type Drop struct{}
 
 func (d Drop) Execute(ctx Context) {
@@ -990,6 +1010,7 @@ func buildCommands() map[string]Executor {
 		Bleed{},
 		Blitz{},
 		Circle{},
+		Die{},
 		Drop{},
 		East{},
 		Flee{},
