@@ -25,11 +25,22 @@ Rooms:
       containing nothing at all, but conveying a sense of an infinite expanse,
       as if you were staring into an abyss.
     Exits:
-      East: ab675bc143e84233a543f7e6e7338f11
-      North: ab675bc143e84233a543f7e6e7338f11
-      South: b8712a40130e41dabb7e17adb2d1aef7
-      West: ab675bc143e84233a543f7e6e7338f11
+      South: 60df1cea8d264d41b74d3bec6eac4e99
     Size: 10
     Items:
       - UUID: cf22078771794c77b6921ce6f812c736
         Count: 1
+  - UUID: 60df1cea8d264d41b74d3bec6eac4e99
+    Name: Spiral hallway
+    Description: |
+      The hallway has more of the same smoothly cut stone, barren of any
+      detail, on both walls.  Overhead, however, the walls curve to form a
+      ceiling.  In the center of the ceiling, a row of runes runs parallel
+      with the hallway.  The runes glow with an iridescent light,
+      illuminating the entire hallway.  There is a doorway to the south, and
+      the hallway continues to the east.
+    Exits:
+      North: ab675bc143e84233a543f7e6e7338f11
+      South: b8712a40130e41dabb7e17adb2d1aef7
+      East: 60df1cea8d264d41b74d3bec6eac4e99
+    Size: 10
