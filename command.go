@@ -653,9 +653,20 @@ func (i Invest) Label() string {
 type Look struct{}
 
 func (l Look) Execute(ctx Context) {
-	ctx.Player.Showln("")
-	ctx.Player.Showln(ctx.Player.Room.Describe(ctx.Player))
-	ctx.Player.Showln("")
+	player := ctx.Player
+	parts := strings.SplitN(ctx.Raw, " ", 2)
+	if len(parts) == 1 {
+		player.Showln(ctx.Player.Room.Describe(ctx.Player))
+		return
+	}
+
+	keyword := parts[1]
+	item, err := player.Room.IndexOfItem(keyword)
+	if err != nil {
+		player.Showln("You don't see '%s'.", keyword)
+		return
+	}
+	player.Showln(item.Description())
 }
 
 func (l Look) Label() string {

@@ -13,6 +13,7 @@ type YAMLItem struct {
 	UUID          string   `yaml:"UUID"`
 	Name          string   `yaml:"Name"`
 	Type          string   `yaml:"Type"`
+	Description   string   `yaml:"Description"`
 	Slot          string   `yaml:"Slot"`
 	DamageType    string   `yaml:"DamageType"`
 	Attributes    []string `yaml:"Attributes""`
@@ -228,9 +229,9 @@ func buildItems(w *world.World, area YAMLArea) {
 	for _, r := range area.Items {
 		var i item.Item
 		if r.Type == "Armor" {
-			i = item.NewArmor(r.UUID, r.Name, r.Slot, r.Keywords)
+			i = item.NewArmor(r.UUID, r.Name, r.Slot, r.Keywords, r.Description)
 		} else if r.Type == "Weapon" {
-			w := item.NewWeapon(r.UUID, r.Name, r.Keywords, r.DamageType, r.Attributes)
+			w := item.NewWeapon(r.UUID, r.Name, r.Keywords, r.Description, r.DamageType, r.Attributes)
 			if r.MaximumDamage <= r.MinimumDamage || r.MinimumDamage <= 0 {
 				log.Fatalln("Invalid Maximum and Minimum Damage", r)
 			}
@@ -240,7 +241,7 @@ func buildItems(w *world.World, area YAMLArea) {
 			w.CriticalRate = r.CriticalRate
 			i = w
 		} else {
-			i = item.NewItem(r.UUID, r.Name, r.Keywords)
+			i = item.NewItem(r.UUID, r.Name, r.Keywords, r.Description)
 		}
 		for _, rm := range r.Modifiers {
 			i.AddModifier(rm.Type, rm.Value)

@@ -8,10 +8,11 @@ import (
 )
 
 type item struct {
-	uuid      string
-	name      string
-	keywords  []string
-	modifiers []modifiers.Modifier
+	uuid        string
+	name        string
+	keywords    []string
+	description string
+	modifiers   []modifiers.Modifier
 }
 
 func (i *item) UUID() string {
@@ -50,6 +51,8 @@ func (i *item) Description() string {
 	for _, modifier := range i.Modifiers() {
 		parts = append(parts, fmt.Sprintf("%s: %d", modifier.Type, modifier.Value))
 	}
+	parts = append(parts, "<reset>")
+	parts = append(parts, i.description)
 	return strings.Join(parts, "\n")
 }
 
@@ -79,13 +82,14 @@ type Other struct {
 	item
 }
 
-func NewItem(UUID string, name string, keywords []string) *Other {
+func NewItem(UUID string, name string, keywords []string, description string) *Other {
 	return &Other{
 		item: item{
-			uuid:      UUID,
-			name:      name,
-			keywords:  keywords,
-			modifiers: make([]modifiers.Modifier, 0),
+			uuid:        UUID,
+			name:        name,
+			keywords:    keywords,
+			description: description,
+			modifiers:   make([]modifiers.Modifier, 0),
 		},
 	}
 }
@@ -125,13 +129,14 @@ func (w *Weapon) HasAttribute(target string) bool {
 	return false
 }
 
-func NewWeapon(UUID string, name string, keywords []string, damageType string, attributes []string) *Weapon {
+func NewWeapon(UUID string, name string, keywords []string, description string, damageType string, attributes []string) *Weapon {
 	return &Weapon{
 		item: item{
-			uuid:      UUID,
-			name:      name,
-			keywords:  keywords,
-			modifiers: make([]modifiers.Modifier, 0),
+			uuid:        UUID,
+			name:        name,
+			keywords:    keywords,
+			description: description,
+			modifiers:   make([]modifiers.Modifier, 0),
 		},
 		DamageType: damageType,
 		Attributes: attributes,
@@ -143,13 +148,14 @@ type Armor struct {
 	Slot string
 }
 
-func NewArmor(UUID string, name string, slot string, keywords []string) *Armor {
+func NewArmor(UUID string, name string, slot string, keywords []string, description string) *Armor {
 	return &Armor{
 		item: item{
-			uuid:      UUID,
-			name:      name,
-			keywords:  keywords,
-			modifiers: make([]modifiers.Modifier, 0),
+			uuid:        UUID,
+			name:        name,
+			keywords:    keywords,
+			description: description,
+			modifiers:   make([]modifiers.Modifier, 0),
 		},
 		Slot: slot,
 	}

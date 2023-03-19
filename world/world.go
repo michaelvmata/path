@@ -225,7 +225,7 @@ func (c *Character) Weapon() *item.Weapon {
 	if c.Gear.MainHand != nil {
 		return c.Gear.MainHand
 	}
-	hand := item.NewWeapon("Barehand", "Barehand", []string{}, item.Crush, []string{item.Impact})
+	hand := item.NewWeapon("Barehand", "Barehand", []string{}, "", item.Crush, []string{item.Impact})
 	hand.MinimumDamage = 1
 	hand.MaximumDamage = 5
 	hand.CriticalBonus = 1
@@ -621,6 +621,14 @@ func (r *Room) Accept(i item.Item) error {
 		return errors.New("can't drop item")
 	}
 	return nil
+}
+
+func (r *Room) IndexOfItem(keyword string) (item.Item, error) {
+	index := r.Items.IndexOfItem(keyword)
+	if index == -1 {
+		return nil, errors.New("no item with keyword")
+	}
+	return r.Items.GetItemAtIndex(index), nil
 }
 
 func (r *Room) PickupItem(keyword string) (item.Item, error) {
