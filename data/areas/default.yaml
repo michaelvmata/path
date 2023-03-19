@@ -218,7 +218,7 @@ Rooms:
     Description: An unending expanse.
     Exits:
       East: 0d578dc460b64cddad374dfef39bbe4c
-      North: 0d578dc460b64cddad374dfef39bbe4c
+      North: ab675bc143e84233a543f7e6e7338f11
       South: 0d578dc460b64cddad374dfef39bbe4c
       West: 0d578dc460b64cddad374dfef39bbe4c
     Size: 10

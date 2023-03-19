@@ -12,3 +12,24 @@ Items:
       You feel a connection to the portal, as if it were anchoring you to
       reality.  You know with absolute certainty that if something were to
       happen to you, you would somehow find yourself back here.
+Rooms:
+  - UUID: ab675bc143e84233a543f7e6e7338f11
+    Name: <white>Dimensional tether<reset>
+    Description: |
+      This is a plain yard with bare walls of smoothly cut stone.  The sun
+      hangs high overhead behind a heavy blanket of clouds.  The ground is
+      made of the same smoothly cut stone as the walls and is equally bare.
+      Hanging a few feet in the air is a swirling, pulsating mass of energy.
+      The edges are composed of dark purple hues that periodically ripple
+      in brightness.  The center looks like a window to another realm,
+      containing nothing at all, but conveying a sense of an infinite expanse,
+      as if you were staring into an abyss.
+    Exits:
+      East: ab675bc143e84233a543f7e6e7338f11
+      North: ab675bc143e84233a543f7e6e7338f11
+      South: b8712a40130e41dabb7e17adb2d1aef7
+      West: ab675bc143e84233a543f7e6e7338f11
+    Size: 10
+    Items:
+      - UUID: cf22078771794c77b6921ce6f812c736
+        Count: 1

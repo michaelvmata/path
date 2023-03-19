@@ -84,6 +84,10 @@ type YAMLRoom struct {
 		UUID  string `yaml:"UUID"`
 		Count int    `yaml:"Count"`
 	} `yaml:"Mobiles"`
+	Items []struct {
+		UUID  string `yaml:"UUID"`
+		Count int    `yaml:"Count"`
+	} `yaml:"Items"`
 }
 
 type YAMLArea struct {
@@ -256,6 +260,13 @@ func buildRooms(w *world.World, yamlArea YAMLArea) {
 		w.Rooms[room.UUID] = room
 		for _, mc := range rr.Mobiles {
 			w.RoomMobiles[room.UUID] = append(w.RoomMobiles[room.UUID], world.NewRoomMobile(mc.UUID, mc.Count))
+		}
+		for _, yamlItem := range rr.Items {
+			i, found := w.Items[yamlItem.UUID]
+			if !found {
+				log.Fatalf("Can't find item %s", yamlItem.UUID)
+			}
+			room.Accept(i)
 		}
 		room.Exits.East = rr.Exits.East
 		room.Exits.North = rr.Exits.North
