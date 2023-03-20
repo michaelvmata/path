@@ -7,7 +7,7 @@ import (
 )
 
 func TestItem(t *testing.T) {
-	item := NewArmor("f7b83201941a422f95100ac174be587f", "test helmet", Head, []string{"test", "helmet"})
+	item := NewArmor("f7b83201941a422f95100ac174be587f", "test helmet", Head, []string{"test", "helmet"}, "")
 	if len(item.Modifiers()) != 0 {
 		t.Fatalf("Default item has non empty modifiers")
 	}
@@ -25,7 +25,7 @@ func TestItem(t *testing.T) {
 }
 
 func TestContainer(t *testing.T) {
-	item := NewArmor("f7b83201941a422f95100ac174be587f", "test helmet", Head, []string{"test", "helmet"})
+	item := NewArmor("f7b83201941a422f95100ac174be587f", "test helmet", Head, []string{"test", "helmet"}, "")
 	container := NewContainer(1)
 	if index := container.IndexOfItem("test"); index != -1 {
 		t.Fatalf("Armor found in empty container")
@@ -34,7 +34,7 @@ func TestContainer(t *testing.T) {
 		t.Fatalf("Unable to add item to container")
 	}
 
-	boots := NewArmor("Test UUID", "test boots", Head, []string{"test", "boots"})
+	boots := NewArmor("Test UUID", "test boots", Head, []string{"test", "boots"}, "")
 	if err := container.AddItem(boots); err == nil {
 		t.Fatalf("Able to add 2 items to container")
 	}
@@ -51,14 +51,14 @@ func TestContainer(t *testing.T) {
 
 func TestGear(t *testing.T) {
 	gear := NewGear()
-	helmet := NewArmor("f7b83201941a422f95100ac174be587f", "test helmet", Head, []string{})
+	helmet := NewArmor("f7b83201941a422f95100ac174be587f", "test helmet", Head, []string{}, "")
 	if _, err := gear.Equip(helmet); err != nil {
 		t.Fatalf("Error equiping %v", helmet)
 	}
 	if previous, err := gear.Equip(helmet); previous != helmet || err != nil {
 		t.Fatalf("Error getting previous %v %v", helmet, err)
 	}
-	weapon := NewWeapon("Test UUID", "Test weapon", []string{"test", "weapon"}, Crush, []string{Impact})
+	weapon := NewWeapon("Test UUID", "Test weapon", []string{"test", "weapon"}, "", Crush, []string{Impact})
 	if _, err := gear.Equip(weapon); err != nil {
 		t.Fatalf("Error equiping weapon %v", weapon)
 	}

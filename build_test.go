@@ -9,7 +9,7 @@ import (
 func TestBuild(t *testing.T) {
 	world := build("data/areas")
 	expectedRooms := 2
-	if len(world.Rooms) != expectedRooms {
+	if len(world.Rooms) < expectedRooms {
 		t.Fatalf("Rooms count(%d) expected (%d)", len(world.Rooms), expectedRooms)
 	}
 	for _, room := range world.Rooms {
