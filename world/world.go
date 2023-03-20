@@ -701,6 +701,10 @@ func (r *Room) MobileCount(mobileUUID string) int {
 	return count
 }
 
+func (r *Room) Name() string {
+	return r.name
+}
+
 type Area struct {
 	UUID  string
 	Name  string

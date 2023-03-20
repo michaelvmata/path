@@ -829,23 +829,45 @@ func (n Noop) Label() string {
 	return ""
 }
 
+func MovePlayer(ctx Context, roomUUID string, direction string) {
+	player := ctx.Player
+	if player.IsFighting() {
+		player.Showln("You can't go %s while fighting.", direction)
+		return
+	}
+
+	if roomUUID == "" {
+		player.Showln("You can't go %s", direction)
+		return
+	}
+
+	room, ok := ctx.World.Rooms[roomUUID]
+	if !ok {
+		player.Showln("An unseen force prevents you from going %s", direction)
+		return
+	}
+
+	oldRoom := player.Room
+	if err := player.Room.Exit(player); err != nil {
+		player.Showln("You're unable to leave %s", player.Room.Name())
+		return
+	}
+
+	if err := room.Enter(player); err != nil {
+		oldRoom.Enter(player)
+		player.Showln("You're unable to enter %s", room.Name())
+	}
+	player.Room = room
+	player.Room = room
+	player.Showln("You go %s", direction)
+	Look{}.Execute(ctx)
+}
+
 type East struct{}
 
 func (e East) Execute(ctx Context) {
-	player := ctx.Player
-	roomUUID := player.Room.Exits.East
-	if roomUUID == "" {
-		player.Showln("You can't go east")
-		return
-	}
-	room, ok := ctx.World.Rooms[roomUUID]
-	if !ok {
-		player.Showln("You can't go east")
-		return
-	}
-	player.Room = room
-	player.Showln("You go east")
-	Look{}.Execute(ctx)
+	roomUUID := ctx.Player.Room.Exits.East
+	MovePlayer(ctx, roomUUID, e.Label())
 }
 
 func (e East) Label() string {
@@ -855,20 +877,8 @@ func (e East) Label() string {
 type North struct{}
 
 func (n North) Execute(ctx Context) {
-	player := ctx.Player
-	roomUUID := player.Room.Exits.North
-	if roomUUID == "" {
-		player.Showln("You can't go north")
-		return
-	}
-	room, ok := ctx.World.Rooms[roomUUID]
-	if !ok {
-		player.Showln("You can't go north")
-		return
-	}
-	player.Room = room
-	player.Showln("You go north")
-	Look{}.Execute(ctx)
+	roomUUID := ctx.Player.Room.Exits.North
+	MovePlayer(ctx, roomUUID, n.Label())
 }
 
 func (n North) Label() string {
@@ -878,20 +888,8 @@ func (n North) Label() string {
 type South struct{}
 
 func (s South) Execute(ctx Context) {
-	player := ctx.Player
-	roomUUID := player.Room.Exits.South
-	if roomUUID == "" {
-		player.Showln("You can't go south")
-		return
-	}
-	room, ok := ctx.World.Rooms[roomUUID]
-	if !ok {
-		player.Showln("You can't go south")
-		return
-	}
-	player.Room = room
-	player.Showln("You go south")
-	Look{}.Execute(ctx)
+	roomUUID := ctx.Player.Room.Exits.South
+	MovePlayer(ctx, roomUUID, s.Label())
 }
 
 func (s South) Label() string {
@@ -901,20 +899,8 @@ func (s South) Label() string {
 type West struct{}
 
 func (w West) Execute(ctx Context) {
-	player := ctx.Player
-	roomUUID := player.Room.Exits.West
-	if roomUUID == "" {
-		player.Showln("You can't go west")
-		return
-	}
-	room, ok := ctx.World.Rooms[roomUUID]
-	if !ok {
-		player.Showln("You can't go west")
-		return
-	}
-	player.Room = room
-	player.Showln("You go west")
-	Look{}.Execute(ctx)
+	roomUUID := ctx.Player.Room.Exits.West
+	MovePlayer(ctx, roomUUID, w.Label())
 }
 
 func (w West) Label() string {
