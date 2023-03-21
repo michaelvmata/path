@@ -382,7 +382,6 @@ type Die struct{}
 func (d Die) Execute(ctx Context) {
 	player := ctx.Player
 	amount := player.Health.Current
-	simulate.DoDamage(player, player, amount)
 	message := world.Message{
 		FirstPersonMessage: fmt.Sprintf("Focusing inward, you do %d damage to yourself.", amount),
 		FirstPerson:        player,
@@ -391,6 +390,7 @@ func (d Die) Execute(ctx Context) {
 	if err := player.Room.ShowMessage(message); err != nil {
 		log.Fatalf("Problem showing die message: %v", err)
 	}
+	simulate.DoDamage(player, player, amount)
 }
 
 func (d Die) Label() string {

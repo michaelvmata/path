@@ -41,6 +41,7 @@ type YAMLMobile struct {
 	Health       int    `yaml:"Health"`
 	Spirit       int    `yaml:"Spirit"`
 	RoomUUID     string `yaml:"RoomUUID"`
+	Anchor       string `yaml:"Anchor"`
 	Gear         struct {
 		Head     string `yaml:"Head"`
 		Neck     string `yaml:"Neck"`
@@ -465,6 +466,9 @@ func buildPlayers(w *world.World) {
 			if err := room.Enter(c); err == nil {
 				c.Room = room
 			}
+		}
+		if room, ok := w.Rooms[rp.Anchor]; ok {
+			c.Anchor = room
 		}
 	}
 }

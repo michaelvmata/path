@@ -34,6 +34,15 @@ func (rp RespawnCharacter) Handle(World *world.World, payload events.CharacterDe
 		}
 		char.Room = nil
 	} else {
+		if char.Room != char.Anchor && char.Anchor != nil {
+			if err := char.Room.Exit(char); err != nil {
+				log.Fatalf("Player couldn't exit room %s to respawn.", char.Room.Name())
+			}
+			char.Room = char.Anchor
+			if err := char.Room.Enter(char); err != nil {
+				log.Fatalf("Player couldn't respawn in %s", char.Room.Name())
+			}
+		}
 		char.Restore()
 		message = world.Message{
 			FirstPerson:        char,

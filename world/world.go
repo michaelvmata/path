@@ -36,6 +36,7 @@ type Character struct {
 	UUID    string
 	Name    string
 	Room    *Room
+	Anchor  *Room
 	Session *session.Session
 
 	keywords []string
