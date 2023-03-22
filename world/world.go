@@ -641,6 +641,15 @@ func (r *Room) PickupItem(keyword string) (item.Item, error) {
 	return i, nil
 }
 
+func (r *Room) HasPortal() bool {
+	for _, i := range r.Items.Items {
+		if i.Type() == item.PortalType {
+			return true
+		}
+	}
+	return false
+}
+
 func (r *Room) IsFull() bool {
 	return r.Size == len(r.Players)
 }

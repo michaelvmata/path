@@ -63,6 +63,27 @@ func InitBattleSkill(attacker *world.Character, defender *world.Character, spiri
 	attacker.ApplyCoolDown(&coolDown)
 }
 
+type Anchor struct{}
+
+func (a Anchor) Execute(ctx Context) {
+	player := ctx.Player
+	if !player.Room.HasPortal() {
+		player.Showln("You cannot anchor your spirit here.")
+		return
+	}
+	message := world.Message{
+		FirstPerson:        player,
+		FirstPersonMessage: "You attune your spirit to this room",
+		ThirdPersonMessage: fmt.Sprintf("%s attunes their spirit to this room.", player.Name),
+	}
+	player.Room.ShowMessage(message)
+	player.Anchor = player.Room
+}
+
+func (a Anchor) Label() string {
+	return "anchor"
+}
+
 type Attack struct{}
 
 func (a Attack) Execute(ctx Context) {
@@ -988,6 +1009,7 @@ var commands = buildCommands()
 
 func buildCommands() map[string]Executor {
 	commands := []Executor{
+		Anchor{},
 		Attack{},
 		Affect{},
 		Backstab{},
