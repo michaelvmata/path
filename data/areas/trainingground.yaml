@@ -3,7 +3,7 @@ Name: Training ground
 Items:
   - UUID: cf22078771794c77b6921ce6f812c736
     Name: Swirling purple portal
-    Type: Other
+    Type: Portal
     Keywords:
       - swirling
       - purple

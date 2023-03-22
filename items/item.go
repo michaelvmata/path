@@ -7,12 +7,19 @@ import (
 	"strings"
 )
 
+const (
+	PortalType = "Portal"
+	WeaponType = "Weapon"
+	ArmorType  = "Armor"
+)
+
 type item struct {
 	uuid        string
 	name        string
 	keywords    []string
 	description string
 	modifiers   []modifiers.Modifier
+	itemType    string
 }
 
 func (i *item) UUID() string {
@@ -56,6 +63,10 @@ func (i *item) Description() string {
 	return strings.Join(parts, "\n")
 }
 
+func (i *item) Type() string {
+	return i.itemType
+}
+
 type Item interface {
 	UUID() string
 	Name() string
@@ -63,6 +74,7 @@ type Item interface {
 	Modifiers() []modifiers.Modifier
 	AddModifier(string, int)
 	Description() string
+	Type() string
 }
 
 const (
@@ -82,7 +94,7 @@ type Other struct {
 	item
 }
 
-func NewItem(UUID string, name string, keywords []string, description string) *Other {
+func NewItem(UUID string, name string, keywords []string, description string, Type string) *Other {
 	return &Other{
 		item: item{
 			uuid:        UUID,
@@ -90,6 +102,7 @@ func NewItem(UUID string, name string, keywords []string, description string) *O
 			keywords:    keywords,
 			description: description,
 			modifiers:   make([]modifiers.Modifier, 0),
+			itemType:    Type,
 		},
 	}
 }
@@ -137,6 +150,7 @@ func NewWeapon(UUID string, name string, keywords []string, description string, 
 			keywords:    keywords,
 			description: description,
 			modifiers:   make([]modifiers.Modifier, 0),
+			itemType:    WeaponType,
 		},
 		DamageType: damageType,
 		Attributes: attributes,
@@ -156,6 +170,7 @@ func NewArmor(UUID string, name string, slot string, keywords []string, descript
 			keywords:    keywords,
 			description: description,
 			modifiers:   make([]modifiers.Modifier, 0),
+			itemType:    ArmorType,
 		},
 		Slot: slot,
 	}

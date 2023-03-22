@@ -229,9 +229,9 @@ func buildAreas(w *world.World, root string) {
 func buildItems(w *world.World, area YAMLArea) {
 	for _, r := range area.Items {
 		var i item.Item
-		if r.Type == "Armor" {
+		if r.Type == item.ArmorType {
 			i = item.NewArmor(r.UUID, r.Name, r.Slot, r.Keywords, r.Description)
-		} else if r.Type == "Weapon" {
+		} else if r.Type == item.WeaponType {
 			w := item.NewWeapon(r.UUID, r.Name, r.Keywords, r.Description, r.DamageType, r.Attributes)
 			if r.MaximumDamage <= r.MinimumDamage || r.MinimumDamage <= 0 {
 				log.Fatalln("Invalid Maximum and Minimum Damage", r)
@@ -242,7 +242,7 @@ func buildItems(w *world.World, area YAMLArea) {
 			w.CriticalRate = r.CriticalRate
 			i = w
 		} else {
-			i = item.NewItem(r.UUID, r.Name, r.Keywords, r.Description)
+			i = item.NewItem(r.UUID, r.Name, r.Keywords, r.Description, r.Type)
 		}
 		for _, rm := range r.Modifiers {
 			i.AddModifier(rm.Type, rm.Value)
