@@ -20,6 +20,7 @@ type item struct {
 	description string
 	modifiers   []modifiers.Modifier
 	itemType    string
+	immovable   bool
 }
 
 func (i *item) UUID() string {
@@ -63,6 +64,14 @@ func (i *item) Description() string {
 	return strings.Join(parts, "\n")
 }
 
+func (i *item) Immovable() bool {
+	return i.immovable
+}
+
+func (i *item) MakeImmovable() {
+	i.immovable = true
+}
+
 func (i *item) Type() string {
 	return i.itemType
 }
@@ -75,6 +84,8 @@ type Item interface {
 	AddModifier(string, int)
 	Description() string
 	Type() string
+	Immovable() bool
+	MakeImmovable()
 }
 
 const (

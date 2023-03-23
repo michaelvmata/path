@@ -517,7 +517,12 @@ func (g Get) Execute(ctx Context) {
 		return
 	}
 	keyword := parts[1]
+
 	i, err := player.Room.PickupItem(keyword)
+	if err == world.ImmovableItem {
+		player.Showln("You can't pickup %s", keyword)
+		return
+	}
 	if err != nil {
 		player.Showln("You don't see '%s'.", keyword)
 		return

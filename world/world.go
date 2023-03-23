@@ -632,10 +632,15 @@ func (r *Room) IndexOfItem(keyword string) (item.Item, error) {
 	return r.Items.GetItemAtIndex(index), nil
 }
 
+var ImmovableItem = errors.New("item is immovable")
+
 func (r *Room) PickupItem(keyword string) (item.Item, error) {
 	index := r.Items.IndexOfItem(keyword)
 	if index == -1 {
 		return nil, errors.New("no item with keyword")
+	}
+	if r.Items.GetItemAtIndex(index).Immovable() {
+		return nil, ImmovableItem
 	}
 	i := r.Items.RemItemAtIndex(index)
 	return i, nil

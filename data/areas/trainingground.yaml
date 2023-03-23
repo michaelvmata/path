@@ -4,6 +4,7 @@ Items:
   - UUID: cf22078771794c77b6921ce6f812c736
     Name: Swirling purple portal
     Type: Portal
+    Immovable: true
     Keywords:
       - swirling
       - purple

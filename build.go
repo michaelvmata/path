@@ -17,6 +17,7 @@ type YAMLItem struct {
 	Slot          string   `yaml:"Slot"`
 	DamageType    string   `yaml:"DamageType"`
 	Attributes    []string `yaml:"Attributes""`
+	Immovable     bool     `yaml:"Immovable"`
 	MinimumDamage int      `yaml:"MinimumDamage"`
 	MaximumDamage int      `yaml:"MaximumDamage"`
 	CriticalRate  float64  `yaml:"CriticalRate"`
@@ -243,6 +244,9 @@ func buildItems(w *world.World, area YAMLArea) {
 			i = w
 		} else {
 			i = item.NewItem(r.UUID, r.Name, r.Keywords, r.Description, r.Type)
+			if r.Immovable {
+				i.MakeImmovable()
+			}
 		}
 		for _, rm := range r.Modifiers {
 			i.AddModifier(rm.Type, rm.Value)
