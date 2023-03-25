@@ -13,6 +13,35 @@ Items:
       You feel a connection to the portal, as if it were anchoring you to
       reality.  You know with absolute certainty that if something were to
       happen to you, you would somehow find yourself back here.
+  - UUID: 096cb2277b534834a98a782ede24b217
+    Name: Training mallet
+    Type: Weapon
+    DamageType: Crush
+    Attributes:
+      - impact
+    MinimumDamage: 1
+    MaximumDamage: 5
+    CriticalRate: 0
+    Keywords:
+      - training
+      - mallet
+Mobiles:
+  - UUID: 73f44aa05e014ee1a17acc16c52e0563
+    Name: Harmless training dummy
+    Description: |
+      The harmless training dummy is an excellent training aid for beginners
+      looking to learn the basics. Made from soft and pliable materials, it's
+      designed to be gentle and non-intimidating while still providing an
+      effective training experience.
+    Essence: 10
+    Power: 1
+    Agility: 1
+    Insight: 1
+    Will: 1
+    IsAggressive: false
+    IsSocial: false
+    Gear:
+      MainHand: 096cb2277b534834a98a782ede24b217
 Rooms:
   - UUID: ab675bc143e84233a543f7e6e7338f11
     Name: Dimensional tether
@@ -42,6 +71,19 @@ Rooms:
       the hallway continues to the east.
     Exits:
       North: ab675bc143e84233a543f7e6e7338f11
-      South: b8712a40130e41dabb7e17adb2d1aef7
-      East: 60df1cea8d264d41b74d3bec6eac4e99
+      South: 1805f20f8ac143269ec3d355433818cb
+      East: b8712a40130e41dabb7e17adb2d1aef7
     Size: 10
+  - UUID: 1805f20f8ac143269ec3d355433818cb
+    Name: Training room
+    Description: |
+      The walls are carved with intricate glowing runes that slowly pulse with
+      a faint light, casting a warm glow throughout the space. The runes are
+      ancient and mysterious, their meanings lost to time, but they lend an
+      air of mystery to the room.
+    Exits:
+      North: 60df1cea8d264d41b74d3bec6eac4e99
+    Size: 5
+    Mobiles:
+      - UUID: 73f44aa05e014ee1a17acc16c52e0563
+        Count: 1
