@@ -1026,7 +1026,6 @@ func buildCommands() map[string]Executor {
 		Circle{},
 		Die{},
 		Drop{},
-		East{},
 		Flee{},
 		Gear{},
 		Get{},
@@ -1037,14 +1036,17 @@ func buildCommands() map[string]Executor {
 		Invest{},
 		Look{},
 		Noop{},
-		North{},
 		Remove{},
 		Save{},
 		Score{},
-		South{},
 		Sweep{},
 		Typo{},
 		Wear{},
+
+		// Direction commands should have alias priority
+		East{},
+		North{},
+		South{},
 		West{},
 	}
 	aliases := make(map[string]Executor)
