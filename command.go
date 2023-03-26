@@ -882,8 +882,9 @@ func MovePlayer(ctx Context, roomUUID string, direction string) {
 	if err := room.Enter(player); err != nil {
 		oldRoom.Enter(player)
 		player.Showln("You're unable to enter %s", room.Name())
+		player.Room = oldRoom
+		return
 	}
-	player.Room = room
 	player.Room = room
 	player.Showln("You go %s", direction)
 	Look{}.Execute(ctx)
