@@ -42,6 +42,23 @@ Mobiles:
     IsSocial: false
     Gear:
       MainHand: 096cb2277b534834a98a782ede24b217
+  - UUID: 3a597417633346f89fa26f0d989c2c04
+    Name: Combat training dummy
+    Description: |
+      The combat training dummy is a durable and formidable tool for fighters
+      seeking to improve their combat skills. It is constructed from
+      high-quality materials and designed to withstand rigorous training
+      sessions while offering a realistic combat experience. This training
+      dummy is an invaluable asset in your pursuit of martial excellence.
+    Essence: 10
+    Power: 5
+    Agility: 5
+    Insight: 5
+    Will: 5
+    IsAggressive: false
+    IsSocial: false
+    Gear:
+      MainHand: 096cb2277b534834a98a782ede24b217
 Rooms:
   - UUID: ab675bc143e84233a543f7e6e7338f11
     Name: Dimensional tether
@@ -72,7 +89,21 @@ Rooms:
     Exits:
       North: ab675bc143e84233a543f7e6e7338f11
       South: 1805f20f8ac143269ec3d355433818cb
-      East: b8712a40130e41dabb7e17adb2d1aef7
+      East: 988b8155b67a41dba313f057f99d760e
+    Size: 10
+  - UUID: 988b8155b67a41dba313f057f99d760e
+    Name: Spiral hallway
+    Description: |
+      The spiraling hallway continues with the same smoothly cut stone, bare
+      of any details. As you round the bend, the ceiling arches above you,
+      creating a sense of grandeur. The walls curve seamlessly into the
+      ceiling, forming a continuous, uninterrupted surface. In the center of
+      the ceiling, a row of glowing runes runs parallel with the hallway,
+      casting an iridescent light that illuminates the entire passageway.
+      There is a doorway to the east, and the hallway continues to the north.
+    Exits:
+      East: bcab82c547df4d51a2247ccc7575789d
+      West: 60df1cea8d264d41b74d3bec6eac4e99
     Size: 10
   - UUID: 1805f20f8ac143269ec3d355433818cb
     Name: Training room
@@ -86,4 +117,17 @@ Rooms:
     Size: 5
     Mobiles:
       - UUID: 73f44aa05e014ee1a17acc16c52e0563
+        Count: 1
+  - UUID: bcab82c547df4d51a2247ccc7575789d
+    Name: Training room
+    Description: |
+      The large chamber is dimly lit, with the walls carved with intricate
+      glowing runes that slowly pulse with a faint light. The runes cast a
+      warm, almost comforting glow throughout the space, illuminating the
+      room in a soft and mysterious light.
+    Exits:
+      West: 988b8155b67a41dba313f057f99d760e
+    Size: 5
+    Mobiles:
+      - UUID: 3a597417633346f89fa26f0d989c2c04
         Count: 1
