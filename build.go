@@ -32,6 +32,7 @@ type YAMLItem struct {
 type YAMLMobile struct {
 	UUID         string `yaml:"UUID"`
 	Name         string `yaml:"Name"`
+	Description  string `yaml:"Description"`
 	Essence      int    `yaml:"Essence"`
 	Power        int    `yaml:"Power"`
 	Agility      int    `yaml:"Agility"`
@@ -481,6 +482,7 @@ func buildMobiles(w *world.World, area YAMLArea) {
 	for _, rp := range area.Mobiles {
 		c := world.NewPlayer(rp.UUID, rp.Name)
 
+		c.Description = rp.Description
 		c.Essence = rp.Essence
 		c.Core.Power.Base = rp.Power
 		c.Core.Agility.Base = rp.Agility

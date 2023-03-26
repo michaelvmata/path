@@ -708,11 +708,16 @@ func (l Look) Execute(ctx Context) {
 
 	keyword := parts[1]
 	item, err := player.Room.IndexOfItem(keyword)
-	if err != nil {
+	if err == nil {
+		player.Showln(item.Description())
+		return
+	}
+	otherPlayer := player.Room.GetPlayer(keyword)
+	if otherPlayer == nil {
 		player.Showln("You don't see '%s'.", keyword)
 		return
 	}
-	player.Showln(item.Description())
+	player.Showln(otherPlayer.LongDescribe())
 }
 
 func (l Look) Label() string {

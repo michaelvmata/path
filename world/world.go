@@ -39,7 +39,8 @@ type Character struct {
 	Anchor  *Room
 	Session *session.Session
 
-	keywords []string
+	Description string
+	keywords    []string
 
 	Health stats.Line
 	Spirit stats.Line
@@ -237,6 +238,7 @@ func (c *Character) Weapon() *item.Weapon {
 func (c *Character) Clone(target Character) {
 	c.UUID = target.UUID
 	c.Name = target.Name
+	c.Description = target.Description
 	c.Room = nil
 	c.Session = nil
 	c.Essence = target.Essence
@@ -483,6 +485,15 @@ func (c *Character) Describe() string {
 		return fmt.Sprintf("%s is fighting.", c.Name)
 	}
 	return fmt.Sprintf("%s is here.", c.Name)
+}
+
+func (c *Character) LongDescribe() string {
+	parts := make([]string, 0)
+	parts = append(parts, fmt.Sprintf("<white>Name: %s", c.Name))
+	parts = append(parts, "<reset>")
+	parts = append(parts, fmt.Sprintf("%s", c.Description))
+	log.Printf("Long %s", c.Description)
+	return strings.Join(parts, "\n")
 }
 
 type RoomMobile struct {
