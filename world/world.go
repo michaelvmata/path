@@ -492,7 +492,6 @@ func (c *Character) LongDescribe() string {
 	parts = append(parts, fmt.Sprintf("<white>Name: %s", c.Name))
 	parts = append(parts, "<reset>")
 	parts = append(parts, fmt.Sprintf("%s", c.Description))
-	log.Printf("Long %s", c.Description)
 	return strings.Join(parts, "\n")
 }
 
