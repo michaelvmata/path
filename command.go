@@ -378,7 +378,7 @@ func (c Circle) CalculateDamage(level int, hitDamage int) int {
 }
 
 func (c Circle) TargetExpectsCircle(target *world.Character) bool {
-	return target.Memory.Occurrences(c.Label()) != 0
+	return target.Memory.MostRecent() == c.Label()
 }
 
 func (c Circle) HandleExpectedCircle(attacker *world.Character, defender *world.Character) {
