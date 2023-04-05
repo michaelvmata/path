@@ -94,12 +94,27 @@ type YAMLRoom struct {
 	} `yaml:"Items"`
 }
 
+type YamlQuest struct {
+	UUID        string `yaml:"UUID"`
+	Description string `yaml:"Description"`
+	Steps       []struct {
+		Type        string `yaml:"Type"`
+		Total       int    `yaml:"Total"`
+		Description string `yaml:"Description"`
+		Mobile      string `yaml:"Mobile"`
+	} `yaml:"Steps"`
+	Rewards struct {
+		Essence int `yaml:"Essence"`
+	} `yaml:"Rewards"`
+}
+
 type YAMLArea struct {
 	UUID    string       `yaml:"UUID"`
 	Name    string       `yaml:"Name"`
 	Items   []YAMLItem   `yaml:"Items"`
 	Mobiles []YAMLMobile `yaml:"Mobiles"`
 	Rooms   []YAMLRoom   `yaml:"Rooms"`
+	Quests  []YamlQuest  `yaml:"Quests"`
 }
 
 type YAMLPlayer struct {
@@ -123,6 +138,9 @@ func buildArea(data []byte) YAMLArea {
 	}
 	for _, room := range area.Rooms {
 		validateRoom(room)
+	}
+	for _, quest := range area.Quests {
+		validateQuest(quest)
 	}
 	for _, mobile := range area.Mobiles {
 		validateMobile(mobile)
@@ -194,6 +212,21 @@ func validateRoom(room YAMLRoom) {
 		if mobile.Count == 0 {
 			log.Fatalf("Room mobile has count 0 %v", room)
 		}
+	}
+}
+
+func validateQuest(quest YamlQuest) {
+	if quest.UUID == "" {
+		log.Fatalf("Quest has no UUID %v", quest)
+	}
+	if quest.Description == "" {
+		log.Fatalf("Quest has no description %s", quest.UUID)
+	}
+	if len(quest.Steps) == 0 {
+		log.Fatalf("No steps for quest %s", quest.UUID)
+	}
+	if quest.Rewards.Essence == 0 {
+		log.Fatalf("No rewards for quest %s", quest.UUID)
 	}
 }
 

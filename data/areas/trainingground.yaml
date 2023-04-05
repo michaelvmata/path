@@ -131,3 +131,13 @@ Rooms:
     Mobiles:
       - UUID: 3a597417633346f89fa26f0d989c2c04
         Count: 1
+Quests:
+  - UUID: 15719b887b804b4ca28bb3c7f466f36b
+    Description: No dummy left behind
+    Steps:
+      - Type: KillMobiles
+        Total: 5
+        Description: Go farm dummies
+        Mobile: 3a597417633346f89fa26f0d989c2c04
+    Rewards:
+      Essence: 100
