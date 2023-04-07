@@ -63,14 +63,16 @@ Rooms:
   - UUID: ab675bc143e84233a543f7e6e7338f11
     Name: Dimensional tether
     Description: |
-      This is a plain yard with bare walls of smoothly cut stone.  The sun
-      hangs high overhead behind a heavy blanket of clouds.  The ground is
-      made of the same smoothly cut stone as the walls and is equally bare.
-      Hanging a few feet in the air is a swirling, pulsating mass of energy.
-      The edges are composed of dark purple hues that periodically ripple
-      in brightness.  The center looks like a window to another realm,
-      containing nothing at all, but conveying a sense of an infinite expanse,
-      as if you were staring into an abyss.
+      This is a simple yard, with bare walls of smoothly cut stone towering
+      over you. The sky above is obscured by a heavy blanket of clouds,
+      leaving the yard in a gray, diffused light. The ground beneath your feet
+      is made of the same smoothly cut stone as the walls.  In the middle of
+      the yard, you see a swirling, pulsating mass of energy hanging a few feet
+      in the air. The edges of the mass are composed of dark purple hues that
+      periodically ripple in brightness. It's as if you're staring at a
+      curtain of energy, with a window to another realm at its center. The
+      window contains nothing at all, but conveys a sense of an infinite
+      expanse, as if you were staring into an abyss that stretches on forever.
     Exits:
       South: 60df1cea8d264d41b74d3bec6eac4e99
     Size: 10
