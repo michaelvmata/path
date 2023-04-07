@@ -7,13 +7,13 @@ type Step interface {
 
 type Quest struct {
 	Description string
-	Steps       []*Step
+	Steps       []Step
 }
 
 func NewQuest(description string) *Quest {
 	return &Quest{
 		Description: description,
-		Steps:       make([]*Step, 0),
+		Steps:       make([]Step, 0),
 	}
 }
 

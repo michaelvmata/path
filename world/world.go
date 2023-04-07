@@ -6,6 +6,7 @@ import (
 	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/memory"
 	"github.com/michaelvmata/path/modifiers"
+	"github.com/michaelvmata/path/quest"
 	"github.com/michaelvmata/path/session"
 	"github.com/michaelvmata/path/skills"
 	"github.com/michaelvmata/path/stats"
@@ -58,6 +59,7 @@ type Character struct {
 	Buffs     []Buff
 	CoolDowns []CoolDown
 	Memory    *memory.Memory
+	Quests    []*quest.Quest
 
 	IsAggressive bool
 	IsSocial     bool
@@ -275,6 +277,7 @@ func NewPlayer(UUID string, handle string) *Character {
 		Attacking: make([]*Character, 0),
 
 		Memory:       memory.NewMemory(),
+		Quests:       make([]*quest.Quest, 0),
 		IsAggressive: false,
 		IsSocial:     false,
 		IsPlayer:     true,
