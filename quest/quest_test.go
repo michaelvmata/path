@@ -4,7 +4,8 @@ import "testing"
 
 func TestQuest(t *testing.T) {
 	questName := "Test Quest"
-	q := NewQuest(questName)
+	questUUID := "Test Quest UUID"
+	q := NewQuest(questUUID, questName)
 	if q.Description != questName {
 		t.Fatalf("Quest description note set %s", q.Description)
 	}

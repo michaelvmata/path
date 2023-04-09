@@ -39,3 +39,7 @@ Players:
         Haste: 1
         Parry: 1
         Sweep: 1
+      Quests: []
+     - UUID: 15719b887b804b4ca28bb3c7f466f36b
+          Steps:
+            - Current: 0

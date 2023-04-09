@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/michaelvmata/path/items"
+	"github.com/michaelvmata/path/quest"
 	"github.com/michaelvmata/path/world"
 	"gopkg.in/yaml.v3"
 	"log"
@@ -258,6 +259,7 @@ func buildAreas(w *world.World, root string) {
 		buildItems(w, yamlArea)
 		buildMobiles(w, yamlArea)
 		buildRooms(w, yamlArea)
+		buildQuests(w, yamlArea)
 	}
 }
 
@@ -312,6 +314,19 @@ func buildRooms(w *world.World, yamlArea YAMLArea) {
 		room.Exits.North = rr.Exits.North
 		room.Exits.South = rr.Exits.South
 		room.Exits.West = rr.Exits.West
+	}
+}
+
+func buildQuests(w *world.World, yamlArea YAMLArea) {
+	for _, yamlQuest := range yamlArea.Quests {
+		q := quest.NewQuest(yamlQuest.UUID, yamlQuest.Description)
+		for _, yamlStep := range yamlQuest.Steps {
+			if yamlStep.Type == "KillMobiles" {
+				s := quest.NewKillMobiles(yamlStep.Description, "", yamlStep.Mobile, yamlStep.Total)
+				q.Steps = append(q.Steps, s)
+			}
+		}
+		w.Quests[q.UUID] = q
 	}
 }
 

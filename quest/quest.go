@@ -6,12 +6,14 @@ type Step interface {
 }
 
 type Quest struct {
+	UUID        string
 	Description string
 	Steps       []Step
 }
 
-func NewQuest(description string) *Quest {
+func NewQuest(UUID string, description string) *Quest {
 	return &Quest{
+		UUID:        UUID,
 		Description: description,
 		Steps:       make([]Step, 0),
 	}

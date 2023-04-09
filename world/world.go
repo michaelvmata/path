@@ -796,6 +796,7 @@ type World struct {
 	RoomMobiles map[string][]RoomMobile
 	Items       map[string]item.Item
 	Areas       map[string]*Area
+	Quests      map[string]*quest.Quest
 
 	Ticks       int
 	SpawnTicks  int
@@ -813,6 +814,7 @@ func NewWorld() *World {
 		RoomMobiles: make(map[string][]RoomMobile, 0),
 		Items:       make(map[string]item.Item),
 		Areas:       make(map[string]*Area, 0),
+		Quests:      make(map[string]*quest.Quest, 0),
 		SpawnTicks:  60,
 		BattleTicks: 3,
 	}
