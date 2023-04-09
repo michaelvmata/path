@@ -1,6 +1,7 @@
 Players:
     - UUID: 76dbad41cb8144848f266ad9fe6d0b19
       Name: gaigen
+      Description: ""
       Essence: 110
       Power: 1
       Agility: 2
@@ -11,7 +12,7 @@ Players:
       Health: 454
       Spirit: 1200
       RoomUUID: ab675bc143e84233a543f7e6e7338f11
-      Anchor: b8712a40130e41dabb7e17adb2d1aef7
+      Anchor: ""
       Gear:
         Head: f7b83201941a422f95100ac174be587f
         Neck: ""
@@ -39,7 +40,7 @@ Players:
         Haste: 1
         Parry: 1
         Sweep: 1
-      Quests: []
-     - UUID: 15719b887b804b4ca28bb3c7f466f36b
+      Quests:
+        - UUID: 15719b887b804b4ca28bb3c7f466f36b
           Steps:
             - Current: 0
