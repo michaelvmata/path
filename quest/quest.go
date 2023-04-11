@@ -1,5 +1,7 @@
 package quest
 
+import "log"
+
 type Step interface {
 	Description() string
 	Progress() (int, int)
@@ -17,6 +19,20 @@ func NewQuest(UUID string, description string) *Quest {
 		Description: description,
 		Steps:       make([]Step, 0),
 	}
+}
+
+func (q *Quest) Clone(playerUUID string) *Quest {
+	cloned := NewQuest(q.UUID, q.Description)
+	for _, step := range q.Steps {
+		switch s := step.(type) {
+		case *KillMobiles:
+			km := NewKillMobiles(s.Description(), playerUUID, s.mobileUUID, s.total)
+			cloned.Steps = append(cloned.Steps, km)
+		default:
+			log.Fatalf("Unsupported step %v", step)
+		}
+	}
+	return cloned
 }
 
 type KillMobiles struct {

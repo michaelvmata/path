@@ -1,6 +1,8 @@
 package quest
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestQuest(t *testing.T) {
 	questName := "Test Quest"
@@ -18,4 +20,15 @@ func TestQuest(t *testing.T) {
 		t.Fatalf("Progress not set correctly")
 	}
 	q.Steps = append(q.Steps, step)
+
+	newPlayerUUID := "Test Player UUID"
+	cloned := q.Clone(newPlayerUUID)
+	if cloned.UUID != cloned.UUID {
+		t.Fatalf("Unexpected cloned UUID %s", cloned.UUID)
+	}
+	for i, _ := range cloned.Steps {
+		if cloned.Steps[i].Description() != q.Steps[i].Description() {
+			t.Fatalf("Step descriptions don't match at %d", i)
+		}
+	}
 }
