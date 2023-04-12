@@ -72,6 +72,12 @@ type YAMLMobile struct {
 		Parry    int `yaml:"Parry"`
 		Sweep    int `yaml:"Sweep"`
 	} `yaml:"Skills"`
+	Quests []struct {
+		UUID  string `yaml:"UUID"`
+		Steps []struct {
+			Current int `yaml:"Current"`
+		} `yaml:"Steps"`
+	} `yaml:"Quests"`
 }
 
 type YAMLRoom struct {
@@ -522,6 +528,13 @@ func buildPlayers(w *world.World) {
 		}
 		if room, ok := w.Rooms[rp.Anchor]; ok {
 			c.Anchor = room
+		}
+		for _, yq := range rp.Quests {
+			q, ok := w.Quests[yq.UUID]
+			if !ok {
+				log.Fatalf("Could not find quest %s", yq.UUID)
+			}
+			c.Quests = append(c.Quests, q.Clone(c.UUID))
 		}
 	}
 }
