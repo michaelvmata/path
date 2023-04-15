@@ -1,10 +1,14 @@
 package quest
 
-import "log"
+import (
+	"fmt"
+	"log"
+)
 
 type Step interface {
 	Description() string
 	Progress() (int, int)
+	IsComplete() bool
 }
 
 type Quest struct {
@@ -33,6 +37,17 @@ func (q *Quest) Clone(playerUUID string) *Quest {
 		}
 	}
 	return cloned
+}
+
+func (q *Quest) Describe() string {
+	total := len(q.Steps)
+	complete := 0
+	for _, s := range q.Steps {
+		if s.IsComplete() {
+			complete += 1
+		}
+	}
+	return fmt.Sprintf("(%d/%d) %s", complete, total, q.Description)
 }
 
 type KillMobiles struct {
@@ -65,4 +80,9 @@ func (km *KillMobiles) Description() string {
 
 func (km *KillMobiles) Progress() (int, int) {
 	return km.current, km.total
+}
+
+func (km *KillMobiles) IsComplete() bool {
+	current, total := km.Progress()
+	return current == total
 }

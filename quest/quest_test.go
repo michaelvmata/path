@@ -31,4 +31,8 @@ func TestQuest(t *testing.T) {
 			t.Fatalf("Step descriptions don't match at %d", i)
 		}
 	}
+
+	if q.Describe() == "" {
+		t.Fatalf("Quest description empty")
+	}
 }

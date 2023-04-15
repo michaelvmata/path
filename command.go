@@ -724,6 +724,23 @@ func (l Look) Label() string {
 	return "look"
 }
 
+type Quest struct{}
+
+func (q Quest) Execute(ctx Context) {
+	player := ctx.Player
+	if len(player.Quests) == 0 {
+		player.Showln("You are not on a quest.")
+		return
+	}
+	for _, q := range player.Quests {
+		player.Showln(q.Describe())
+	}
+}
+
+func (q Quest) Label() string {
+	return "quest"
+}
+
 type Remove struct{}
 
 func (r Remove) Execute(ctx Context) {
@@ -1041,6 +1058,7 @@ func buildCommands() map[string]Executor {
 		Invest{},
 		Look{},
 		Noop{},
+		Quest{},
 		Remove{},
 		Save{},
 		Score{},
