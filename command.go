@@ -12,6 +12,7 @@ import (
 	"log"
 	"math"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -728,12 +729,34 @@ type Quest struct{}
 
 func (q Quest) Execute(ctx Context) {
 	player := ctx.Player
+	parts := strings.SplitN(ctx.Raw, " ", 2)
+	if len(parts) == 1 {
+		q.ShowQuests(player)
+		return
+	}
+	index, err := strconv.Atoi(parts[1])
+	if err != nil || index <= 0 || index > len(player.Quests) {
+		player.Showln("What quest?")
+		return
+	}
+	q.ShowQuestSteps(player, index-1)
+
+}
+
+func (q Quest) ShowQuests(player *world.Character) {
 	if len(player.Quests) == 0 {
 		player.Showln("You are not on a quest.")
 		return
 	}
 	for _, q := range player.Quests {
 		player.Showln(q.Describe())
+	}
+}
+
+func (q Quest) ShowQuestSteps(player *world.Character, index int) {
+	quest := player.Quests[index]
+	for _, step := range quest.Steps {
+		player.Showln(step.Description())
 	}
 }
 
