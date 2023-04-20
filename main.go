@@ -25,7 +25,7 @@ func main() {
 	events.CharacterDeath.Init(w)
 	events.CharacterDeath.Register(actions.RespawnCharacter{})
 	events.CharacterDeath.Register(actions.EssenceOnDeath{})
-
+	events.CharacterDeath.Register(actions.QuestOnDeath{})
 	title.ListCharacters(s, w.Players)
 MainLoop:
 	for {

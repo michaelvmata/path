@@ -67,7 +67,10 @@ func NewKillMobiles(description string, playerUUID string, mobileUUID string, to
 	}
 }
 
-func (km *KillMobiles) Increment(amount int) {
+func (km *KillMobiles) Increment(playerUUID string, mobileUUID string, amount int) {
+	if playerUUID != km.playerUUID || mobileUUID != km.mobileUUID {
+		return
+	}
 	km.total += amount
 	if km.current > km.total {
 		km.current = km.total
