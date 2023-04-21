@@ -416,6 +416,9 @@ func savePlayers(players map[string]*world.Character) {
 	if err != nil {
 		log.Fatalf("Unable to open players file")
 	}
+	if err := yamlFile.Truncate(0); err != nil {
+		log.Fatalf("Unable to truncate player file")
+	}
 	len, err := yamlFile.Write(data)
 	if err != nil {
 		log.Fatalf("Unable to write players file")
