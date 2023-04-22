@@ -72,12 +72,16 @@ type YAMLMobile struct {
 		Parry    int `yaml:"Parry"`
 		Sweep    int `yaml:"Sweep"`
 	} `yaml:"Skills"`
-	Quests []struct {
-		UUID  string `yaml:"UUID"`
-		Steps []struct {
-			Current int `yaml:"Current"`
-		} `yaml:"Steps"`
-	} `yaml:"Quests"`
+	Quests []YAMLMobileQuests `yaml:"Quests"`
+}
+
+type YAMLMobileQuests struct {
+	UUID  string                `yaml:"UUID"`
+	Steps []YAMLMobileQuestStep `yaml:"Steps"`
+}
+
+type YAMLMobileQuestStep struct {
+	Current int `yaml:"Current"`
 }
 
 type YAMLRoom struct {
@@ -405,8 +409,19 @@ func savePlayers(players map[string]*world.Character) {
 		p.Skills.Haste = player.Skills.Haste.Base
 		p.Skills.Parry = player.Skills.Parry.Base
 		p.Skills.Sweep = player.Skills.Sweep.Base
-		yamlPlayer.Players = append(yamlPlayer.Players, p)
 
+		for _, q := range player.Quests {
+			steps := make([]YAMLMobileQuestStep, 0)
+			for _, s := range q.Steps {
+				current, _ := s.Progress()
+				steps = append(steps, YAMLMobileQuestStep{Current: current})
+			}
+			p.Quests = append(p.Quests, YAMLMobileQuests{
+				UUID:  q.UUID,
+				Steps: steps,
+			})
+		}
+		yamlPlayer.Players = append(yamlPlayer.Players, p)
 	}
 	data, err := yaml.Marshal(&yamlPlayer)
 	if err != nil {
