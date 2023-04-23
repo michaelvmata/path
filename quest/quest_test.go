@@ -14,11 +14,24 @@ func TestQuest(t *testing.T) {
 	playerUUID := "test player"
 	mobileUUID := "test mobile"
 	description := "Kill mobiles step"
-	step := NewKillMobiles(description, playerUUID, mobileUUID, 1)
+	total := 2
+	step := NewKillMobiles(description, playerUUID, mobileUUID, total)
 	current, total := step.Progress()
-	if current != 0 || total != 1 {
+	if current != 0 || total != total {
 		t.Fatalf("Progress not set correctly")
 	}
+
+	step.Increment(playerUUID, "Other Mobile UUID", 1)
+	current, total = step.Progress()
+	if current != 0 {
+		t.Fatalf("Progress incremented for wrong mobile")
+	}
+	step.Increment(playerUUID, mobileUUID, 1)
+	current, total = step.Progress()
+	if current != 1 {
+		t.Fatalf("Progress not incremented for mobile.  Current = %d", current)
+	}
+
 	q.Steps = append(q.Steps, step)
 
 	newPlayerUUID := "Test Player UUID"
