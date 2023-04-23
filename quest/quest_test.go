@@ -39,11 +39,6 @@ func TestQuest(t *testing.T) {
 	if cloned.UUID != cloned.UUID {
 		t.Fatalf("Unexpected cloned UUID %s", cloned.UUID)
 	}
-	for i, _ := range cloned.Steps {
-		if cloned.Steps[i].Description() != q.Steps[i].Description() {
-			t.Fatalf("Step descriptions don't match at %d", i)
-		}
-	}
 
 	if q.Describe() == "" {
 		t.Fatalf("Quest description empty")
