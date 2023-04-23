@@ -30,7 +30,7 @@ func (q *Quest) Clone(playerUUID string) *Quest {
 	for _, step := range q.Steps {
 		switch s := step.(type) {
 		case *KillMobiles:
-			km := NewKillMobiles(s.Description(), playerUUID, s.mobileUUID, s.total)
+			km := NewKillMobiles(s.description, playerUUID, s.mobileUUID, s.total)
 			cloned.Steps = append(cloned.Steps, km)
 		default:
 			log.Fatalf("Unsupported step %v", step)
@@ -78,7 +78,8 @@ func (km *KillMobiles) Increment(playerUUID string, mobileUUID string, amount in
 }
 
 func (km *KillMobiles) Description() string {
-	return km.description
+	current, total := km.Progress()
+	return fmt.Sprintf("(%d/%d) %s", current, total, km.description)
 }
 
 func (km *KillMobiles) Progress() (int, int) {
