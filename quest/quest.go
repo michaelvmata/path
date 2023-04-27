@@ -25,6 +25,15 @@ func NewQuest(UUID string, description string) *Quest {
 	}
 }
 
+func (q *Quest) IsComplete() bool {
+	for _, step := range q.Steps {
+		if !step.IsComplete() {
+			return false
+		}
+	}
+	return true
+}
+
 func (q *Quest) Clone(playerUUID string) *Quest {
 	cloned := NewQuest(q.UUID, q.Description)
 	for _, step := range q.Steps {

@@ -34,6 +34,14 @@ func TestQuest(t *testing.T) {
 
 	q.Steps = append(q.Steps, step)
 
+	if current == total && q.IsComplete() {
+		t.Fatalf("Quest should not be complete yet")
+	}
+	step.Increment(playerUUID, mobileUUID, total-current)
+	if !q.IsComplete() {
+		t.Fatalf("Quest should be complete")
+	}
+
 	newPlayerUUID := "Test Player UUID"
 	cloned := q.Clone(newPlayerUUID)
 	if cloned.UUID != cloned.UUID {
