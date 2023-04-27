@@ -437,6 +437,7 @@ func (c *Character) Update(tick int) {
 	c.Spirit.EnforceMaximum()
 	c.Spirit.RecoverRate = c.Core.Will.Value()
 
+	c.UpdateQuests()
 	if tick > 0 {
 		if tick%5 == 0 && !c.IsFighting() {
 			c.Health.Recover()
@@ -456,6 +457,18 @@ func (c *Character) Update(tick int) {
 
 		c.Memory.Update(tick)
 	}
+}
+
+func (c *Character) UpdateQuests() {
+	remaining := make([]*quest.Quest, 0)
+	for _, q := range c.Quests {
+		if !q.IsComplete() {
+			remaining = append(remaining, q)
+			continue
+		}
+		c.Showln("Quest completed: %s", q.Description)
+	}
+	c.Quests = remaining
 }
 
 func (c *Character) ShowNewline() {
