@@ -143,3 +143,6 @@ Quests:
         Mobile: 3a597417633346f89fa26f0d989c2c04
     Rewards:
       Essence: 100
+      Items:
+        - UUID: 096cb2277b534834a98a782ede24b217
+          Count: 1

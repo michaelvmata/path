@@ -11,17 +11,40 @@ type Step interface {
 	IsComplete() bool
 }
 
+type RewardItem struct {
+	UUID  string
+	Count int
+}
+
+type Reward struct {
+	Essence int
+	Items   []RewardItem
+}
+
+func (r *Reward) AddRewardItem(UUID string, count int) {
+	r.Items = append(r.Items, RewardItem{
+		UUID:  UUID,
+		Count: count,
+	})
+}
+
 type Quest struct {
 	UUID        string
 	Description string
 	Steps       []Step
+	Reward      Reward
 }
 
 func NewQuest(UUID string, description string) *Quest {
+	reward := Reward{
+		Essence: 0,
+		Items:   make([]RewardItem, 0),
+	}
 	return &Quest{
 		UUID:        UUID,
 		Description: description,
 		Steps:       make([]Step, 0),
+		Reward:      reward,
 	}
 }
 
@@ -44,6 +67,10 @@ func (q *Quest) Clone(playerUUID string) *Quest {
 		default:
 			log.Fatalf("Unsupported step %v", step)
 		}
+	}
+	cloned.Reward.Essence = q.Reward.Essence
+	for _, i := range q.Reward.Items {
+		cloned.Reward.AddRewardItem(i.UUID, i.Count)
 	}
 	return cloned
 }

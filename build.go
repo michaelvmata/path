@@ -116,6 +116,10 @@ type YamlQuest struct {
 	} `yaml:"Steps"`
 	Rewards struct {
 		Essence int `yaml:"Essence"`
+		Items   []struct {
+			UUID  string `yaml:"UUID"`
+			Count int    `yaml:"Count"`
+		} `yaml:"Items"`
 	} `yaml:"Rewards"`
 }
 
@@ -335,6 +339,10 @@ func buildQuests(w *world.World, yamlArea YAMLArea) {
 				s := quest.NewKillMobiles(yamlStep.Description, "", yamlStep.Mobile, yamlStep.Total)
 				q.Steps = append(q.Steps, s)
 			}
+		}
+		q.Reward.Essence = yamlQuest.Rewards.Essence
+		for _, yamlItem := range yamlQuest.Rewards.Items {
+			q.Reward.AddRewardItem(yamlItem.UUID, yamlItem.Count)
 		}
 		w.Quests[q.UUID] = q
 	}
