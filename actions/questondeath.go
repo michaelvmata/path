@@ -2,6 +2,7 @@ package actions
 
 import (
 	"github.com/michaelvmata/path/events"
+	"github.com/michaelvmata/path/items"
 	"github.com/michaelvmata/path/quest"
 	"github.com/michaelvmata/path/world"
 	"log"
@@ -23,13 +24,23 @@ func (qod QuestOnDeath) Handle(World *world.World, payload events.CharacterDeath
 	}
 }
 
-func (qod QuestOnDeath) AssignRewards(World *world.World, player *world.Character, q *quest.Quest) {
+type GetItemer interface {
+	GetItem(string) (item.Item, bool)
+}
+
+type Player interface {
+	AdjustEssence(int)
+	Receive(item.Item) error
+	Showln(string, ...interface{})
+}
+
+func (qod QuestOnDeath) AssignRewards(World GetItemer, player Player, q *quest.Quest) {
 	if q.Reward.Essence > 0 {
 		player.Showln("You earned %d essence.", q.Reward.Essence)
-		player.Essence += q.Reward.Essence
+		player.AdjustEssence(q.Reward.Essence)
 	}
 	for _, i := range q.Reward.Items {
-		item, ok := World.Items[i.UUID]
+		item, ok := World.GetItem(i.UUID)
 		if !ok {
 			log.Fatalf("Item reward not found %s for quest %s", i.UUID, q.UUID)
 		}

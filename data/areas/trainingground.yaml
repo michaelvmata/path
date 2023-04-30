@@ -138,7 +138,7 @@ Quests:
     Description: No dummy left behind
     Steps:
       - Type: KillMobiles
-        Total: 5
+        Total: 1
         Description: Kill combat training dummies
         Mobile: 3a597417633346f89fa26f0d989c2c04
     Rewards:

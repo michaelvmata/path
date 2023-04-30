@@ -484,6 +484,10 @@ func (c *Character) Showln(message string, args ...interface{}) {
 	}
 }
 
+func (c *Character) AdjustEssence(amount int) {
+	c.Essence += amount
+}
+
 func (c *Character) ShowDivider() {
 	if c.Session != nil {
 		c.Session.Outgoing <- "------------------------------------------------------------"
@@ -857,6 +861,11 @@ func (w *World) IsSpawnTick() bool {
 
 func (w *World) IsBattleTick() bool {
 	return w.Ticks%w.BattleTicks == 0
+}
+
+func (w *World) GetItem(uuid string) (item.Item, bool) {
+	item, ok := w.Items[uuid]
+	return item, ok
 }
 
 func (w *World) SpawnMobiles() {
