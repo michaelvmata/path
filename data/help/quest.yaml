@@ -1,0 +1,15 @@
+UUID: 0efb628305d64453b67ddd0c8fb3cd08
+Keywords:
+  - quest
+Content: |
+  Quest without any arguments will list all active quests along with how many
+  steps are remaining over completed.
+  
+  (# of steps completed / # of steps remaining) Quest name
+  
+  Quest with an numeric number will give steps of the quest with the same
+  position in the list.  E.g., the command "quest 1" will give details 
+  the first active quest.  Each step will have progress completed over
+  remaining.
+  
+  (# completed / # remaining) Step name
