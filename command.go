@@ -1035,14 +1035,31 @@ func (h Help) ShowCommand(ctx Context, command string) {
 func (h Help) ShowAllCommands(ctx Context) {
 	player := ctx.Player
 	aliases := make([]string, 0)
+
 	for alias, command := range commands {
 		if alias == command.Label() {
 			aliases = append(aliases, alias)
 		}
 	}
 	sort.Strings(aliases)
+
+	max := 0
 	for _, alias := range aliases {
-		player.Showln(alias)
+		if len(alias) > max {
+			max = len(alias)
+		}
+	}
+	max += 3 // pad based on max length
+
+	columnNum := 5
+
+	for index, alias := range aliases {
+		padding := max - len(alias)
+		player.Show(alias)
+		player.Show(strings.Repeat(" ", padding))
+		if index%columnNum == 0 {
+			player.ShowNewline()
+		}
 	}
 	player.ShowNewline()
 }

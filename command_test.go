@@ -51,6 +51,13 @@ func TestHasteCommand(t *testing.T) {
 	}
 }
 
+func TestHelp(t *testing.T) {
+	player := world.NewPlayer("Test UUID", "Test Handle")
+	ctx := Context{Player: player}
+	h := Help{}
+	h.Execute(ctx)
+}
+
 func TestInvest(t *testing.T) {
 	previous := 0
 	for i := 0; i < 100; i++ {
